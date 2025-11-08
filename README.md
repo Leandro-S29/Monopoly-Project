@@ -1,13 +1,11 @@
-# Monopoly-Project
+# Programming Fundamentals Project - Monopoly
 
-## Description
-This is a project about a game of Monopoly developed in C#. 
-Created as part of a project for Fundamentals of Programming of Computer Engineering.
+This project involves the implementation of a variant of the Monopoly game for the curricular units Fundamentals of Programming and Structure of Logical Thinking in Computer Engineering.
 
-## Requirements
-- .NET 
+## 📋 Requirements:
+- .NET 8.0 SDK or higher
 
-## Made by:
+## 👥 Group members of the project:
 - Leandro Santos
 - Guilherme Soares
 - Henrique Correia
