@@ -6,7 +6,7 @@ namespace MonopolyProject
     {
         static void Main(string[] args)
         {
-            Console.WriteLine("Welcome to Monopoly!");
+            Console.WriteLine("Welcome to Monopoly! Test");
         }
     }
 }
