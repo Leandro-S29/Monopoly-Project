@@ -8,5 +8,5 @@ This project involves the implementation of a variant of the Monopoly game for t
 ## 👥 Group members of the project:
 - Leandro Santos
 - Guilherme Soares
-- Henrique Correia
+- Henrique Carvalho
 - Henrique Metelo
