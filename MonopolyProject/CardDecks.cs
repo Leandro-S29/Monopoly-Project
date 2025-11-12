@@ -2,14 +2,15 @@
 using System;
 using System.Linq;
 using System.Collections.Generic;
-using Resisto_dos_jogadores; // Para aceder a SistemaJogo e Jogador
-using MonopolyBoard; // Para aceder ao Board
+using Resisto_dos_jogadores; 
+using MonopolyBoard; 
 
 namespace MonopolyGameLogic
 {
     public static class CardDecks
     {
         private static readonly Random random = new Random();
+        private const int CentroTabuleiro = 3; // Offset para traduzir coordenadas
 
         // ==================================================================
         // === MÉTODOS DE SORTE/AZAR (CHANCE) ===============================
@@ -32,23 +33,29 @@ namespace MonopolyGameLogic
             else if (roll <= 40) // 10%
             {
                 Console.WriteLine("  Pague $70. (Multa por excesso de velocidade)");
-                jogador.Dinheiro -= 70;
-                sistema.AdicionarDinheiroFreePark(70); 
+                // <-- MUDANÇA AQUI: Usar TentarPagar -->
+                if (sistema.TentarPagar(jogador, 70, "multa por excesso de velocidade"))
+                {
+                    sistema.AdicionarDinheiroFreePark(70); 
+                }
             }
             else if (roll <= 60) // 20%
             {
                 Console.WriteLine("  Avance para a casa 'Start'.");
-                MovePlayerTo(jogador, "Start", board);
+                // (O "MovePlayerTo" agora está no SistemaJogo)
+                sistema.MoverJogadorPara(jogador, "Start");
             }
             else if (roll <= 80) // 20%
             {
                 Console.WriteLine("  Vá para a 'Police' (Prisão)!");
-                MovePlayerTo(jogador, "Police", board);
+                // (O "MovePlayerTo" agora está no SistemaJogo)
+                sistema.MoverJogadorPara(jogador, "Police");
             }
             else // 20%
             {
                 Console.WriteLine("  Avance para 'FreePark'.");
-                MovePlayerTo(jogador, "FreePark", board);
+                // (O "MovePlayerTo" agora está no SistemaJogo)
+                sistema.MoverJogadorPara(jogador, "FreePark");
             }
             
             Console.Write("  Pressione Enter para continuar...");
@@ -71,8 +78,12 @@ namespace MonopolyGameLogic
                 
                 int totalAPagar = totalCasas * 20;
                 Console.WriteLine($"  Taxa de manutenção! Pague $20 por casa. (Total: {totalCasas} casas = ${totalAPagar})");
-                jogador.Dinheiro -= totalAPagar;
-                sistema.AdicionarDinheiroFreePark(totalAPagar);
+                
+                // <-- MUDANÇA AQUI: Usar TentarPagar -->
+                if (sistema.TentarPagar(jogador, totalAPagar, "taxa de manutenção"))
+                {
+                    sistema.AdicionarDinheiroFreePark(totalAPagar);
+                }
             }
             else if (roll <= 20) // 10%
             {
@@ -81,6 +92,7 @@ namespace MonopolyGameLogic
                 int totalRecebido = 0;
                 foreach (var outro in outrosJogadores)
                 {
+                    // (Pagamento entre jogadores não causa bancarrota, apenas paga o que pode)
                     int aPagar = Math.Min(10, outro.Dinheiro); 
                     outro.Dinheiro -= aPagar;
                     totalRecebido += aPagar;
@@ -102,23 +114,26 @@ namespace MonopolyGameLogic
             else if (roll <= 70) // 10%
             {
                 Console.WriteLine("  Pague $40. (Consulta médica)");
-                jogador.Dinheiro -= 40;
-                sistema.AdicionarDinheiroFreePark(40);
+                // <-- MUDANÇA AQUI: Usar TentarPagar -->
+                if (sistema.TentarPagar(jogador, 40, "consulta médica"))
+                {
+                    sistema.AdicionarDinheiroFreePark(40);
+                }
             }
             else if (roll <= 80) // 10%
             {
                 Console.WriteLine("  Avance para 'Pink1'.");
-                MovePlayerTo(jogador, "Pink1", board);
+                sistema.MoverJogadorPara(jogador, "Pink1");
             }
             else if (roll <= 90) // 10%
             {
                 Console.WriteLine("  Avance para 'Teal2'.");
-                MovePlayerTo(jogador, "Teal2", board);
+                sistema.MoverJogadorPara(jogador, "Teal2");
             }
             else // 10%
             {
                 Console.WriteLine("  Avance para 'White2'.");
-                MovePlayerTo(jogador, "White2", board);
+                sistema.MoverJogadorPara(jogador, "White2");
             }
             
             Console.Write("  Pressione Enter para continuar...");
@@ -126,22 +141,9 @@ namespace MonopolyGameLogic
         }
 
         // ==================================================================
-        // === MÉTODO PRIVADO DE MOVIMENTO ==================================
+        // === MÉTODO PRIVADO DE MOVIMENTO (REMOVIDO) =======================
         // ==================================================================
-        private static void MovePlayerTo(SistemaJogo.Jogador jogador, string spaceName, Board board)
-        {
-            // <-- MUDANÇA AQUI: Esta é a forma "antiga" de fazer -->
-            // 1. Recebe o 'Tuple'
-            Tuple<int, int> coords = board.GetSpaceCoords(spaceName);
-            
-            // 2. Acede aos valores com 'Item1' (Linha) e 'Item2' (Coluna)
-            int newRow = coords.Item1;
-            int newCol = coords.Item2;
-            
-            jogador.PosicaoY = newRow;
-            jogador.PosicaoX = newCol;
-            
-            Console.WriteLine($"  {jogador.Nome} moveu-se para ({newCol}, {newRow}) [{spaceName}]");
-        }
+        // (O método "MovePlayerTo" foi movido para a classe SistemaJogo
+        // para que possa ser usado por "RealizarJogada" e pelas Cartas)
     }
 }

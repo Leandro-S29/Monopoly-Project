@@ -1,5 +1,8 @@
 // Nome do Ficheiro: MonopolyBoard.cs
 using System;
+using Resisto_dos_jogadores; // Referência aos Jogadores
+using System.Collections.Generic;
+using System.Linq;
 
 namespace MonopolyBoard
 {
@@ -7,8 +10,8 @@ namespace MonopolyBoard
     {
         private readonly string[,] spaces;
         private const int Size = 7;
-        
         private const int CellWidth = 13; 
+        private const int CentroTabuleiro = 3; // Offset para traduzir coordenadas
 
         public Board()
         {
@@ -25,14 +28,15 @@ namespace MonopolyBoard
             };
         }
 
-        public void Display()
+        public void Display(IEnumerable<SistemaJogo.Jogador> players)
         {
             Console.WriteLine("\t\t\t\t    === Tabuleiro de Monopólio 7x7 ===\n"); 
             DrawTopBorder();
 
             for (int i = 0; i < Size; i++)
             {
-                DrawRow(i);
+                // Passa os jogadores para o método DrawRow
+                DrawRow(i, players);
                 if (i < Size - 1)
                     DrawMiddleBorder();
             }
@@ -49,11 +53,6 @@ namespace MonopolyBoard
             return "Fora do Tabuleiro";
         }
 
-        // <-- MUDANÇA AQUI: Mudar a sintaxe de '(int Row, int Col)' para 'Tuple<int, int>' -->
-        /// <summary>
-        /// Encontra as coordenadas (Linha, Coluna) de um espaço pelo seu nome.
-        /// </summary>
-        /// <returns>Um Tuple<int, int> (Item1 = Linha, Item2 = Coluna).</returns>
         public Tuple<int, int> GetSpaceCoords(string name)
         {
             for (int r = 0; r < Size; r++)
@@ -62,19 +61,17 @@ namespace MonopolyBoard
                 {
                     if (spaces[r, c].Equals(name, StringComparison.OrdinalIgnoreCase))
                     {
-                        // <-- MUDANÇA AQUI: 'return (r, c)' mudou para 'return new Tuple...' -->
                         return new Tuple<int, int>(r, c); // Encontrado!
                     }
                 }
             }
             
-            // Se não encontrar, devolve "Start" por segurança
             Console.WriteLine($"AVISO: Casa '{name}' não encontrada no tabuleiro!");
             return new Tuple<int, int>(3, 3); // Posição (3, 3) = Start
         }
 
 
-        // --- Métodos de Desenho (Ficam iguais) ---
+        // --- Métodos de Desenho (Atualizados) ---
         private void DrawTopBorder()
         {
             Console.Write("┌");
@@ -108,15 +105,51 @@ namespace MonopolyBoard
             Console.WriteLine("┘");
         }
 
-        private void DrawRow(int row)
+        // <-- MUDANÇA AQUI: DrawRow() agora desenha DUAS linhas por célula -->
+        private void DrawRow(int row, IEnumerable<SistemaJogo.Jogador> players)
         {
+            // --- Linha 1: Nome da Casa ---
             Console.Write("│");
-            for (int j = 0; j < Size; j++)
+            for (int j = 0; j < Size; j++) // j = coluna
             {
-                string text = CenterText(spaces[row, j], CellWidth);
-                Console.Write($"{text}│");
+                string spaceName = spaces[row, j];
+                string centeredName = CenterText(spaceName, CellWidth);
+                Console.Write($"{centeredName}│");
             }
-            Console.WriteLine();
+            Console.WriteLine(); // Fim da linha 1
+
+            // --- Linha 2: Marcadores dos Jogadores ---
+            Console.Write("│");
+            for (int j = 0; j < Size; j++) // j = coluna
+            {
+                // 1. Encontrar jogadores que estão nesta casa
+                var playersOnThisSpace = players
+                    .Where(p => p.EstaEmJogo && 
+                                (p.PosicaoY + CentroTabuleiro) == row && 
+                                (p.PosicaoX + CentroTabuleiro) == j)
+                    .ToList();
+
+                string markerText = " "; // Default: um espaço vazio
+                
+                if (playersOnThisSpace.Any())
+                {
+                    // 2. Se há jogadores, criar a string de marcadores (iniciais)
+                    string playerMarkers = "";
+                    foreach (var p in playersOnThisSpace)
+                    {
+                        if (!string.IsNullOrEmpty(p.Nome))
+                        {
+                            playerMarkers += p.Nome[0]; // Adiciona a primeira letra
+                        }
+                    }
+                    markerText = playerMarkers;
+                }
+                
+                // 3. Centrar os marcadores
+                string centeredMarkers = CenterText(markerText, CellWidth);
+                Console.Write($"{centeredMarkers}│");
+            }
+            Console.WriteLine(); // Fim da linha 2
         }
 
         private string CenterText(string text, int width)
@@ -124,7 +157,7 @@ namespace MonopolyBoard
             text = text.Trim();
             if (text.Length > width)
             {
-                return text.Substring(0, width - 1) + "."; 
+                return text.Substring(0, width); // Corta se for demasiado longo
             }
             if (text.Length == width)
             {

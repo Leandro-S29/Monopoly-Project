@@ -15,10 +15,9 @@ namespace MonopolyGameLogic
 
     public class EspacoComercial
     {
-        // ... (Dicionário PrecosBase fica igual) ...
+        // --- DICIONÁRIOS ESTÁTICOS (COM DADOS) ---
         private static readonly Dictionary<string, int> PrecosBase = new()
         {
-            // (Lista completa de preços)
             { "Brown1", 100 }, { "Brown2", 120 }, { "Teal1", 90 }, { "Teal2", 130 },
             { "Orange1", 120 }, { "Orange2", 120 }, { "Orange3", 140 },
             { "Black1", 110 }, { "Black2", 120 }, { "Black3", 130 },
@@ -31,9 +30,6 @@ namespace MonopolyGameLogic
             { "Train3", 150 }, { "Train4", 150 }, { "Electric Company", 120 }, { "Water Works", 120 }
         };
  
-        // <-- MUDANÇA 1: O Dicionário 'RendasBase' foi REMOVIDO -->
-        
-        // ... (Dicionário GruposDeCor fica igual) ...
         private static readonly Dictionary<string, string[]> GruposDeCor = new()
         {
             { "Brown", new[] { "Brown1", "Brown2" } },
@@ -53,12 +49,13 @@ namespace MonopolyGameLogic
         // --- Propriedades da Classe ---
         public string Nome { get; }
         public int Preco { get; } 
-        // <-- MUDANÇA 2: A propriedade 'Renda' foi REMOVIDA -->
         public SistemaJogo.Jogador Dono { get; set; }
-        
-        public int NivelCasa { get; set; } // Nível 0 = sem casas, Nível 5 = Hotel
-        public int PrecoCasa { get; } // Preço para comprar UMA casa
-        public string Cor { get; } // A cor do grupo (ex: "Brown")
+        public int NivelCasa { get; set; }
+        public int PrecoCasa { get; } 
+        public string Cor { get; } 
+        public bool Hipotecado { get; set; }
+        public int ValorHipoteca { get; }
+
         
         // Construtor
         public EspacoComercial(string nome, int preco)
@@ -66,19 +63,15 @@ namespace MonopolyGameLogic
             Nome = nome;
             Preco = preco; 
             Dono = null; 
-            NivelCasa = 0; // Começa sem casas
-            
-            // <-- MUDANÇA 3: A atribuição da Renda Base foi REMOVIDA -->
-            
-            // Define o Preço da Casa
+            NivelCasa = 0; 
             PrecoCasa = (int)(Preco * 0.6); 
-
-            // Encontra a cor desta propriedade
             Cor = ObterCorDaPropriedade(nome);
+            Hipotecado = false;
+            ValorHipoteca = Preco / 2; 
         }
         
         
-        // --- Métodos Estáticos (ficam iguais) ---
+        // --- Métodos Estáticos ---
         public static bool EspacoEComercial(string nome)
         {
             return PrecosBase.ContainsKey(nome);
@@ -106,9 +99,9 @@ namespace MonopolyGameLogic
             return GruposDeCor.ContainsKey(cor) ? GruposDeCor[cor] : null;
         }
         
+        
         // --- Métodos de Lógica ---
         
-        // ... (TentarComprar fica igual) ...
         public ResultadoCompra TentarComprar(SistemaJogo.Jogador comprador)
         {
             if (this.Dono != null) { return ResultadoCompra.JaTemDono; }
@@ -118,13 +111,10 @@ namespace MonopolyGameLogic
             return ResultadoCompra.Sucesso;
         }
         
-        // ... (AterrarNoEspaco fica igual) ...
         public void AterrarNoEspaco(SistemaJogo.Jogador jogador, SistemaJogo sistema)
         {
-            // 1. Verificar se tem dono
             if (this.Dono == null)
             {
-                // (Lógica de compra/leilão - Fica tudo igual)
                 if (jogador.Dinheiro >= this.Preco)
                 {
                     string resposta = ""; 
@@ -153,7 +143,7 @@ namespace MonopolyGameLogic
                     ExecutarLogicaDeRecusa(jogador, sistema);
                 }
             }
-            else // Espaço já tem dono
+            else 
             {
                 if (this.Dono == jogador)
                 {
@@ -161,25 +151,24 @@ namespace MonopolyGameLogic
                 }
                 else
                 {
-                    // É de outro jogador! Pagar Renda!
-                    PagarRenda(jogador, this.Dono);
+                    if (this.Hipotecado)
+                    {
+                        Console.WriteLine($"  Você aterrou em [{this.Nome}], que pertence a {this.Dono.Nome}, mas está HIPOTECADO. Não paga renda.");
+                    }
+                    else
+                    {
+                        PagarRenda(jogador, this.Dono, sistema);
+                    }
                 }
             }
-            // Pausa no final da jogada (sempre acontece)
             Console.Write("  Pressione Enter para continuar...");
             Console.ReadLine();
         }
         
-        // <-- MUDANÇA 4: MÉTODO 'PAGARRENDA' ATUALIZADO COM A TUA FÓRMULA -->
-        private void PagarRenda(SistemaJogo.Jogador inquilino, SistemaJogo.Jogador proprietario)
+        private void PagarRenda(SistemaJogo.Jogador inquilino, SistemaJogo.Jogador proprietario, SistemaJogo sistema)
         {
-            // Calcula a renda usando a fórmula:
-            // PreçoDoEspaço * 0,25 + PreçoDoEspaço * 0,75 * NúmeroDeCasasNoEspaço
-            // (this.Preco * 0.25) é a renda base (NivelCasa = 0)
             double rendaBase = this.Preco * 0.25;
             double rendaCasas = this.Preco * 0.75 * this.NivelCasa;
-            
-            // Converte para int para usar como dinheiro
             int valorRenda = (int)(rendaBase + rendaCasas); 
             
             Console.WriteLine($"  Você aterrou em [{this.Nome}], que pertence a {proprietario.Nome}!");
@@ -193,41 +182,42 @@ namespace MonopolyGameLogic
                 Console.WriteLine($"  A renda base é de ${valorRenda}.");
             }
 
-            // (O resto da lógica de pagamento/falência fica igual)
-            if (inquilino.Dinheiro >= valorRenda)
+            if (sistema.TentarPagar(inquilino, valorRenda, $"renda a {proprietario.Nome}"))
             {
-                inquilino.Dinheiro -= valorRenda;
                 proprietario.Dinheiro += valorRenda;
                 Console.WriteLine($"  Você pagou ${valorRenda}. O seu saldo é ${inquilino.Dinheiro}.");
                 Console.WriteLine($"  {proprietario.Nome} recebeu ${valorRenda}. O saldo dele é ${proprietario.Dinheiro}.");
             }
-            else
-            {
-                int dinheiroPago = inquilino.Dinheiro;
-                inquilino.Dinheiro = 0;
-                proprietario.Dinheiro += dinheiroPago;
-                
-                Console.WriteLine($"  Você não tem dinheiro suficiente para a renda completa!");
-                Console.WriteLine($"  Você pagou os seus últimos ${dinheiroPago} e está arruinado (saldo $0).");
-            }
         }
         
-        // ... (O resto do ficheiro - ExecutarLogicaDeRecusa, OferecerPropriedade, IniciarLeilao - fica IGUAL) ...
+        
         private void ExecutarLogicaDeRecusa(SistemaJogo.Jogador jogadorQueRecusou, SistemaJogo sistema)
         {
-            var outrosJogadores = sistema.ObterOutrosJogadores(jogadorQueRecusou);
-            int totalJogadoresNoJogo = sistema.ContagemJogadores;
-            if (totalJogadoresNoJogo == 2)
+            var outrosJogadores = sistema.ObterOutrosJogadores(jogadorQueRecusou); 
+            int totalJogadoresAtivos = sistema.ContagemJogadoresAtivos; 
+
+            if (totalJogadoresAtivos == 2)
             {
-                var outroJogador = outrosJogadores[0]; 
-                if (outroJogador.Dinheiro >= this.Preco) { OferecerPropriedade(outroJogador); }
-                else { Console.WriteLine($"  {outroJogador.Nome} não tem dinheiro (${this.Preco}) para comprar. A propriedade continua sem dono."); }
+                var outroJogador = outrosJogadores.FirstOrDefault(); 
+                if (outroJogador != null)
+                {
+                    if (outroJogador.Dinheiro >= this.Preco) { OferecerPropriedade(outroJogador); }
+                    else { Console.WriteLine($"  {outroJogador.Nome} não tem dinheiro (${this.Preco}) para comprar. A propriedade continua sem dono."); }
+                }
             }
-            else if (totalJogadoresNoJogo > 2)
+            else if (totalJogadoresAtivos > 2 && sistema.LeiloesAtivos)
             {
                 var jogadoresElegiveis = outrosJogadores.Where(j => j.Dinheiro > 0).ToList();
-                if (jogadoresElegiveis.Count > 0) { IniciarLeilao(jogadoresElegiveis); }
+                
+                if (jogadoresElegiveis.Count > 0) { IniciarLeilao(jogadoresElegiveis, sistema); }
                 else { Console.WriteLine("  Nenhum outro jogador tem dinheiro para o leilão. A propriedade continua sem dono."); }
+            }
+            else
+            {
+                if (totalJogadoresAtivos > 2)
+                {
+                    Console.WriteLine("  Leilões estão desligados. A propriedade continua sem dono.");
+                }
             }
         }
 
@@ -253,7 +243,7 @@ namespace MonopolyGameLogic
             else { Console.WriteLine($"  {compradorPotencial.Nome} recusou. A propriedade continua sem dono."); }
         }
 
-        private void IniciarLeilao(List<SistemaJogo.Jogador> licitantes)
+        private void IniciarLeilao(List<SistemaJogo.Jogador> licitantes, SistemaJogo sistema)
         {
             Console.WriteLine($"\n--- LEILÃO INICIADO PARA: {this.Nome} ---");
             Console.WriteLine("Licitantes: " + string.Join(", ", licitantes.Select(j => j.Nome)));
@@ -308,9 +298,12 @@ namespace MonopolyGameLogic
                 vencedor = maiorLicitante; 
                 Console.WriteLine($"--- LEILÃO ENCERRADO ---");
                 Console.WriteLine($"  Vendido a {vencedor.Nome} por ${licitacaoAtual}!");
-                vencedor.Dinheiro -= licitacaoAtual;
-                this.Dono = vencedor;
-                Console.WriteLine($"  O novo saldo de {vencedor.Nome} é ${vencedor.Dinheiro}.");
+                
+                if (sistema.TentarPagar(vencedor, licitacaoAtual, "leilão"))
+                {
+                    this.Dono = vencedor;
+                    Console.WriteLine($"  O novo saldo de {vencedor.Nome} é ${vencedor.Dinheiro}.");
+                }
             }
             else { Console.WriteLine($"--- LEILÃO ENCERRADO ---"); Console.WriteLine("  Todos desistiram (ou ninguém era elegível). A propriedade continua sem dono."); }
         }

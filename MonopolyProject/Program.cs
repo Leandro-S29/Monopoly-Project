@@ -8,6 +8,8 @@ class Program
 {
     static Board board = new Board();
     static SistemaJogo sistema = new SistemaJogo(board); 
+    
+    private const int CentroTabuleiro = 3;
 
     static void Main()
     {
@@ -37,16 +39,24 @@ class Program
     static void RedesenharUI()
     {
         Console.Clear(); 
-        board.Display(); 
+        
+        var jogadores = sistema.ObterJogadoresOrdenados();
+        
+        board.Display(jogadores); 
 
         Console.WriteLine("\n--- Jogadores Registados ---");
         
+        // <-- MUDANÇA AQUI: Mostrar o estado de TODAS as opções de jogo -->
         if (!sistema.JogoIniciado)
         {
             Console.WriteLine($"({sistema.ContagemJogadores}/5 jogadores registados)");
+            string eLeilao = sistema.LeiloesAtivos ? "LIGADOS" : "DESLIGADOS";
+            string eVenda = sistema.VendaCasasAtiva ? "LIGADA" : "DESLIGADA";
+            string eHipot = sistema.HipotecasAtivas ? "LIGADA" : "DESLIGADA";
+            
+            Console.WriteLine($"  Opções: Leilões ({eLeilao}) | Venda Casas ({eVenda}) | Hipotecas ({eHipot})");
         }
         
-        var jogadores = sistema.ObterJogadoresOrdenados();
         var jogadorAtual = sistema.JogadorAtual; 
         
         if (!jogadores.Any())
@@ -57,9 +67,22 @@ class Program
         {
             foreach (var j in jogadores)
             {
-                string prefixo = (j == jogadorAtual) ? "→ " : "- ";
-                string nomeCasa = board.GetSpaceName(j.PosicaoY, j.PosicaoX);
-                Console.WriteLine($"{prefixo}{j.Nome} (${j.Dinheiro}) Posição: [{nomeCasa}]");
+                if (sistema.JogoIniciado && !j.EstaEmJogo)
+                {
+                    Console.WriteLine($"- {j.Nome} (Fora de Jogo)");
+                }
+                else
+                {
+                    string prefixo = (j == jogadorAtual) ? "→ " : "- ";
+                    
+                    int arrayRow = j.PosicaoY + CentroTabuleiro;
+                    int arrayCol = j.PosicaoX + CentroTabuleiro;
+                    string nomeCasa = board.GetSpaceName(arrayRow, arrayCol);
+                    
+                    string estado = j.EstaPreso ? " (Preso)" : "";
+                    
+                    Console.WriteLine($"{prefixo}{j.Nome} (${j.Dinheiro}){estado} Posição: ({j.PosicaoX}, {j.PosicaoY}) [{nomeCasa}]");
+                }
             }
         }
 
@@ -75,18 +98,31 @@ class Program
         Console.WriteLine("\n=== Sistema de Jogo ===");
         Console.WriteLine("Comandos disponíveis:");
         
-        // <-- MUDANÇA: Menu de comandos atualizado -->
         if (!sistema.JogoIniciado)
         {
             Console.WriteLine("  RJ NomeJogador  → Regista novo jogador (Máx 5)");
             Console.WriteLine("  IJ              → Inicia o Jogo (Mín 2)");
-            Console.WriteLine("  LS              → Lista estatísticas dos jogadores");;
+            Console.WriteLine("  LS              → Lista estatísticas dos jogadores");
+            Console.WriteLine("  EF              → Abre o menu de funcionalidades extras");
         }
         else
         {
             Console.WriteLine("  LD              → Lança os dados (inicia o turno)");
             Console.WriteLine("  CC              → Abre o menu de compra de casas");
+            
+            // <-- MUDANÇA AQUI: Novos comandos VC e H adicionados -->
+            if (sistema.VendaCasasAtiva)
+            {
+                Console.WriteLine("  VC              → Abre o menu de venda de casas");
+            }
+            if (sistema.HipotecasAtivas)
+            {
+                Console.WriteLine("  H               → Abre o menu de hipotecas");
+            }
+            
             Console.WriteLine("  PROPS           → Vê as suas propriedades");
+            Console.WriteLine("  EPT             → Propõe um empate aos outros jogadores");
+            Console.WriteLine("  DS              → Desistir do jogo (perde)");
             Console.WriteLine("  ET              → Encerrar o seu turno");
         }
         
