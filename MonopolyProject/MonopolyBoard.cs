@@ -1,3 +1,4 @@
+// Nome do Ficheiro: MonopolyBoard.cs
 using System;
 
 namespace MonopolyBoard
@@ -7,12 +8,10 @@ namespace MonopolyBoard
         private readonly string[,] spaces;
         private const int Size = 7;
         
-        // Largura da célula reduzida
         private const int CellWidth = 13; 
 
         public Board()
         {
-            // Array formatado para ser legível
             spaces = new string[Size, Size]
             {
                 // Col 0                 Col 1                Col 2                  Col 3                Col 4                Col 5                Col 6
@@ -28,7 +27,7 @@ namespace MonopolyBoard
 
         public void Display()
         {
-            Console.WriteLine("\t\t\t\t    === Tabuleiro de Monopólio 7x7 ===\n"); // Título ajustado
+            Console.WriteLine("\t\t\t\t    === Tabuleiro de Monopólio 7x7 ===\n"); 
             DrawTopBorder();
 
             for (int i = 0; i < Size; i++)
@@ -41,7 +40,6 @@ namespace MonopolyBoard
             DrawBottomBorder();
         }
         
-        // Método para obter o nome da casa
         public string GetSpaceName(int row, int col)
         {
             if (row >= 0 && row < Size && col >= 0 && col < Size)
@@ -51,8 +49,32 @@ namespace MonopolyBoard
             return "Fora do Tabuleiro";
         }
 
+        // <-- MUDANÇA AQUI: Mudar a sintaxe de '(int Row, int Col)' para 'Tuple<int, int>' -->
+        /// <summary>
+        /// Encontra as coordenadas (Linha, Coluna) de um espaço pelo seu nome.
+        /// </summary>
+        /// <returns>Um Tuple<int, int> (Item1 = Linha, Item2 = Coluna).</returns>
+        public Tuple<int, int> GetSpaceCoords(string name)
+        {
+            for (int r = 0; r < Size; r++)
+            {
+                for (int c = 0; c < Size; c++)
+                {
+                    if (spaces[r, c].Equals(name, StringComparison.OrdinalIgnoreCase))
+                    {
+                        // <-- MUDANÇA AQUI: 'return (r, c)' mudou para 'return new Tuple...' -->
+                        return new Tuple<int, int>(r, c); // Encontrado!
+                    }
+                }
+            }
+            
+            // Se não encontrar, devolve "Start" por segurança
+            Console.WriteLine($"AVISO: Casa '{name}' não encontrada no tabuleiro!");
+            return new Tuple<int, int>(3, 3); // Posição (3, 3) = Start
+        }
 
-        // --- Métodos de Desenho ---
+
+        // --- Métodos de Desenho (Ficam iguais) ---
         private void DrawTopBorder()
         {
             Console.Write("┌");
@@ -97,24 +119,17 @@ namespace MonopolyBoard
             Console.WriteLine();
         }
 
-        // Método 'CenterText' atualizado para truncar nomes compridos
         private string CenterText(string text, int width)
         {
             text = text.Trim();
-
-            // Se o texto for maior que a célula, encurta-o
             if (text.Length > width)
             {
-                // Retorna os primeiros 'width-1' caracteres + "."
                 return text.Substring(0, width - 1) + "."; 
             }
-            
             if (text.Length == width)
             {
                 return text;
             }
-
-            // Lógica original para centrar
             int padding = width - text.Length;
             int padLeft = padding / 2;
             int padRight = padding - padLeft;

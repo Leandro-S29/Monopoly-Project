@@ -1,16 +1,12 @@
 ﻿using System;
 using System.Linq; 
 using MonopolyBoard;
+using MonopolyGameLogic; 
 using Resisto_dos_jogadores;
-
-namespace MonopolyProject
-{
 
 class Program
 {
     static Board board = new Board();
-    
-    // Passa o 'board' para o construtor do 'sistema'
     static SistemaJogo sistema = new SistemaJogo(board); 
 
     static void Main()
@@ -27,18 +23,14 @@ class Program
 
             bool sucesso = sistema.ExecutarComando(linha);
 
-            if (!sucesso)
+            if (sucesso)
             {
-                // Se o comando falhar (instrução inválida, limites, etc.)
                 RedesenharUI();
             }
-            // Redesenha a UI se um jogador for registado, o jogo começar, ou uma compra for feita
-            else if (comando == "RJ" || comando == "IJ" || comando == "CE") 
+            else
             {
-                RedesenharUI(); 
+                RedesenharUI();
             }
-            // Nota: "LD" (Lançar Dados) não redesenha a UI inteira,
-            // apenas imprime a sua própria saída.
         }
     }
 
@@ -49,13 +41,13 @@ class Program
 
         Console.WriteLine("\n--- Jogadores Registados ---");
         
-        // Mostra a contagem de jogadores (ex: 2/5) antes de o jogo começar
         if (!sistema.JogoIniciado)
         {
             Console.WriteLine($"({sistema.ContagemJogadores}/5 jogadores registados)");
         }
         
         var jogadores = sistema.ObterJogadoresOrdenados();
+        var jogadorAtual = sistema.JogadorAtual; 
         
         if (!jogadores.Any())
         {
@@ -65,31 +57,40 @@ class Program
         {
             foreach (var j in jogadores)
             {
+                string prefixo = (j == jogadorAtual) ? "→ " : "- ";
                 string nomeCasa = board.GetSpaceName(j.PosicaoY, j.PosicaoX);
-                
-                // Mostra o dinheiro do jogador
-                Console.WriteLine($"- {j.Nome} (${j.Dinheiro}) (Jogos:{j.Jogos} V:{j.Vitorias} E:{j.Empates} D:{j.Derrotas}) - Posição: ({j.PosicaoX}, {j.PosicaoY}) [{nomeCasa}]");
+                Console.WriteLine($"{prefixo}{j.Nome} (${j.Dinheiro}) Posição: [{nomeCasa}]");
             }
         }
 
-        Console.WriteLine("\n=== Sistema de Registo de Jogadores ===");
+        if (sistema.JogoIniciado)
+        {
+            Console.WriteLine($"\n💰 Pote do FreePark: ${sistema.DinheiroFreePark}");
+            if (jogadorAtual != null)
+            {
+                Console.WriteLine($"➡️  É a vez de: {jogadorAtual.Nome}"); 
+            }
+        }
+
+        Console.WriteLine("\n=== Sistema de Jogo ===");
         Console.WriteLine("Comandos disponíveis:");
         
-        // Menu dinâmico: muda consoante o jogo tenha começado
+        // <-- MUDANÇA: Menu de comandos atualizado -->
         if (!sistema.JogoIniciado)
         {
             Console.WriteLine("  RJ NomeJogador  → Regista novo jogador (Máx 5)");
             Console.WriteLine("  IJ              → Inicia o Jogo (Mín 2)");
+            Console.WriteLine("  LS              → Lista estatísticas dos jogadores");;
         }
         else
         {
-            Console.WriteLine("  LD NomeJogador  → Lança os dados para um jogador");
-            Console.WriteLine("  CE NomeJogador  → Compra o espaço atual");
+            Console.WriteLine("  LD              → Lança os dados (inicia o turno)");
+            Console.WriteLine("  CC              → Abre o menu de compra de casas");
+            Console.WriteLine("  PROPS           → Vê as suas propriedades");
+            Console.WriteLine("  ET              → Encerrar o seu turno");
         }
         
         Console.WriteLine("  Q               → Termina o programa");
         Console.WriteLine("----------------------------------------");
     }
-}
-
 }
