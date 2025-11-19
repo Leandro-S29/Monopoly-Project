@@ -27,7 +27,6 @@ namespace MonopolyProject
                 // Formula: Base 25% + 75% per house
                 return (int)(Price * 0.25 + Price * 0.75 * HouseCount);
             }
-            //FIXME: Its not specified in the Briefing how to calculate rent for Trains and Utilities, ask what to do
             // Fallback for Trains/Utilities (25% flat rate)
             return (int)(Price * 0.25);
         }
