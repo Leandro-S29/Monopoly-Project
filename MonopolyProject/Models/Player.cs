@@ -16,7 +16,7 @@ namespace MonopolyProject.Models
         public int Row { get; set; } // Y position
         public int Col { get; set; } // X position
         public bool IsInJail { get; set; }
-        public int TurnsInJail { get; set; }
+        public int TurnsInJail { get; set; } // Counts number of turns in jail
         public bool HasRolledThisTurn { get; set; }
         public bool NeedsToPayRent { get; set; } // To Lock turn if rent is due
         public int DoublesCount { get; set; } // To track consecutive doubles dice rolls
