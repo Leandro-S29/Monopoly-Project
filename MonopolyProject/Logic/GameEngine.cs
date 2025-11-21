@@ -10,6 +10,8 @@ namespace MonopolyProject.Logic
         private bool gameInProgress;
         private int freeParkingFunds;
 
+        private Board board;
+
 
         private Dictionary<string, Player> registeredPlayers = new Dictionary<string, Player>();
         private Dictionary<string, Player> activeInGamePlayers = new Dictionary<string, Player>();
@@ -49,7 +51,7 @@ namespace MonopolyProject.Logic
                     ListPlayers();
                     break;
                 case "IJ":
-                    //TODO: Start Game
+                    StartGame(commandParts);
                     break;
                 case "LD":
                     //TODO: Roll Dice's
@@ -102,20 +104,27 @@ namespace MonopolyProject.Logic
         {
             if (registeredPlayers.Count == 0)
             {
-                Console.WriteLine("Sem jogadores registados. ");
+                Console.WriteLine("Sem jogadores registados.");
                 return;
             }
-
-            foreach (var playerEntry in registeredPlayers)
+        
+            var players = new List<Player>(registeredPlayers.Values);
+            players.Sort((a, b) =>
             {
-                Player player = playerEntry.Value;
+                int winComparison = b.Wins.CompareTo(a.Wins);
+                return winComparison != 0 ? winComparison : string.Compare(a.Name, b.Name, StringComparison.Ordinal);
+            });
+        
+            foreach (var player in players)
+            {
                 Console.WriteLine($"{player.Name} {player.GamesPlayed} {player.Wins} {player.Draws} {player.Losses}");
             }
         }
 
+        // Method to start a new game
         public void StartGame(string[] commandParts)
         {
-            if(commandParts.Length != 4)
+            if(commandParts.Length != 5)
             {
                     Console.WriteLine("Instrução inválida.");
                     return;
@@ -126,17 +135,47 @@ namespace MonopolyProject.Logic
                 return;
             }
 
-        
-            
+            List<string> playerNames = new List<string>();
+            for(int i = 1; i < commandParts.Length; i++)
+            {
+                playerNames.Add(commandParts[i]);
+            }
+            foreach(string playerName in playerNames)
+            {
+                if(registeredPlayers.ContainsKey(playerName))
+                {
+                    Player player = registeredPlayers[playerName];
+                    if(!activeInGamePlayers.ContainsKey(playerName))
+                    {
+                        activeInGamePlayers.Add(playerName, player);
+                    }
+                    else
+                    {
+                        Console.WriteLine("Jogador inexistente.");
+                        return;
+                    }
+                }
+                else
+                {
+                    Console.WriteLine("Jogador inexistente.");
+                    return;
+                }
+            }
+
+            freeParkingFunds = 0;
+            board = new Board();
 
 
+            foreach(var player in activeInGamePlayers.Values)
+            {
+                player.ResetForGame();
+                player.GamesPlayed ++;
+            }
 
 
+            gameInProgress = true;
+            Console.WriteLine("Jogo iniciado com sucesso.");
         }
-
-        //TODO: GoToJail Method
-        //TODO: GetActivePlayer Method
-        //TODO: PlayerBankrupt Method
 
     }
 }
