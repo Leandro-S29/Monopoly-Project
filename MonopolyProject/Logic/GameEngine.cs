@@ -11,6 +11,8 @@ namespace MonopolyProject.Logic
         private int freeParkingFunds;
 
         private Board board;
+        private Random random = new Random();
+        private int currentPlayerIndex;
 
 
         private Dictionary<string, Player> registeredPlayers = new Dictionary<string, Player>();
@@ -54,7 +56,7 @@ namespace MonopolyProject.Logic
                     StartGame(commandParts);
                     break;
                 case "LD":
-                    //TODO: Roll Dice's
+                    RollDice(commandParts);
                     break;
                 case "CE":
                     //TODO: Buy space
@@ -172,9 +174,221 @@ namespace MonopolyProject.Logic
                 player.GamesPlayed ++;
             }
 
-
+            currentPlayerIndex = 0;
             gameInProgress = true;
             Console.WriteLine("Jogo iniciado com sucesso.");
+        }
+
+        public void RollDice(string[] commandParts)
+        {
+            if(commandParts.Length != 2)
+            {
+                Console.WriteLine("Instrução inválida.");
+                return;
+            }
+
+            string playerName = commandParts[1];
+            Player activePlayer = GetActivePlayer(playerName);
+
+            // Check if player exists
+            if(activePlayer == null)
+            {
+                Console.WriteLine("Jogador inexistente.");
+                return;
+            }
+
+            // Check if game is in progress
+            if(!gameInProgress)
+            {
+                Console.WriteLine("Não existe um jogo em curso.");
+                return;
+            }
+            
+            // Check if it's the player's turn
+            if(activePlayer != activeInGamePlayers.Values.ElementAt(currentPlayerIndex))
+            {
+                Console.WriteLine("Não é a vez do jogador.");
+                return;
+            }
+
+            // Check if player has already rolled and has no doubles to continue
+            if(activePlayer.HasRolledThisTurn && activePlayer.DoublesCount == 0)
+            {
+                Console.WriteLine("jogador ainda tem ações a fazer.");
+                return;
+            }
+
+            // Check if player needs to pay rent or take card before rolling
+            if (activePlayer.NeedsToPayRent || activePlayer.HasCommunityOrChanceCard) {
+                Console.WriteLine("jogador ainda tem ações a fazer.");
+                return;
+            }
+            
+            // Roll the dice
+            int d1, d2;
+            do { d1 = random.Next(-3, 4); } while (d1 == 0);
+            do { d2 = random.Next(-3, 4); } while (d2 == 0);
+
+            bool isDouble = (d1 == d2); // Check for doubles
+
+            if (activePlayer.IsInJail)
+            {
+                if (isDouble || activePlayer.TurnsInJail >= 3)
+                {
+                    activePlayer.IsInJail = false;
+                    activePlayer.TurnsInJail = 0;
+                    // Proceed to move
+                }
+                else
+                {
+                    activePlayer.TurnsInJail++;
+                    activePlayer.HasRolledThisTurn = true; 
+                    Console.WriteLine($"Saiu {d1}/{d2} - espaço Prison. Jogador só de passagem.");
+                    return;
+                }
+            }
+
+            // Handle Movement
+            // d1 = Horizontal (Right +, Left -)
+            // d2 = Vertical (Up +, Down -)
+            int moveRow = -d2; 
+            int moveCol = d1;
+
+            int newRow = activePlayer.Row + moveRow;
+            int newCol = activePlayer.Col + moveCol;
+
+            // Handle board wrapping : Movements continues on the opposite side
+            while (newRow < 0) newRow += 7;
+            while (newRow > 6) newRow -= 7;
+            while (newCol < 0) newCol += 7;
+            while (newCol > 6) newCol -= 7;
+
+            activePlayer.Row = newRow;
+            activePlayer.Col = newCol;
+            activePlayer.HasRolledThisTurn = true;
+
+            Space spacing = board.Grid[activePlayer.Row, activePlayer.Col];
+
+            if (isDouble)
+            {
+                activePlayer.DoublesCount++;
+                activePlayer.HasRolledThisTurn = false; // Allow rolling again
+                if (activePlayer.DoublesCount == 2) // If happens 2 in a row 
+                {
+                    //Players goes to jail
+                    GoToJail(activePlayer);
+                    Console.WriteLine($"Saiu {d1}/{d2}");
+                    Console.WriteLine("espaço Police. Jogador preso.");
+                    return;
+                }
+            }
+            else
+            {
+                activePlayer.DoublesCount = 0;
+            }
+
+            Console.Write($"Saiu {d1}/{d2} -");
+
+            // After movement in start space get 200
+            if (spacing.Type == SpaceType.Start)
+            {
+                activePlayer.Money += 200;
+                return;
+            }
+
+            // Handle landing on different space types
+            switch (spacing.Type)
+            {
+                case SpaceType.Street:
+                case SpaceType.Train:
+                case SpaceType.Utility:
+                    if (spacing.Owner == null)
+                    {
+                        Console.Write($"espaço {spacing.Name}. Espaço sem dono.");
+                    }
+                    else if (spacing.Owner == activePlayer)
+                    {
+                        Console.Write($"espaço {spacing.Name}. Espaço já comprada.");
+                    }
+                    else
+                    {
+                        Console.Write($"espaço {spacing.Name}. Espaço já comprada por outro jogador. Necessário pagar renda.");
+                        activePlayer.NeedsToPayRent = true;
+                    }
+                    break;
+
+                case SpaceType.Chance:
+                case SpaceType.Community:
+                    Console.Write($"espaço {spacing.Name}. Espaço especial. Tirar carta.");
+                    activePlayer.HasCommunityOrChanceCard = true; // Using this flag to indicate player needs to take action
+                    break;
+
+                case SpaceType.GoToStart:
+                    Console.Write($"Espaço BackToStart. Peça colocada no espaço Start.");
+                    activePlayer.Row = 3; activePlayer.Col = 3; // Move to start
+                    activePlayer.Money += 200; // Player Gets 200 for passing start
+                    break;
+
+                case SpaceType.Police:
+                    Console.Write($"espaço Police. Jogador preso.");
+                    GoToJail(activePlayer);
+                    break;
+
+                case SpaceType.Prison:
+                    Console.Write($"espaço Prison. Jogador só de passagem.");
+                    break;
+
+                case SpaceType.FreePark:
+                    Console.Write($"espaço FreePark. Jogador recebe {freeParkingFunds} ValorGuardado No Free Park.");
+                    activePlayer.Money += freeParkingFunds;
+                    freeParkingFunds = 0;
+                    break;
+
+                case SpaceType.Tax:
+                    // Lux Tax pays 80 to FreePark
+                    if (activePlayer.Money >= 80)
+                    {
+                        activePlayer.Money -= 80;
+                        freeParkingFunds += 80;
+                        Console.WriteLine($"espaço {spacing.Name}. Pago 80 de imposto.");
+                    }
+                    else
+                    {
+                        PlayerBankrupt(activePlayer);
+                    }
+                    break;
+            }
+
+        }
+
+        public void BuySpace(string[] parts)
+        {
+            //TODO:
+        }
+
+        public void GameDetails()
+        {
+            //TODO:
+        }
+
+        public void EndTurn(string[] parts)
+        {
+            //TODO:
+        }
+
+        public void PayRent(string[] parts)
+        {
+            //TODO:    
+        }
+
+        public void BuyHouse(string[] parts) 
+        {
+            // TODO:
+        }
+        
+        public void TakeCard(string[] parts) 
+        { 
+            // TODO:
         }
 
 
@@ -201,7 +415,8 @@ namespace MonopolyProject.Logic
             return null;
         }
 
-        //FIXME: PlayerBankrupt Method
+
+
         public void PlayerBankrupt(Player player)
         {
             //Remove Player from the game 
@@ -214,8 +429,15 @@ namespace MonopolyProject.Logic
                 gameInProgress = false;
                 activeInGamePlayers.Values.First().Wins += 1;
             }
-        }
-
+            else
+            {
+                if(currentPlayerIndex >= activeInGamePlayers.Count)
+                {
+                    currentPlayerIndex = 0;
+                }
+            }
+        } 
+            
     }
 
     
