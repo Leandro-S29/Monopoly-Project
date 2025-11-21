@@ -177,5 +177,44 @@ namespace MonopolyProject.Logic
             Console.WriteLine("Jogo iniciado com sucesso.");
         }
 
+        //TODO: GoToJail Method
+        public void GoToJail(Player player)
+        {
+            // Moves player to prison
+            player.Row = 0; // Makes player go to row = 0
+            player.Col = 0; // Makes player go to col = 0
+            
+            player.IsInJail = true;
+            player.TurnsInJail = 0; // Resets turns in jail counter
+            player.HasRolledThisTurn = true; // Locks player from rolling dice this turn
+        }
+        
+        //TODO: GetActivePlayer Method
+        public Player GetActivePlayer(String playerName)
+        {
+            if(activeInGamePlayers.ContainsKey(playerName))
+            {
+                return activeInGamePlayers[playerName];
+            }
+            return null;
+        }
+
+        //TODO: PlayerBankrupt Method
+        public void PlayerBankrupt(Player player)
+        {
+            //Remove Player from the game 
+            activeInGamePlayers.Remove(player.Name);
+            
+            //update the player's stats 
+            player.Losses += 1;
+            if(activeInGamePlayers.Count == 1)
+            {
+                gameInProgress = false;
+                activeInGamePlayers.Values.First().Wins += 1;
+            }
+        }
+
     }
+
+    
 }
