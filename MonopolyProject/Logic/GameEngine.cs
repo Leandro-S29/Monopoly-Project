@@ -177,7 +177,10 @@ namespace MonopolyProject.Logic
             Console.WriteLine("Jogo iniciado com sucesso.");
         }
 
-        //TODO: GoToJail Method
+
+
+
+        // Helpers Methods
         public void GoToJail(Player player)
         {
             // Moves player to prison
@@ -188,8 +191,7 @@ namespace MonopolyProject.Logic
             player.TurnsInJail = 0; // Resets turns in jail counter
             player.HasRolledThisTurn = true; // Locks player from rolling dice this turn
         }
-        
-        //TODO: GetActivePlayer Method
+
         public Player GetActivePlayer(String playerName)
         {
             if(activeInGamePlayers.ContainsKey(playerName))
@@ -199,7 +201,7 @@ namespace MonopolyProject.Logic
             return null;
         }
 
-        //TODO: PlayerBankrupt Method
+        //FIXME: PlayerBankrupt Method
         public void PlayerBankrupt(Player player)
         {
             //Remove Player from the game 
