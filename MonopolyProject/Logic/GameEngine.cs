@@ -100,7 +100,6 @@ namespace MonopolyProject.Logic
             
             registeredPlayers.Add(name, new Player(name));
             Console.WriteLine("Jogador registado com sucesso.");
-            
         }
 
         // Method to list all registered players
@@ -298,8 +297,7 @@ namespace MonopolyProject.Logic
                 {
                     //Players goes to jail
                     GoToJail(activePlayer);
-                    Console.WriteLine($"Saiu {d1}/{d2}");
-                    Console.WriteLine("espaço Police. Jogador preso.");
+                    Console.WriteLine($"Saiu {d1}/{d2} - espaço Police. Jogador preso.");
                     return;
                 }
             }
@@ -308,80 +306,98 @@ namespace MonopolyProject.Logic
                 activePlayer.DoublesCount = 0;
             }
 
-            Console.Write($"Saiu {d1}/{d2} - ");
+            Console.WriteLine($"Saiu {d1}/{d2} -");
 
-            // After movement in start space get 200
-            if (spacing.Type == SpaceType.Start)
+            HandleSpaceInteraction(activePlayer, spacing);
+        }
+
+        // Helper methods for RollDice
+        // Property handler
+        private void HandleProperty(Player player, Space space)
+        {
+            if (space.Owner == null)
             {
-                activePlayer.Money += 200;
+                Console.WriteLine($"espaço {space.Name}. Espaço sem dono.");
+            }
+            else if (space.Owner == player)
+            {
+                Console.WriteLine($"espaço {space.Name}. Espaço já comprado.");
+            }
+            else
+            {
+                Console.WriteLine($"espaço {space.Name}. Espaço já comprado por outro jogador. Necessário pagar renda.");
+                player.NeedsToPayRent = true;
+            }
+        }
+
+        // Special spaces handler
+        private void HandleSpecialSpaces(Player player, Space space)
+        {
+            switch (space.Type)
+            {
+                case SpaceType.GoToStart:
+                    Console.WriteLine($"Espaço BackToStart. Peça colocada no espaço Start.");
+                    player.Row = 3; player.Col = 3;
+                    player.Money += 200;
+                    break;
+                case SpaceType.Police:
+                    Console.WriteLine($"espaço Police. Jogador preso.");
+                    GoToJail(player);
+                    break;
+                case SpaceType.Prison:
+                    Console.WriteLine($"espaço Prison. Jogador só de passagem.");
+                    break;
+                case SpaceType.FreePark:
+                    Console.WriteLine($"espaço FreePark. Jogador recebe {freeParkingFunds} ValorGuardado No Free Park.");
+                    player.Money += freeParkingFunds;
+                    freeParkingFunds = 0;
+                    break;
+            }
+        }
+
+        // Space interaction handler
+        private void HandleSpaceInteraction(Player player, Space space)
+        {
+            if (space.Type == SpaceType.Start)
+            {
+                player.Money += 200;
                 return;
             }
 
-            // Handle landing on different space types
-            switch (spacing.Type)
+            if (space.Type == SpaceType.Street || space.Type == SpaceType.Train || space.Type == SpaceType.Utility)
             {
-                case SpaceType.Street:
-                case SpaceType.Train:
-                case SpaceType.Utility:
-                    if (spacing.Owner == null)
-                    {
-                        Console.Write($"espaço {spacing.Name}. Espaço sem dono.");
-                    }
-                    else if (spacing.Owner == activePlayer)
-                    {
-                        Console.Write($"espaço {spacing.Name}. Espaço já comprado.");
-                    }
-                    else
-                    {
-                        Console.Write($"espaço {spacing.Name}. Espaço já comprado por outro jogador. Necessário pagar renda.");
-                        activePlayer.NeedsToPayRent = true;
-                    }
-                    break;
-
-                case SpaceType.Chance:
-                case SpaceType.Community:
-                    Console.Write($"espaço {spacing.Name}. Espaço especial. Tirar carta.");
-                    activePlayer.HasCommunityOrChanceCard = true; // Using this flag to indicate player needs to take action
-                    break;
-
-                case SpaceType.GoToStart:
-                    Console.Write($"Espaço BackToStart. Peça colocada no espaço Start.");
-                    activePlayer.Row = 3; activePlayer.Col = 3; // Move to start
-                    activePlayer.Money += 200; // Player Gets 200 for passing start
-                    break;
-
-                case SpaceType.Police:
-                    Console.Write($"espaço Police. Jogador preso.");
-                    GoToJail(activePlayer);
-                    break;
-
-                case SpaceType.Prison:
-                    Console.Write($"espaço Prison. Jogador só de passagem.");
-                    break;
-
-                case SpaceType.FreePark:
-                    Console.Write($"espaço FreePark. Jogador recebe {freeParkingFunds} ValorGuardado No Free Park.");
-                    activePlayer.Money += freeParkingFunds;
-                    freeParkingFunds = 0;
-                    break;
-
-                case SpaceType.Tax:
-                    // Lux Tax pays 80 to FreePark
-                    if (activePlayer.Money >= 80)
-                    {
-                        activePlayer.Money -= 80;
-                        freeParkingFunds += 80;
-                        Console.WriteLine($"espaço {spacing.Name}. Pago 80 de imposto.");
-                    }
-                    else
-                    {
-                        PlayerBankrupt(activePlayer);
-                    }
-                    break;
+                HandleProperty(player, space);
             }
-
+            else if (space.Type == SpaceType.Chance || space.Type == SpaceType.Community)
+            {
+                Console.WriteLine($"espaço {space.Name}. Espaço especial. Tirar carta.");
+                player.HasCommunityOrChanceCard = true;
+            }
+            else if (space.Type == SpaceType.Tax)
+            {
+                HandleTax(player, space);
+            }
+            else
+            {
+                HandleSpecialSpaces(player, space);
+            }
         }
 
+        // Tax handling
+        private void HandleTax(Player player, Space space)
+        {
+            if (player.Money >= 80)
+            {
+                player.Money -= 80;
+                freeParkingFunds += 80;
+            }
+            else
+            {
+                PlayerBankrupt(player);
+            }
+        }
+
+        // Other commands
         public void BuySpace(string[] parts)
         {
             //TODO:
@@ -413,8 +429,6 @@ namespace MonopolyProject.Logic
         }
 
 
-
-
         // Helpers Methods
         public void GoToJail(Player player)
         {
@@ -439,8 +453,6 @@ namespace MonopolyProject.Logic
             }
             return null;
         }
-
-
 
         public void PlayerBankrupt(Player player)
         {
@@ -483,6 +495,4 @@ namespace MonopolyProject.Logic
         }
 
     }
-
-
 }
