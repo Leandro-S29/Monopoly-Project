@@ -233,14 +233,12 @@ namespace MonopolyProject.Logic
             // Check if player has already rolled and has no doubles to continue
             if (activePlayer.HasRolledThisTurn && activePlayer.DoublesCount == 0)
             {
-                Console.WriteLine("jogador ainda tem ações a fazer.");
                 return;
             }
 
             // Check if player needs to pay rent or take card before rolling
             if (activePlayer.NeedsToPayRent || activePlayer.HasCommunityOrChanceCard)
             {
-                Console.WriteLine("jogador ainda tem ações a fazer.");
                 return;
             }
 
