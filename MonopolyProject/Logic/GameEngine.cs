@@ -6,23 +6,25 @@ namespace MonopolyProject.Logic
 {
     public class GameEngine
     {
+        // Game state variables
         private bool gameInProgress;
         private int freeParkingFunds;
 
+        // The game board instance and random number generator
         private Board board;
         private Random random = new Random();
+
+        // To track whose turn it is
         private int currentPlayerIndex;
 
-
+        // Player management
         private Dictionary<string, Player> registeredPlayers = new Dictionary<string, Player>();
-        private Dictionary<string, Player> activeInGamePlayers = new Dictionary<string, Player>();
-
-
+        private List<Player> activePlayersInGameWithOrder = new List<Player>();
 
         public GameEngine()
         {
             registeredPlayers = new Dictionary<string, Player>();
-            activeInGamePlayers = new Dictionary<string, Player>();
+            activePlayersInGameWithOrder = new List<Player>();
             gameInProgress = false;
         }
 
@@ -30,13 +32,13 @@ namespace MonopolyProject.Logic
         // Method to read and process commands
         public void commandReading(string command)
         {
-            if(string.IsNullOrWhiteSpace(command))
+            if (string.IsNullOrWhiteSpace(command))
             {
                 return;
             }
 
             string[] commandParts = command.Split(' ', StringSplitOptions.RemoveEmptyEntries);
-            if(commandParts.Length == 0)
+            if (commandParts.Length == 0)
             {
                 return;
             }
@@ -77,9 +79,9 @@ namespace MonopolyProject.Logic
                     break;
                 default:
                     Console.WriteLine("Instrução inválida.");
-                break;
+                    break;
             }
-            
+
         }
 
         // Method to register a new player
@@ -99,7 +101,7 @@ namespace MonopolyProject.Logic
                 Console.WriteLine("Jogador registrado com sucesso.");
             }
         }
-        
+
         // Method to list all registered players
         public void ListPlayers()
         {
@@ -108,14 +110,14 @@ namespace MonopolyProject.Logic
                 Console.WriteLine("Sem jogadores registados.");
                 return;
             }
-        
+
             var players = new List<Player>(registeredPlayers.Values);
             players.Sort((a, b) =>
             {
                 int winComparison = b.Wins.CompareTo(a.Wins);
                 return winComparison != 0 ? winComparison : string.Compare(a.Name, b.Name, StringComparison.Ordinal);
             });
-        
+
             foreach (var player in players)
             {
                 Console.WriteLine($"{player.Name} {player.GamesPlayed} {player.Wins} {player.Draws} {player.Losses}");
@@ -125,30 +127,46 @@ namespace MonopolyProject.Logic
         // Method to start a new game
         public void StartGame(string[] commandParts)
         {
-            if(commandParts.Length != 5)
+            if (commandParts.Length != 5)
             {
-                    Console.WriteLine("Instrução inválida.");
-                    return;
+                Console.WriteLine("Instrução inválida.");
+                return;
             }
-            else if(gameInProgress == true)
+            else if (gameInProgress == true)
             {
                 Console.WriteLine("Existe um jogo em curso.");
                 return;
             }
 
             List<string> playerNames = new List<string>();
-            for(int i = 1; i < commandParts.Length; i++)
+            for (int i = 1; i < commandParts.Length; i++)
             {
                 playerNames.Add(commandParts[i]);
             }
-            foreach(string playerName in playerNames)
+
+            // Clear previous game state
+            activePlayersInGameWithOrder.Clear();
+
+            foreach (string playerName in playerNames)
             {
-                if(registeredPlayers.ContainsKey(playerName))
+                if (registeredPlayers.ContainsKey(playerName))
                 {
                     Player player = registeredPlayers[playerName];
-                    if(!activeInGamePlayers.ContainsKey(playerName))
+                    
+                    // Check if player is already in the list to avoid duplicates
+                    bool isAlreadyInGame = false;
+                    foreach (var activePlayer in activePlayersInGameWithOrder)
                     {
-                        activeInGamePlayers.Add(playerName, player);
+                        if (activePlayer == player)
+                        {
+                            isAlreadyInGame = true;
+                            break;
+                        }
+                    }
+
+                    if (!isAlreadyInGame)
+                    {
+                        activePlayersInGameWithOrder.Add(player);
                     }
                     else
                     {
@@ -167,10 +185,10 @@ namespace MonopolyProject.Logic
             board = new Board();
 
 
-            foreach(var player in activeInGamePlayers.Values)
+            foreach (var player in activePlayersInGameWithOrder)
             {
                 player.ResetForGame();
-                player.GamesPlayed ++;
+                player.GamesPlayed++;
             }
 
             currentPlayerIndex = 0;
@@ -180,7 +198,7 @@ namespace MonopolyProject.Logic
 
         public void RollDice(string[] commandParts)
         {
-            if(commandParts.Length != 2)
+            if (commandParts.Length != 2)
             {
                 Console.WriteLine("Instrução inválida.");
                 return;
@@ -190,39 +208,40 @@ namespace MonopolyProject.Logic
             Player activePlayer = GetActivePlayer(playerName);
 
             // Check if player exists
-            if(activePlayer == null)
+            if (activePlayer == null)
             {
                 Console.WriteLine("Jogador inexistente.");
                 return;
             }
 
             // Check if game is in progress
-            if(!gameInProgress)
+            if (!gameInProgress)
             {
                 Console.WriteLine("Não existe um jogo em curso.");
                 return;
             }
-            
-            // Check if it's the player's turn
-            if(activePlayer != activeInGamePlayers.Values.ElementAt(currentPlayerIndex))
+
+            // Check if it's the player's turn using the list index
+            if (activePlayer != activePlayersInGameWithOrder[currentPlayerIndex])
             {
                 Console.WriteLine("Não é a vez do jogador.");
                 return;
             }
 
             // Check if player has already rolled and has no doubles to continue
-            if(activePlayer.HasRolledThisTurn && activePlayer.DoublesCount == 0)
+            if (activePlayer.HasRolledThisTurn && activePlayer.DoublesCount == 0)
             {
                 Console.WriteLine("jogador ainda tem ações a fazer.");
                 return;
             }
 
             // Check if player needs to pay rent or take card before rolling
-            if (activePlayer.NeedsToPayRent || activePlayer.HasCommunityOrChanceCard) {
+            if (activePlayer.NeedsToPayRent || activePlayer.HasCommunityOrChanceCard)
+            {
                 Console.WriteLine("jogador ainda tem ações a fazer.");
                 return;
             }
-            
+
             // Roll the dice
             int d1, d2;
             do { d1 = random.Next(-3, 4); } while (d1 == 0);
@@ -241,7 +260,7 @@ namespace MonopolyProject.Logic
                 else
                 {
                     activePlayer.TurnsInJail++;
-                    activePlayer.HasRolledThisTurn = true; 
+                    activePlayer.HasRolledThisTurn = true;
                     Console.WriteLine($"Saiu {d1}/{d2} - espaço Prison. Jogador só de passagem.");
                     return;
                 }
@@ -250,7 +269,7 @@ namespace MonopolyProject.Logic
             // Handle Movement
             // d1 = Horizontal (Right +, Left -)
             // d2 = Vertical (Up +, Down -)
-            int moveRow = -d2; 
+            int moveRow = -d2;
             int moveCol = d1;
 
             int newRow = activePlayer.Row + moveRow;
@@ -380,13 +399,13 @@ namespace MonopolyProject.Logic
             //TODO:    
         }
 
-        public void BuyHouse(string[] parts) 
+        public void BuyHouse(string[] parts)
         {
             // TODO:
         }
-        
-        public void TakeCard(string[] parts) 
-        { 
+
+        public void TakeCard(string[] parts)
+        {
             // TODO:
         }
 
@@ -399,7 +418,7 @@ namespace MonopolyProject.Logic
             // Moves player to prison
             player.Row = 0; // Makes player go to row = 0
             player.Col = 0; // Makes player go to col = 0
-            
+
             player.IsInJail = true;
             player.TurnsInJail = 0; // Resets turns in jail counter
             player.HasRolledThisTurn = true; // Locks player from rolling dice this turn
@@ -407,9 +426,13 @@ namespace MonopolyProject.Logic
 
         public Player GetActivePlayer(String playerName)
         {
-            if(activeInGamePlayers.ContainsKey(playerName))
+            // Iterate list to find player (replacement for Dictionary lookup)
+            foreach (var player in activePlayersInGameWithOrder)
             {
-                return activeInGamePlayers[playerName];
+                if (player.Name == playerName)
+                {
+                    return player;
+                }
             }
             return null;
         }
@@ -418,26 +441,45 @@ namespace MonopolyProject.Logic
 
         public void PlayerBankrupt(Player player)
         {
-            //Remove Player from the game 
-            activeInGamePlayers.Remove(player.Name);
-            
-            //update the player's stats 
-            player.Losses += 1;
-            if(activeInGamePlayers.Count == 1)
+            // Remove Player from the game using the list
+            int playerIndex = -1;
+            for (int i = 0; i < activePlayersInGameWithOrder.Count; i++)
             {
-                gameInProgress = false;
-                activeInGamePlayers.Values.First().Wins += 1;
-            }
-            else
-            {
-                if(currentPlayerIndex >= activeInGamePlayers.Count)
+                if (activePlayersInGameWithOrder[i] == player)
                 {
-                    currentPlayerIndex = 0;
+                    playerIndex = i;
+                    break;
                 }
             }
-        } 
-            
+
+            if (playerIndex != -1)
+            {
+                activePlayersInGameWithOrder.RemoveAt(playerIndex);
+
+                // If the player removed was before the current player, decrement index
+                // to keep the turn with the correct next person
+                if (playerIndex < currentPlayerIndex)
+                {
+                    currentPlayerIndex--;
+                }
+            }
+
+            // Handle wrap around if index is now out of bounds
+            if (currentPlayerIndex >= activePlayersInGameWithOrder.Count)
+            {
+                currentPlayerIndex = 0;
+            }
+
+            // update the player's stats 
+            player.Losses += 1;
+            if (activePlayersInGameWithOrder.Count == 1)
+            {
+                gameInProgress = false;
+                activePlayersInGameWithOrder[0].Wins += 1;
+            }
+        }
+
     }
 
-    
+
 }
