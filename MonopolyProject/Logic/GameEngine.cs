@@ -12,9 +12,9 @@ namespace MonopolyProject.Logic
 
         // The game board instance and random number generator
         private Board board;
-        private Random random = new Random();
+        private Random random;
 
-        // To track whose turn it is
+        // To track the current player's turn
         private int currentPlayerIndex;
 
         // Player management
@@ -26,6 +26,8 @@ namespace MonopolyProject.Logic
             registeredPlayers = new Dictionary<string, Player>();
             activePlayersInGameWithOrder = new List<Player>();
             gameInProgress = false;
+            random = new Random();
+            freeParkingFunds = 0;
         }
 
 
@@ -95,11 +97,10 @@ namespace MonopolyProject.Logic
                 Console.WriteLine("Jogador existente.");
                 return;
             }
-            else
-            {
-                registeredPlayers.Add(name, new Player(name));
-                Console.WriteLine("Jogador registado com sucesso.");
-            }
+            
+            registeredPlayers.Add(name, new Player(name));
+            Console.WriteLine("Jogador registado com sucesso.");
+            
         }
 
         // Method to list all registered players
@@ -150,36 +151,24 @@ namespace MonopolyProject.Logic
 
             foreach (string playerName in playerNames)
             {
-                if (registeredPlayers.ContainsKey(playerName))
-                {
-                    Player player = registeredPlayers[playerName];
-                    
-                    // Check if player is already in the list to avoid duplicates
-                    bool isAlreadyInGame = false;
-                    foreach (var activePlayer in activePlayersInGameWithOrder)
-                    {
-                        if (activePlayer == player)
-                        {
-                            isAlreadyInGame = true;
-                            break;
-                        }
-                    }
-
-                    if (!isAlreadyInGame)
-                    {
-                        activePlayersInGameWithOrder.Add(player);
-                    }
-                    else
-                    {
-                        Console.WriteLine("Jogador inexistente.");
-                        return;
-                    }
-                }
-                else
+                // Check if player is NOT registered
+                if (!registeredPlayers.ContainsKey(playerName))
                 {
                     Console.WriteLine("Jogador inexistente.");
                     return;
                 }
+
+                Player player = registeredPlayers[playerName];
+
+                // Check if player is already in the game
+                if (activePlayersInGameWithOrder.Contains(player))
+                {
+                    Console.WriteLine("Jogador inexistente.");
+                    return;
+                }
+
+                // Add player to the active game list
+                activePlayersInGameWithOrder.Add(player);
             }
 
             freeParkingFunds = 0;
