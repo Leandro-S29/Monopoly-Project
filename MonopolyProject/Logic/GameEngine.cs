@@ -60,22 +60,22 @@ namespace MonopolyProject.Logic
                     RollDice(commandParts);
                     break;
                 case "CE":
-                    //TODO: Buy space
+                    BuySpace(commandParts);
                     break;
                 case "DJ":
-                    //TODO: Game Details
+                    GameDetails();
                     break;
                 case "TT":
-                    //TODO: End Turn
+                    EndTurn(commandParts);
                     break;
                 case "PA":
-                    //TODO: Pay Rent
+                    PayRent(commandParts);
                     break;
                 case "CC":
-                    //TODO: Buy House
+                    BuyHouse(commandParts);
                     break;
                 case "TC":
-                    //TODO: Take Cards
+                    TakeCard(commandParts);
                     break;
                 default:
                     Console.WriteLine("Instrução inválida.");
@@ -98,7 +98,7 @@ namespace MonopolyProject.Logic
             else
             {
                 registeredPlayers.Add(name, new Player(name));
-                Console.WriteLine("Jogador registrado com sucesso.");
+                Console.WriteLine("Jogador registado com sucesso.");
             }
         }
 
@@ -111,6 +111,7 @@ namespace MonopolyProject.Logic
                 return;
             }
 
+            // Sort players by wins descending, then by name ascending using a List
             var players = new List<Player>(registeredPlayers.Values);
             players.Sort((a, b) =>
             {
@@ -198,26 +199,27 @@ namespace MonopolyProject.Logic
 
         public void RollDice(string[] commandParts)
         {
-            if (commandParts.Length != 2)
+            if (commandParts.Length != 2 && commandParts.Length != 4)
             {
                 Console.WriteLine("Instrução inválida.");
                 return;
             }
 
             string playerName = commandParts[1];
-            Player activePlayer = GetActivePlayer(playerName);
-
-            // Check if player exists
-            if (activePlayer == null)
-            {
-                Console.WriteLine("Jogador inexistente.");
-                return;
-            }
-
+            
             // Check if game is in progress
             if (!gameInProgress)
             {
                 Console.WriteLine("Não existe um jogo em curso.");
+                return;
+            }
+
+            Player activePlayer = GetActivePlayer(playerName);
+
+            // Check if player is in the current game
+            if (activePlayer == null)
+            {
+                Console.WriteLine("Jogador não participa no jogo em curso.");
                 return;
             }
 
@@ -242,10 +244,24 @@ namespace MonopolyProject.Logic
                 return;
             }
 
-            // Roll the dice
+            // Roll the dice (Cheat Mode or Random)
             int d1, d2;
-            do { d1 = random.Next(-3, 4); } while (d1 == 0);
-            do { d2 = random.Next(-3, 4); } while (d2 == 0);
+
+            if (commandParts.Length == 4)
+            {
+                // Attempt to parse the cheat values
+                if (!int.TryParse(commandParts[2], out d1) || !int.TryParse(commandParts[3], out d2))
+                {
+                    Console.WriteLine("Instrução inválida.");
+                    return;
+                }
+            }
+            else
+            {
+                // Standard logic: Generate random values between -3 and 3, excluding 0
+                do { d1 = random.Next(-3, 4); } while (d1 == 0);
+                do { d2 = random.Next(-3, 4); } while (d2 == 0);
+            }
 
             bool isDouble = (d1 == d2); // Check for doubles
 
@@ -305,7 +321,7 @@ namespace MonopolyProject.Logic
                 activePlayer.DoublesCount = 0;
             }
 
-            Console.Write($"Saiu {d1}/{d2} -");
+            Console.Write($"Saiu {d1}/{d2} - ");
 
             // After movement in start space get 200
             if (spacing.Type == SpaceType.Start)
@@ -326,11 +342,11 @@ namespace MonopolyProject.Logic
                     }
                     else if (spacing.Owner == activePlayer)
                     {
-                        Console.Write($"espaço {spacing.Name}. Espaço já comprada.");
+                        Console.Write($"espaço {spacing.Name}. Espaço já comprado.");
                     }
                     else
                     {
-                        Console.Write($"espaço {spacing.Name}. Espaço já comprada por outro jogador. Necessário pagar renda.");
+                        Console.Write($"espaço {spacing.Name}. Espaço já comprado por outro jogador. Necessário pagar renda.");
                         activePlayer.NeedsToPayRent = true;
                     }
                     break;
