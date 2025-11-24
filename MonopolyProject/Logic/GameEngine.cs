@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using MonopolyProject.Models;
 
 namespace MonopolyProject.Logic
@@ -410,7 +411,45 @@ namespace MonopolyProject.Logic
 
         public void EndTurn(string[] parts)
         {
-            //TODO:
+            if (parts.Length != 2)
+            {
+                Console.WriteLine("Instrução inválida.");
+                return;
+            }
+            
+            if (!gameInProgress)
+            {
+                Console.WriteLine("Não existe jogo em curso.");
+                return;
+            }
+            
+            string playerName = parts[1];
+            Player activePlayer = GetActivePlayer(playerName);
+
+            if(activePlayer != activePlayersInGameWithOrder[currentPlayerIndex])
+            {
+                Console.WriteLine("Não é o turno do jogador indicado.");
+                return;
+            }
+
+            if (!activePlayer.HasRolledThisTurn || activePlayer.NeedsToPayRent || activePlayer.HasCommunityOrChanceCard || (activePlayer.DoublesCount > 0 && activePlayer.DoublesCount < 2))
+            {
+                Console.WriteLine("jogador ainda tem ações a fazer.");
+                return;
+            }
+
+            // Reset player state for next turn
+            activePlayer.HasRolledThisTurn = false;
+            activePlayer.DoublesCount = 0;
+            activePlayer.NeedsToPayRent = false;
+            activePlayer.HasCommunityOrChanceCard = false;
+
+            // Move to next player
+            currentPlayerIndex = (currentPlayerIndex + 1) % activePlayersInGameWithOrder.Count;
+
+            String nextPlayerName = activePlayersInGameWithOrder[currentPlayerIndex].Name;
+            Console.WriteLine($"Turno terminado. Novo turno do jogador {nextPlayerName}.");    
+
         }
 
         public void PayRent(string[] parts)
