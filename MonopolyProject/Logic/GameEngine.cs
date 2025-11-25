@@ -478,12 +478,113 @@ namespace MonopolyProject.Logic
 
         public void PayRent(string[] parts)
         {
-            //TODO:    
+            if(parts.Length != 2)
+            {
+                Console.WriteLine("Instrução inválida.");
+                return;
+            }
+
+            if (!gameInProgress)
+            {
+                Console.WriteLine("Não existe jogo em curso.");
+                return;
+            }
+
+            string playerName = parts[1];
+            Player activePlayer = GetActivePlayer(playerName);
+            if(activePlayer != activePlayersInGameWithOrder[currentPlayerIndex])
+            {
+                Console.WriteLine("Não é o vez do jogador.");
+                return;
+            }
+
+            Space currentSpace = board.Grid[activePlayer.Row, activePlayer.Col];
+            if (!activePlayer.NeedsToPayRent || currentSpace.Owner == null || currentSpace.Owner == activePlayer || currentSpace.Type != SpaceType.Street && currentSpace.Type != SpaceType.Train && currentSpace.Type != SpaceType.Utility)
+            {
+                Console.WriteLine("Não é necessário pagar aluguer."); 
+                activePlayer.NeedsToPayRent = false; // Fix state if stuck
+                return;
+            }
+
+            int rentAmount = currentSpace.CalculateRent();
+
+            if (activePlayer.Money < rentAmount)
+            {
+                Console.WriteLine("jogador não tem dinheiro suficiente.");
+                PlayerBankrupt(activePlayer);
+            }
+
+            activePlayer.Money -= rentAmount;
+            currentSpace.Owner.Money += rentAmount;
+            activePlayer.NeedsToPayRent = false;
+            Console.WriteLine("Aluguer pago.");
+
         }
 
         public void BuyHouse(string[] parts)
         {
-            // TODO:
+            if(parts.Length != 3)
+            {
+                Console.WriteLine("Instrução inválida.");
+                return;
+            }
+
+            if (!gameInProgress)
+            {
+                Console.WriteLine("Não existe jogo em curso.");
+                return;
+            }
+
+            string playerName = parts[1];
+            string houseSpaceName = parts[2];
+            Player activePlayer = GetActivePlayer(playerName);
+
+            if(activePlayer != activePlayersInGameWithOrder[currentPlayerIndex])
+            {
+                Console.WriteLine("Não é o vez do jogador.");
+                return;
+            }
+
+
+            Space CurrentSpace = board.Grid[activePlayer.Row, activePlayer.Col];
+            if (CurrentSpace.Name != houseSpaceName)
+            {
+                Console.WriteLine("Não é possível comprar casa no espaço indicado.");
+                return;
+            }
+
+            if (CurrentSpace.Type != SpaceType.Street)
+            {
+                Console.WriteLine("Não é possível comprar casa no espaço indicado."); 
+                return;
+            }
+             
+             //Checks if Player owns all properties in the color group
+            if(!OwnsAllColor(activePlayer, CurrentSpace.ColorGroup))
+            {
+                Console.WriteLine("Não é possível comprar casa no espaço indicado.");
+                return;
+            }
+            
+            if(CurrentSpace.HouseCount >= 4)
+            {
+                Console.WriteLine("Número máximo de casas atingido.");
+                return;
+            }
+
+            int houseCost = CurrentSpace.HouseCost();
+            if(activePlayer.Money < houseCost)
+            {
+                Console.WriteLine("jogador não tem dinheiro suficiente.");
+                return;
+            }
+
+            activePlayer.Money -= houseCost;
+            CurrentSpace.HouseCount += 1;
+            Console.WriteLine("Casa adquirida.");
+
+            
+
         }
 
         public void TakeCard(string[] parts)
@@ -515,6 +616,21 @@ namespace MonopolyProject.Logic
                 }
             }
             return null;
+        }
+
+        public bool OwnsAllColor(Player player, ColorType colorGroup)
+        {
+            foreach (var space in board.Grid)
+            {
+                if (space.ColorGroup == colorGroup)
+                {
+                    if (space.Owner != player)
+                    {
+                        return false;
+                    }
+                }
+            }
+            return true;
         }
 
         public void PlayerBankrupt(Player player)

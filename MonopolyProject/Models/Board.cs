@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 
 namespace MonopolyProject.Models
 {
@@ -15,7 +16,7 @@ namespace MonopolyProject.Models
         private void InitializeBoard()
         {
             // Helper to initialize the board with spaces
-            
+
             // Row 0
             Grid[0, 0] = new Space("Prison", SpaceType.Prison, 0, ColorType.Blank);
             Grid[0, 1] = new Space("Green3", SpaceType.Street, 160, ColorType.Green);
@@ -80,7 +81,6 @@ namespace MonopolyProject.Models
             Grid[6, 6] = new Space("Police", SpaceType.Police, 0, ColorType.Blank);
         }
 
-
         public void DisplayBoard(List<Player> players)
         {
             for (int row = 0; row < 7; row++)
@@ -89,11 +89,43 @@ namespace MonopolyProject.Models
                 {
                     Space space = Grid[row, col];
                     string spaceString = "| " + space.Name;
+
+                    // In case of a player be in jail, show that he is in prison
+                    if (space.Type == SpaceType.Prison)
+                    {
+                        foreach (var p in players)
+                        {
+                            if (p.IsInJail)
+                            {
+                                spaceString += $" ({p.Name})";
+                            }
+                        }
+                    }
+                    else
+                    {
+                        // If the space has an owner, show the owner's name
+                        if (space.Owner != null)
+                        {
+                            spaceString += $" ({space.Owner.Name}";
+                            // Indicate number of houses if any
+                            if (space.HouseCount > 0)
+                            {
+                                spaceString += $"-{space.HouseCount}";
+                            }
+                            spaceString += ")";
+                        }
+                    }
+
+                    // Show players on the space 
                     foreach (var player in players)
                     {
                         if (player.Col == col && player.Row == row)
                         {
-                            spaceString += $" {player.Name} ";
+                            // Players out of jail are shown on the prison space
+                            if (space.Type != SpaceType.Prison || !player.IsInJail)
+                            {
+                                spaceString += $" {player.Name}";
+                            }
                         }
                     }
 
@@ -101,7 +133,7 @@ namespace MonopolyProject.Models
                     Console.Write(spaceString);
                 }
 
-                Console.WriteLine();
+                Console.WriteLine("|");
             }
         }
     }
