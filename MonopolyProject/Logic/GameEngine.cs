@@ -3,6 +3,9 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using MonopolyProject.Models;
 
+
+//FIXME: Refactor to separate into a CLI and Game Logic 
+
 namespace MonopolyProject.Logic
 {
     public class GameEngine
@@ -111,15 +114,28 @@ namespace MonopolyProject.Logic
                 Console.WriteLine("Sem jogadores registados.");
                 return;
             }
-
-            // Sort players by wins descending, then by name ascending using a List
+        
             var players = new List<Player>(registeredPlayers.Values);
-            players.Sort((a, b) =>
+        
+            // Sort players by wins (descending) and then by name (ascending)
+            for (int i = 0; i < players.Count - 1; i++)
             {
-                int winComparison = b.Wins.CompareTo(a.Wins);
-                return winComparison != 0 ? winComparison : string.Compare(a.Name, b.Name, StringComparison.Ordinal);
-            });
-
+                for (int j = i + 1; j < players.Count; j++)
+                {
+                    var left = players[i];
+                    var right = players[j];
+        
+                    bool shouldSwap = right.Wins > left.Wins ||
+                                      (right.Wins == left.Wins && string.Compare(right.Name, left.Name, StringComparison.Ordinal) < 0);
+        
+                    if (shouldSwap)
+                    {
+                        players[i] = right;
+                        players[j] = left;
+                    }
+                }
+            }
+        
             foreach (var player in players)
             {
                 Console.WriteLine($"{player.Name} {player.GamesPlayed} {player.Wins} {player.Draws} {player.Losses}");
@@ -222,6 +238,7 @@ namespace MonopolyProject.Logic
             // Check if player has already rolled and has no doubles to continue
             if (activePlayer.HasRolledThisTurn && activePlayer.DoublesCount == 0)
             {
+                Console.WriteLine("Não é a vez do jogador.");
                 return;
             }
 
@@ -245,7 +262,7 @@ namespace MonopolyProject.Logic
             }
             else
             {
-                // Standard logic: Generate random values between -3 and 3, excluding 0
+                // Generate random values between -3 and 3, excluding 0
                 do { d1 = random.Next(-3, 4); } while (d1 == 0);
                 do { d2 = random.Next(-3, 4); } while (d2 == 0);
             }
