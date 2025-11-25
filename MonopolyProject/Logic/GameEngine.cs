@@ -406,7 +406,14 @@ namespace MonopolyProject.Logic
 
         public void GameDetails()
         {
-            //TODO:
+            if(gameInProgress)
+            {
+                Player player = GetActivePlayer(activePlayersInGameWithOrder[currentPlayerIndex].Name);
+                board.DisplayBoard(activePlayersInGameWithOrder);
+                Console.WriteLine($"{player.Name} - {player.Money}");
+                return;
+            }else
+            Console.WriteLine("Não existe nenhum jogo em curso!");
         }
 
         public void EndTurn(string[] parts)

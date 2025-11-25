@@ -79,5 +79,30 @@ namespace MonopolyProject.Models
             Grid[6, 5] = new Space("Yellow2", SpaceType.Street, 140, ColorType.Yellow);
             Grid[6, 6] = new Space("Police", SpaceType.Police, 0, ColorType.Blank);
         }
+
+
+        public void DisplayBoard(List<Player> players)
+        {
+            for (int row = 0; row < 7; row++)
+            {
+                for (int col = 0; col < 7; col++)
+                {
+                    Space space = Grid[row, col];
+                    string spaceString = "| " + space.Name;
+                    foreach (var player in players)
+                    {
+                        if (player.Col == col && player.Row == row)
+                        {
+                            spaceString += $" {player.Name} ";
+                        }
+                    }
+
+                    spaceString += " ";
+                    Console.Write(spaceString);
+                }
+
+                Console.WriteLine();
+            }
+        }
     }
 }
