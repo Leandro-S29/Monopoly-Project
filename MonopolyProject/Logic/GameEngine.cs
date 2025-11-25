@@ -418,7 +418,49 @@ namespace MonopolyProject.Logic
         // Other commands
         public void BuySpace(string[] parts)
         {
-            //TODO:
+            if(parts.Length != 2)
+            {
+                Console.WriteLine("Instrução inválida.");
+                return;
+            }
+            string name = parts[1];
+
+            if(!gameInProgress)
+            {
+                Console.WriteLine("Não existe um jogo em curso.");
+                return;
+            }
+            
+            Player activePlayer = GetActivePlayer(name);
+            if(activePlayer != activePlayersInGameWithOrder[currentPlayerIndex])
+            {
+                Console.WriteLine("Não é a vez do jogador.");
+                return;
+            }
+            Space space = board.Grid[activePlayer.Row, activePlayer.Col];
+
+            if(space.Type != SpaceType.Street && space.Type != SpaceType.Train && space.Type != SpaceType.Utility)
+            {
+                Console.WriteLine("Este espaço não está para venda");
+                return;
+            }
+
+            if(activePlayer != activePlayersInGameWithOrder[currentPlayerIndex])
+            {
+                Console.WriteLine("Não é a vez do jogador.");
+                return;
+            }
+
+            if(space.Owner != null)
+            {
+                Console.WriteLine("O espaço já se encontra comprado.");
+                return;
+            }
+
+            
+            activePlayer.Money -= space.Price;
+            space.Owner = activePlayer;
+            Console.WriteLine("Espaço comprado.");
         }
 
         public void GameDetails()
