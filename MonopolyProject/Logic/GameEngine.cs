@@ -423,15 +423,22 @@ namespace MonopolyProject.Logic
                 Console.WriteLine("Instrução inválida.");
                 return;
             }
-            string name = parts[1];
-
+            
             if(!gameInProgress)
             {
                 Console.WriteLine("Não existe um jogo em curso.");
                 return;
             }
+
+            string playerName = parts[1];
+            Player activePlayer = GetActivePlayer(playerName);
             
-            Player activePlayer = GetActivePlayer(name);
+            if(activePlayer == null)
+            {
+                Console.WriteLine("Jogador não participa no jogo em curso.");
+                return;
+            }
+
             if(activePlayer != activePlayersInGameWithOrder[currentPlayerIndex])
             {
                 Console.WriteLine("Não é a vez do jogador.");
@@ -631,9 +638,165 @@ namespace MonopolyProject.Logic
 
         public void TakeCard(string[] parts)
         {
-            // TODO:
-        }
+            string playerName = parts[1];
+            Player activePlayer = GetActivePlayer(playerName);
+            Space space = board.Grid[activePlayer.Row, activePlayer.Col];
 
+            if(parts.Length != 2)
+            {
+                Console.WriteLine("Instrução inválida.");
+                return;
+            }
+            if (!gameInProgress)
+            {
+                Console.WriteLine("Não existe jogo em curso.");
+                return;
+            }
+
+            if(activePlayer == null)
+            {
+                Console.WriteLine("Jogador não participa no jogo em curso.");
+                return;
+            }
+
+            if(activePlayer != activePlayersInGameWithOrder[currentPlayerIndex])
+            {
+                Console.WriteLine("Não é o vez do jogador.");
+                return;
+            }
+
+            if(!activePlayer.HasCommunityOrChanceCard)
+            {
+                Console.WriteLine("O jogador não necessita de tirar carta.");
+                return;
+            }
+
+            if (!activePlayer.NeedsToPayRent)
+            {
+                Console.WriteLine("A Carta já foi tirada.");
+            }
+
+            if(space.Type != SpaceType.Chance && space.Type != SpaceType.Community)
+            {
+                Console.WriteLine("Não é possível tirar uma carta neste espaço.");
+                return;
+            }
+
+            int roll = random.Next(1, 101);
+            
+
+            if(space.Type != SpaceType.Chance)
+            {
+                if(roll <= 20)
+                {
+                    Console.WriteLine("O jogador recebeu 150.");
+                    activePlayer.Money += 150;
+                }else if(roll <= 30)
+                {
+                    Console.WriteLine("O jogador recebeu 200.");
+                    activePlayer.Money += 200;
+                }else if(roll <= 40)
+                {
+                    Console.WriteLine("O jogador tem de pagar 70.");
+                    if(activePlayer.Money < 70)
+                    {
+                        PlayerBankrupt(activePlayer);
+                    }
+                    else
+                    {
+                        activePlayer.Money -= 70;
+                        freeParkingFunds += 70;
+                    }
+                }else if(roll <= 60)
+                {
+                    Console.WriteLine("O jogador move-se para a casa Start.");
+                    activePlayer.Row = 4;
+                    activePlayer.Col = 4;
+                    activePlayer.Money += 200;
+                }else if(roll <= 80)
+                {
+                    Console.WriteLine("O jogador move-se para a casa Police.");
+                    GoToJail(activePlayer);
+                }else if(roll <= 100)
+                {
+                    Console.WriteLine("O jogador move-se para a casa FreePark.");
+                    activePlayer.Row = 7;
+                    activePlayer.Col = 1;
+                    activePlayer.Money += freeParkingFunds;
+                    
+                }
+            }
+            else //SpaceType.Community
+            {
+                if(roll <= 10)
+                {
+                    Console.WriteLine("O jogador paga 20 por cada casa nos seus espaços.");
+                    int totalHouses = 0;
+                    foreach(var boardSpace in board.Grid)
+                    {
+                        if(boardSpace.Owner == activePlayer)
+                        {
+                            totalHouses += boardSpace.HouseCount;
+                        }
+                    }
+                    int cost = totalHouses * 20;
+                    if(activePlayer.Money < cost)
+                    {
+                        PlayerBankrupt(activePlayer);
+                    }else
+                    {
+                        activePlayer.Money -= cost;
+                    }
+                }else if(roll <= 20)
+                {
+                    Console.WriteLine("O jogador recebe 10 por cada outro jogador.");
+                    int CollectedAmount = 0;
+                    foreach(var otherPlayer in activePlayersInGameWithOrder)
+                    {
+                        if(otherPlayer == activePlayer)
+                        {
+                            continue;
+                        }
+                        if(otherPlayer.Money >= 10)
+                        {
+                            otherPlayer.Money -= 10;
+                            CollectedAmount += 10;
+                        }
+                    }
+                    
+                    activePlayer.Money += CollectedAmount;
+                }else if(roll <= 40)
+                {
+                    Console.WriteLine("O jogador recebe 200.");
+                    activePlayer.Money += 200;
+                }else if(roll <= 60)
+                {
+                    Console.WriteLine("O jogador recebe 170.");
+                    activePlayer.Money += 170;
+                }else if(roll <= 70)
+                {
+                    Console.WriteLine("O jogador tem de pagar 40.");
+                    activePlayer.Money -= 40;
+                }else if(roll <= 80)
+                {
+                    Console.WriteLine("O jogador move-se para Pink1.");
+                    activePlayer.Row = 6;
+                    activePlayer.Col = 1;
+                }else if(roll <= 90)
+                {
+                    Console.WriteLine("O jogador move-se para Teal2.");
+                    activePlayer.Row = 4;
+                    activePlayer.Col = 5;
+                }else if(roll <= 100)
+                {
+                    Console.WriteLine("O jogador move-se para White2.");
+                    activePlayer.Row = 2;
+                    activePlayer.Col = 7;
+                }
+            }
+
+
+        }
 
         // Helpers Methods
         public void GoToJail(Player player)
