@@ -678,11 +678,11 @@ namespace MonopolyProject.Logic
                 // Chance Cards
                 if(roll <= 20)
                 {
-                    Console.WriteLine("O jogador recebeu 150.");
+                    Console.WriteLine("O jogador recebe 150.");
                     activePlayer.Money += 150;
                 }else if(roll <= 30)
                 {
-                    Console.WriteLine("O jogador recebeu 200.");
+                    Console.WriteLine("O jogador recebe 200.");
                     activePlayer.Money += 200;
                 }else if(roll <= 40)
                 {
