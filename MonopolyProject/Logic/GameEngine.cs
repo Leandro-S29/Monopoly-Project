@@ -34,7 +34,6 @@ namespace MonopolyProject.Logic
             freeParkingFunds = 0;
         }
 
-
         // Method to read and process commands
         public void commandReading(string command)
         {
@@ -87,7 +86,6 @@ namespace MonopolyProject.Logic
                     Console.WriteLine("Instrução inválida.");
                     break;
             }
-
         }
 
         // Method to register a new player
@@ -189,7 +187,6 @@ namespace MonopolyProject.Logic
 
             freeParkingFunds = 0;
             board = new Board();
-
 
             foreach (var player in activePlayersInGameWithOrder)
             {
@@ -452,18 +449,17 @@ namespace MonopolyProject.Logic
                 return;
             }
 
-            if(activePlayer != activePlayersInGameWithOrder[currentPlayerIndex])
-            {
-                Console.WriteLine("Não é a vez do jogador.");
-                return;
-            }
-
             if(space.Owner != null)
             {
                 Console.WriteLine("O espaço já se encontra comprado.");
                 return;
             }
 
+            if (activePlayer.Money < space.Price)
+            {
+                Console.WriteLine("jogador não tem dinheiro suficiente para adquirir o espaço.");
+                return;
+            }
             
             activePlayer.Money -= space.Price;
             space.Owner = activePlayer;
@@ -479,7 +475,7 @@ namespace MonopolyProject.Logic
                 Console.WriteLine($"{player.Name} - {player.Money}");
                 return;
             }else
-            Console.WriteLine("Não existe nenhum jogo em curso!");
+            Console.WriteLine("Não existe jogo em curso.");
         }
 
         public void EndTurn(string[] parts)
@@ -522,7 +518,6 @@ namespace MonopolyProject.Logic
 
             String nextPlayerName = activePlayersInGameWithOrder[currentPlayerIndex].Name;
             Console.WriteLine($"Turno terminado. Novo turno do jogador {nextPlayerName}.");    
-
         }
 
         public void PayRent(string[] parts)
@@ -548,7 +543,7 @@ namespace MonopolyProject.Logic
             }
 
             Space currentSpace = board.Grid[activePlayer.Row, activePlayer.Col];
-            if (!activePlayer.NeedsToPayRent || currentSpace.Owner == null || currentSpace.Owner == activePlayer || currentSpace.Type != SpaceType.Street && currentSpace.Type != SpaceType.Train && currentSpace.Type != SpaceType.Utility)
+            if (!activePlayer.NeedsToPayRent || currentSpace.Owner == null || currentSpace.Owner == activePlayer || (currentSpace.Type != SpaceType.Street && currentSpace.Type != SpaceType.Train && currentSpace.Type != SpaceType.Utility))
             {
                 Console.WriteLine("Não é necessário pagar aluguer."); 
                 activePlayer.NeedsToPayRent = false; // Fix state if stuck
@@ -594,7 +589,6 @@ namespace MonopolyProject.Logic
                 return;
             }
 
-
             Space CurrentSpace = board.Grid[activePlayer.Row, activePlayer.Col];
             if (CurrentSpace.Name != houseSpaceName)
             {
@@ -611,7 +605,7 @@ namespace MonopolyProject.Logic
              //Checks if Player owns all properties in the color group
             if(!OwnsAllColor(activePlayer, CurrentSpace.ColorGroup))
             {
-                Console.WriteLine("Não é possível comprar casa no espaço indicado.");
+                Console.WriteLine("0 jogador não possui todos os espaços da cor.");
                 return;
             }
             
@@ -624,32 +618,29 @@ namespace MonopolyProject.Logic
             int houseCost = CurrentSpace.HouseCost();
             if(activePlayer.Money < houseCost)
             {
-                Console.WriteLine("jogador não tem dinheiro suficiente.");
+                Console.WriteLine("jogador não possui dinheiro suficiente.");
                 return;
             }
 
             activePlayer.Money -= houseCost;
             CurrentSpace.HouseCount += 1;
             Console.WriteLine("Casa adquirida.");
-
-            
-
         }
 
         public void TakeCard(string[] parts)
         {
-            string playerName = parts[1];
-            Player activePlayer = GetActivePlayer(playerName);
-            Space space = board.Grid[activePlayer.Row, activePlayer.Col];
-
             if(parts.Length != 2)
             {
                 Console.WriteLine("Instrução inválida.");
                 return;
             }
+            
+            string playerName = parts[1];
+            Player activePlayer = GetActivePlayer(playerName);
+            
             if (!gameInProgress)
             {
-                Console.WriteLine("Não existe jogo em curso.");
+                Console.WriteLine("Não existe um jogo em curso.");
                 return;
             }
 
@@ -661,32 +652,30 @@ namespace MonopolyProject.Logic
 
             if(activePlayer != activePlayersInGameWithOrder[currentPlayerIndex])
             {
-                Console.WriteLine("Não é o vez do jogador.");
+                Console.WriteLine("Não é a vez do jogador.");
                 return;
             }
+            
+            Space space = board.Grid[activePlayer.Row, activePlayer.Col];
 
             if(!activePlayer.HasCommunityOrChanceCard)
             {
-                Console.WriteLine("O jogador não necessita de tirar carta.");
+                Console.WriteLine("Não é possível tirar carta neste espaço.");
                 return;
-            }
-
-            if (!activePlayer.NeedsToPayRent)
-            {
-                Console.WriteLine("A Carta já foi tirada.");
             }
 
             if(space.Type != SpaceType.Chance && space.Type != SpaceType.Community)
             {
-                Console.WriteLine("Não é possível tirar uma carta neste espaço.");
+                Console.WriteLine("Não é possível tirar carta neste espaço.");
                 return;
             }
 
             int roll = random.Next(1, 101);
-            
+            activePlayer.HasCommunityOrChanceCard = false;
 
             if(space.Type != SpaceType.Chance)
             {
+                // Chance Cards
                 if(roll <= 20)
                 {
                     Console.WriteLine("O jogador recebeu 150.");
@@ -710,8 +699,8 @@ namespace MonopolyProject.Logic
                 }else if(roll <= 60)
                 {
                     Console.WriteLine("O jogador move-se para a casa Start.");
-                    activePlayer.Row = 4;
-                    activePlayer.Col = 4;
+                    activePlayer.Row = 3; 
+                    activePlayer.Col = 3;
                     activePlayer.Money += 200;
                 }else if(roll <= 80)
                 {
@@ -720,13 +709,13 @@ namespace MonopolyProject.Logic
                 }else if(roll <= 100)
                 {
                     Console.WriteLine("O jogador move-se para a casa FreePark.");
-                    activePlayer.Row = 7;
-                    activePlayer.Col = 1;
+                    activePlayer.Row = 6; 
+                    activePlayer.Col = 0;
                     activePlayer.Money += freeParkingFunds;
-                    
+                    freeParkingFunds = 0;
                 }
             }
-            else //SpaceType.Community
+            else // SpaceType.Community
             {
                 if(roll <= 10)
                 {
@@ -746,10 +735,11 @@ namespace MonopolyProject.Logic
                     }else
                     {
                         activePlayer.Money -= cost;
+                        freeParkingFunds += cost;
                     }
                 }else if(roll <= 20)
                 {
-                    Console.WriteLine("O jogador recebe 10 por cada outro jogador.");
+                    Console.WriteLine("O jogador recebe 10 de cada outro jogador."); // Fixed string "por cada" -> "de cada"
                     int CollectedAmount = 0;
                     foreach(var otherPlayer in activePlayersInGameWithOrder)
                     {
@@ -763,12 +753,11 @@ namespace MonopolyProject.Logic
                             CollectedAmount += 10;
                         }
                     }
-                    
                     activePlayer.Money += CollectedAmount;
                 }else if(roll <= 40)
                 {
-                    Console.WriteLine("O jogador recebe 200.");
-                    activePlayer.Money += 200;
+                    Console.WriteLine("O jogador recebe 100."); 
+                    activePlayer.Money += 100;
                 }else if(roll <= 60)
                 {
                     Console.WriteLine("O jogador recebe 170.");
@@ -776,26 +765,30 @@ namespace MonopolyProject.Logic
                 }else if(roll <= 70)
                 {
                     Console.WriteLine("O jogador tem de pagar 40.");
-                    activePlayer.Money -= 40;
+                    if(activePlayer.Money < 40)
+                    {
+                        PlayerBankrupt(activePlayer);
+                    } else {
+                        activePlayer.Money -= 40;
+                        freeParkingFunds += 40; 
+                    }
                 }else if(roll <= 80)
                 {
                     Console.WriteLine("O jogador move-se para Pink1.");
-                    activePlayer.Row = 6;
-                    activePlayer.Col = 1;
+                    activePlayer.Row = 5;
+                    activePlayer.Col = 0;
                 }else if(roll <= 90)
                 {
                     Console.WriteLine("O jogador move-se para Teal2.");
-                    activePlayer.Row = 4;
-                    activePlayer.Col = 5;
+                    activePlayer.Row = 3;
+                    activePlayer.Col = 4;
                 }else if(roll <= 100)
                 {
                     Console.WriteLine("O jogador move-se para White2.");
-                    activePlayer.Row = 2;
-                    activePlayer.Col = 7;
+                    activePlayer.Row = 1;
+                    activePlayer.Col = 6;
                 }
             }
-
-
         }
 
         // Helpers Methods
