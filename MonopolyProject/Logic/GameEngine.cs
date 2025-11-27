@@ -82,6 +82,9 @@ namespace MonopolyProject.Logic
                 case "TC":
                     TakeCard(commandParts);
                     break;
+                case "TP":
+                    TestSetPosition(commandParts);
+                    break;
                 default:
                     Console.WriteLine("Instrução inválida.");
                     break;

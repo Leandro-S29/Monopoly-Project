@@ -34,13 +34,19 @@ namespace MonopolyProject.Models
         public void ResetForGame()
         {
             Money = 1200; 
-            Row = 3; // Center of 7x7
-            Col = 3; // Center of 7x7
+            SetPosition(3,3);
             IsInJail = false;
             TurnsInJail = 0;
             HasRolledThisTurn = false;
             NeedsToPayRent = false;
             DoublesCount = 0;
         }
+        
+        public void SetPosition(int row, int col)
+        {
+            Row = row;
+            Col = col;
+        }
+
     }
 }
