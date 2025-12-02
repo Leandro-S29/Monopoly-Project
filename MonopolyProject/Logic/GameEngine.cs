@@ -3,9 +3,6 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using MonopolyProject.Models;
 
-
-//FIXME: Refactor to separate into a CLI and Game Logic 
-
 namespace MonopolyProject.Logic
 {
     public class GameEngine
@@ -23,12 +20,12 @@ namespace MonopolyProject.Logic
 
         // Player management
         private Dictionary<string, Player> registeredPlayers = new Dictionary<string, Player>();
-        private List<Player> activePlayersInGameWithOrder = new List<Player>();
+        private List<Player> activePlayersInGame = new List<Player>();
 
         public GameEngine()
         {
             registeredPlayers = new Dictionary<string, Player>();
-            activePlayersInGameWithOrder = new List<Player>();
+            activePlayersInGame = new List<Player>();
             gameInProgress = false;
             random = new Random();
             freeParkingFunds = 0;
@@ -42,13 +39,13 @@ namespace MonopolyProject.Logic
                 return;
             }
 
-            string[] commandParts = command.Split(' ', StringSplitOptions.RemoveEmptyEntries);
+            string[] commandParts = command.Split(' ');
             if (commandParts.Length == 0)
             {
                 return;
             }
 
-            string commandType = commandParts[0].ToUpper();
+            string commandType = commandParts[0];
 
             switch (commandType)
             {
@@ -82,9 +79,6 @@ namespace MonopolyProject.Logic
                 case "TC":
                     TakeCard(commandParts);
                     break;
-                case "TP":
-                    TestSetPosition(commandParts);
-                    break;
                 default:
                     Console.WriteLine("Instrução inválida.");
                     break;
@@ -94,7 +88,11 @@ namespace MonopolyProject.Logic
         // Method to register a new player
         public void RegisterPlayer(string[] commandParts)
         {
-            if (commandParts.Length != 2) { Console.WriteLine("Instrução inválida."); return; }
+            if (commandParts.Length != 2) { 
+                Console.WriteLine("Instrução inválida."); 
+                return;
+            }
+
             string name = commandParts[1];
 
             if (registeredPlayers.ContainsKey(name))
@@ -164,7 +162,7 @@ namespace MonopolyProject.Logic
             }
 
             // Clear previous game state
-            activePlayersInGameWithOrder.Clear();
+            activePlayersInGame.Clear();
 
             foreach (string playerName in playerNames)
             {
@@ -177,21 +175,14 @@ namespace MonopolyProject.Logic
 
                 Player player = registeredPlayers[playerName];
 
-                // Check if player is already in the game
-                if (activePlayersInGameWithOrder.Contains(player))
-                {
-                    Console.WriteLine("Jogador inexistente.");
-                    return;
-                }
-
                 // Add player to the active game list
-                activePlayersInGameWithOrder.Add(player);
+                activePlayersInGame.Add(player);
             }
 
             freeParkingFunds = 0;
             board = new Board();
 
-            foreach (var player in activePlayersInGameWithOrder)
+            foreach (var player in activePlayersInGame)
             {
                 player.ResetForGame();
                 player.GamesPlayed++;
@@ -229,7 +220,7 @@ namespace MonopolyProject.Logic
             }
 
             // Check if it's the player's turn using the list index
-            if (activePlayer != activePlayersInGameWithOrder[currentPlayerIndex])
+            if (activePlayer != activePlayersInGame[currentPlayerIndex])
             {
                 Console.WriteLine("Não é a vez do jogador.");
                 return;
@@ -248,7 +239,7 @@ namespace MonopolyProject.Logic
                 return;
             }
 
-            // Roll the dice (Cheat Mode or Random)
+            // Roll the dice or use cheat values
             int d1, d2;
 
             if (commandParts.Length == 4)
@@ -301,8 +292,7 @@ namespace MonopolyProject.Logic
             while (newCol < 0) newCol += 7;
             while (newCol > 6) newCol -= 7;
 
-            activePlayer.Row = newRow;
-            activePlayer.Col = newCol;
+            activePlayer.SetPosition(newRow, newCol);
             activePlayer.HasRolledThisTurn = true;
 
             Space spacing = board.Grid[activePlayer.Row, activePlayer.Col];
@@ -335,15 +325,15 @@ namespace MonopolyProject.Logic
         {
             if (space.Owner == null)
             {
-                Console.WriteLine($"espaço {space.Name}. Espaço sem dono.");
+                Console.Write($"espaço {space.Name}. Espaço sem dono.");
             }
             else if (space.Owner == player)
             {
-                Console.WriteLine($"espaço {space.Name}. Espaço já comprado.");
+                Console.Write($"espaço {space.Name}. Espaço já comprado.");
             }
             else
             {
-                Console.WriteLine($"espaço {space.Name}. Espaço já comprado por outro jogador. Necessário pagar renda.");
+                Console.Write($"espaço {space.Name}. Espaço já comprado por outro jogador. Necessário pagar renda.");
                 player.NeedsToPayRent = true;
             }
         }
@@ -354,19 +344,19 @@ namespace MonopolyProject.Logic
             switch (space.Type)
             {
                 case SpaceType.GoToStart:
-                    Console.WriteLine($"Espaço BackToStart. Peça colocada no espaço Start.");
+                    Console.Write($"Espaço BackToStart. Peça colocada no espaço Start.");
                     player.Row = 3; player.Col = 3;
                     player.Money += 200;
                     break;
                 case SpaceType.Police:
-                    Console.WriteLine($"espaço Police. Jogador preso.");
+                    Console.Write($"espaço Police. Jogador preso.");
                     GoToJail(player);
                     break;
                 case SpaceType.Prison:
-                    Console.WriteLine($"espaço Prison. Jogador só de passagem.");
+                    Console.Write($"espaço Prison. Jogador só de passagem.");
                     break;
                 case SpaceType.FreePark:
-                    Console.WriteLine($"espaço FreePark. Jogador recebe {freeParkingFunds} ValorGuardado No Free Park.");
+                    Console.Write($"espaço FreePark. Jogador recebe {freeParkingFunds} ValorGuardado No Free Park.");
                     player.Money += freeParkingFunds;
                     freeParkingFunds = 0;
                     break;
@@ -388,7 +378,7 @@ namespace MonopolyProject.Logic
             }
             else if (space.Type == SpaceType.Chance || space.Type == SpaceType.Community)
             {
-                Console.WriteLine($"espaço {space.Name}. Espaço especial. Tirar carta.");
+                Console.Write($"espaço {space.Name}. Espaço especial. Tirar carta.");
                 player.HasCommunityOrChanceCard = true;
             }
             else if (space.Type == SpaceType.Tax)
@@ -423,27 +413,16 @@ namespace MonopolyProject.Logic
                 Console.WriteLine("Instrução inválida.");
                 return;
             }
-            
-            if(!gameInProgress)
-            {
-                Console.WriteLine("Não existe um jogo em curso.");
-                return;
-            }
 
             string playerName = parts[1];
             Player activePlayer = GetActivePlayer(playerName);
-            
-            if(activePlayer == null)
+
+            if(activePlayer != activePlayersInGame[currentPlayerIndex])
             {
-                Console.WriteLine("Jogador não participa no jogo em curso.");
+                Console.WriteLine("Não é o vez do jogador.");
                 return;
             }
 
-            if(activePlayer != activePlayersInGameWithOrder[currentPlayerIndex])
-            {
-                Console.WriteLine("Não é a vez do jogador.");
-                return;
-            }
             Space space = board.Grid[activePlayer.Row, activePlayer.Col];
 
             if(space.Type != SpaceType.Street && space.Type != SpaceType.Train && space.Type != SpaceType.Utility)
@@ -469,12 +448,13 @@ namespace MonopolyProject.Logic
             Console.WriteLine("Espaço comprado.");
         }
 
+        // TODO: Must Check the Output format with teacher
         public void GameDetails()
         {
             if(gameInProgress)
             {
-                Player player = GetActivePlayer(activePlayersInGameWithOrder[currentPlayerIndex].Name);
-                board.DisplayBoard(activePlayersInGameWithOrder);
+                Player player = GetActivePlayer(activePlayersInGame[currentPlayerIndex].Name);
+                board.DisplayBoard(activePlayersInGame);
                 Console.WriteLine($"{player.Name} - {player.Money}");
                 return;
             }else
@@ -498,7 +478,7 @@ namespace MonopolyProject.Logic
             string playerName = parts[1];
             Player activePlayer = GetActivePlayer(playerName);
 
-            if(activePlayer != activePlayersInGameWithOrder[currentPlayerIndex])
+            if(activePlayer != activePlayersInGame[currentPlayerIndex])
             {
                 Console.WriteLine("Não é o turno do jogador indicado.");
                 return;
@@ -517,9 +497,9 @@ namespace MonopolyProject.Logic
             activePlayer.HasCommunityOrChanceCard = false;
 
             // Move to next player
-            currentPlayerIndex = (currentPlayerIndex + 1) % activePlayersInGameWithOrder.Count;
+            currentPlayerIndex = (currentPlayerIndex + 1) % activePlayersInGame.Count;
 
-            String nextPlayerName = activePlayersInGameWithOrder[currentPlayerIndex].Name;
+            String nextPlayerName = activePlayersInGame[currentPlayerIndex].Name;
             Console.WriteLine($"Turno terminado. Novo turno do jogador {nextPlayerName}.");    
         }
 
@@ -539,7 +519,14 @@ namespace MonopolyProject.Logic
 
             string playerName = parts[1];
             Player activePlayer = GetActivePlayer(playerName);
-            if(activePlayer != activePlayersInGameWithOrder[currentPlayerIndex])
+
+            if(activePlayer == null)
+            {
+                Console.WriteLine("Jogador não participa no jogo em curso.");
+                return;
+            }
+
+            if(activePlayer != activePlayersInGame[currentPlayerIndex])
             {
                 Console.WriteLine("Não é o vez do jogador.");
                 return;
@@ -548,8 +535,7 @@ namespace MonopolyProject.Logic
             Space currentSpace = board.Grid[activePlayer.Row, activePlayer.Col];
             if (!activePlayer.NeedsToPayRent || currentSpace.Owner == null || currentSpace.Owner == activePlayer || (currentSpace.Type != SpaceType.Street && currentSpace.Type != SpaceType.Train && currentSpace.Type != SpaceType.Utility))
             {
-                Console.WriteLine("Não é necessário pagar aluguer."); 
-                activePlayer.NeedsToPayRent = false; // Fix state if stuck
+                Console.WriteLine("Não é necessário pagar aluguer.");
                 return;
             }
 
@@ -586,13 +572,14 @@ namespace MonopolyProject.Logic
             string houseSpaceName = parts[2];
             Player activePlayer = GetActivePlayer(playerName);
 
-            if(activePlayer != activePlayersInGameWithOrder[currentPlayerIndex])
+            if(activePlayer != activePlayersInGame[currentPlayerIndex])
             {
                 Console.WriteLine("Não é o vez do jogador.");
                 return;
             }
 
             Space CurrentSpace = board.Grid[activePlayer.Row, activePlayer.Col];
+
             if (CurrentSpace.Name != houseSpaceName)
             {
                 Console.WriteLine("Não é possível comprar casa no espaço indicado.");
@@ -619,6 +606,7 @@ namespace MonopolyProject.Logic
             }
 
             int houseCost = CurrentSpace.HouseCost();
+            
             if(activePlayer.Money < houseCost)
             {
                 Console.WriteLine("jogador não possui dinheiro suficiente.");
@@ -653,7 +641,7 @@ namespace MonopolyProject.Logic
                 return;
             }
 
-            if(activePlayer != activePlayersInGameWithOrder[currentPlayerIndex])
+            if(activePlayer != activePlayersInGame[currentPlayerIndex])
             {
                 Console.WriteLine("Não é a vez do jogador.");
                 return;
@@ -744,7 +732,7 @@ namespace MonopolyProject.Logic
                 {
                     Console.WriteLine("O jogador recebe 10 de cada outro jogador."); // Fixed string "por cada" -> "de cada"
                     int CollectedAmount = 0;
-                    foreach(var otherPlayer in activePlayersInGameWithOrder)
+                    foreach(var otherPlayer in activePlayersInGame)
                     {
                         if(otherPlayer == activePlayer)
                         {
@@ -809,7 +797,7 @@ namespace MonopolyProject.Logic
         public Player GetActivePlayer(String playerName)
         {
             // Iterate list to find player (replacement for Dictionary lookup)
-            foreach (var player in activePlayersInGameWithOrder)
+            foreach (var player in activePlayersInGame)
             {
                 if (player.Name == playerName)
                 {
@@ -838,9 +826,9 @@ namespace MonopolyProject.Logic
         {
             // Remove Player from the game using the list
             int playerIndex = -1;
-            for (int i = 0; i < activePlayersInGameWithOrder.Count; i++)
+            for (int i = 0; i < activePlayersInGame.Count; i++)
             {
-                if (activePlayersInGameWithOrder[i] == player)
+                if (activePlayersInGame[i] == player)
                 {
                     playerIndex = i;
                     break;
@@ -849,7 +837,7 @@ namespace MonopolyProject.Logic
 
             if (playerIndex != -1)
             {
-                activePlayersInGameWithOrder.RemoveAt(playerIndex);
+                activePlayersInGame.RemoveAt(playerIndex);
 
                 // If the player removed was before the current player, decrement index
                 // to keep the turn with the correct next person
@@ -860,17 +848,17 @@ namespace MonopolyProject.Logic
             }
 
             // Handle wrap around if index is now out of bounds
-            if (currentPlayerIndex >= activePlayersInGameWithOrder.Count)
+            if (currentPlayerIndex >= activePlayersInGame.Count)
             {
                 currentPlayerIndex = 0;
             }
 
             // update the player's stats 
             player.Losses += 1;
-            if (activePlayersInGameWithOrder.Count == 1)
+            if (activePlayersInGame.Count == 1)
             {
                 gameInProgress = false;
-                activePlayersInGameWithOrder[0].Wins += 1;
+                activePlayersInGame[0].Wins += 1;
             }
         }
 
