@@ -18,12 +18,6 @@ The solution is divided into three main parts:
 - **View/Entry**: `Program.cs` handles input/output.
 We used a 2D array `Space[,]` to represent the 7x7 grid for easy row/col navigation.
 
-## ⚖️ Task Distribution
-- **Leandro:** 
-- **Guilherme:** 
-- **Henrique C.:** 
-- **Henrique M.:** 
-
 ---
 
 # Projeto de Fundamentos de Programação - Monopoly
@@ -45,9 +39,3 @@ A solução está dividida em três partes principais:
 - **Lógica**: O `GameEngine` lida com o loop do jogo, análise de comandos e regras (movimento, renda, prisão).
 - **Visão/Entrada**: `Program.cs` lida com entrada/saída
 Utilizamos um array 2D `Space[,]` para representar a area 7x7 para facilitar a navegação por linhas/colunas.
-
-## ⚖️ Distribuição de Tarefas
-- **Leandro:**
-- **Guilherme:**
-- **Henrique C.:**
-- **Henrique M.:**
