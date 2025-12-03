@@ -1,4 +1,5 @@
 ﻿using System;
+using MonopolyProject.Logic;
 
 namespace MonopolyProject
 {
@@ -6,7 +7,18 @@ namespace MonopolyProject
     {
         static void Main(string[] args)
         {
-            Console.WriteLine("Welcome to Monopoly!");
+            string readInput;
+            GameEngine gameEngine = new GameEngine();
+
+            while (true)
+            {               
+                readInput = Console.ReadLine();
+                if (string.IsNullOrWhiteSpace(readInput))
+                {
+                    break;
+                }
+                gameEngine.commandReading(readInput);
+            }
         }
     }
 }
