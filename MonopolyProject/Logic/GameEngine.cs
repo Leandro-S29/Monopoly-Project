@@ -448,7 +448,6 @@ namespace MonopolyProject.Logic
             Console.WriteLine("Espaço comprado.");
         }
 
-        // TODO: Must Check the Output format with teacher
         public void GameDetails()
         {
             if(gameInProgress)
