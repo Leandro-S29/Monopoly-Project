@@ -1,0 +1,277 @@
+<?xml version="1.0"?>
+<flowgorithm fileversion="4.2">
+    <attributes>
+        <attribute name="name" value="ProjetoExemplo"/>
+        <attribute name="authors" value="nathanpc"/>
+        <attribute name="about" value=""/>
+        <attribute name="saved" value="2025-12-04 06:15:16 PM"/>
+        <attribute name="created" value="bmF0aGFucGM7UE9LRUJFUlJZLVdJTjc7MjAyNS0xMS0yNjswOTozNjo0NyBBTTszMTUx"/>
+        <attribute name="edited" value="bmF0aGFucGM7UE9LRUJFUlJZLVdJTjc7MjAyNS0xMS0yNjsxMjo1NToxNiBQTTsyNDszMzE4"/>
+        <attribute name="edited" value="Z3VpY2E7R1VJTEhFUk1FLVBDOzIwMjUtMTItMDM7MDY6MjY6NTYgUE07MzsyNzgx"/>
+        <attribute name="edited" value="SGVucmlxdWU7TUVYOzIwMjUtMTItMDQ7MDY6MTU6MTYgUE07MjsyNDU1"/>
+    </attributes>
+    <function name="Main" type="None" variable="">
+        <parameters/>
+        <body>
+            <comment text="Este &#233; um exemplo de como devemos montar o fluxograma do projeto. Siga exatamente essa estrutura e l&#243;gica.&#13;&#10;&#13;&#10;H&#225; muito ainda por implementar, portanto olhe tamb&#233;m para algumas das fun&#231;&#245;es que j&#225; implementei pois algumas n&#227;o est&#227;o completas!&#13;&#10;&#13;&#10;** Recomendo utilizarem coment&#225;rios como este para ajudar na organiza&#231;&#227;o e contribuir para que a avalia&#231;&#227;o do trabalho seja mais f&#225;cil. **&#13;&#10;&#13;&#10;Boa sorte! :)"/>
+            <declare name="Jogadores" type="String" array="True" size="4"/>
+            <declare name="Peoes" type="Integer" array="True" size="4"/>
+            <declare name="JogoEmProgresso" type="Boolean" array="False" size=""/>
+            <assign variable="JogoEmProgresso" expression="False"/>
+            <declare name="JogadoresNoJogo" type="String" array="True" size="4"/>
+            <declare name="Tabuleiro" type="String" array="True" size="49"/>
+            <call expression="InicializaVariaveis(Jogadores, Tabuleiro, Peoes)"/>
+            <comment text="Como est&#225; explicado no briefing, n&#227;o dever&#225; ser implementada a linha de comando. Apenas criar uma sequencia que executa cada comando (ao menos um sucesso e uma falha).&#13;&#10;&#13;&#10;N&#227;o deve haver intera&#231;&#245;es com o utilizador. O objetivo deste trabalho &#233; apenas analizar a l&#243;gica do projeto e a capacidade de resolu&#231;&#227;o de problemas utilizando a l&#243;gica."/>
+            <call expression="LJListarJogadores(Jogadores)"/>
+            <call expression="RJRegistarJogador(Jogadores, 0, &quot;Nathan&quot;)"/>
+            <call expression="RJRegistarJogador(Jogadores, 1, &quot;Thiago&quot;)"/>
+            <call expression="RJRegistarJogador(Jogadores, 2, &quot;Nathan&quot;)"/>
+            <assign variable="JogoEmProgresso" expression="IJIniciarJogo(Jogadores, JogadoresNoJogo, JogoEmProgresso)"/>
+            <call expression="RJRegistarJogador(Jogadores, 3, &quot;Guivo&quot;)"/>
+            <call expression="RJRegistarJogador(Jogadores, 2, &quot;Real&quot;)"/>
+            <call expression="LJListarJogadores(Jogadores)"/>
+            <assign variable="JogoEmProgresso" expression="IJIniciarJogo(Jogadores, JogadoresNoJogo, JogoEmProgresso)"/>
+            <call expression="DJDetalhesDoJogo(Tabuleiro, Jogadores, Peoes)"/>
+            <assign variable="JogoEmProgresso" expression="IJIniciarJogo(Jogadores, JogadoresNoJogo, JogoEmProgresso)"/>
+        </body>
+    </function>
+    <function name="CEComprarEspa&#231;o" type="None" variable="">
+        <parameters>
+            <parameter name="Jogador" type="String" array="False"/>
+        </parameters>
+        <body>
+            <declare name="EstaNoJogo" type="Boolean" array="False" size=""/>
+            <if expression="!jogoEmProgresso">
+                <then>
+                    <assign variable="EstaNoJogo" expression="EstaNoJogo(Jogador, JogadoresNoJogo)"/>
+                    <if expression="EstaNoJogo == True">
+                        <then>
+                            <if expression="Jogador = JogadoresNoJogo[JogadorAtivo]">
+                                <then>
+                                    <if expression="">
+                                        <then/>
+                                        <else/>
+                                    </if>
+                                </then>
+                                <else>
+                                    <output expression="&quot;N&#227;o &#233; a vez do jogador.&quot;" newline="True"/>
+                                </else>
+                            </if>
+                        </then>
+                        <else>
+                            <output expression="&quot;O jogador n&#227;o est&#225; no jogo.&quot;" newline="True"/>
+                        </else>
+                    </if>
+                </then>
+                <else>
+                    <output expression="&quot;N&#227;o existe um jogo em curso.&quot;" newline="True"/>
+                </else>
+            </if>
+        </body>
+    </function>
+    <function name="DJDetalhesDoJogo" type="None" variable="">
+        <parameters>
+            <parameter name="Tabuleiro" type="String" array="True"/>
+            <parameter name="Jogadores" type="String" array="True"/>
+            <parameter name="Peoes" type="Integer" array="True"/>
+        </parameters>
+        <body>
+            <declare name="i" type="Integer" array="False" size=""/>
+            <for variable="i" start="0" end="Size(Tabuleiro) - 1" direction="inc" step="1">
+                <declare name="j" type="Integer" array="False" size=""/>
+                <output expression="&quot;| &quot; &amp; Tabuleiro[i] &amp; &quot; &quot;" newline="False"/>
+                <for variable="j" start="0" end="Size(Peoes) - 1" direction="inc" step="1">
+                    <if expression="Peoes[j] = i">
+                        <then>
+                            <output expression="Jogadores[j] &amp; &quot; &quot;" newline="False"/>
+                        </then>
+                        <else/>
+                    </if>
+                </for>
+                <comment text="Completar..."/>
+                <if expression="(i + 1) % 7 = 0">
+                    <then>
+                        <output expression="&quot;|&quot;" newline="True"/>
+                    </then>
+                    <else/>
+                </if>
+            </for>
+        </body>
+    </function>
+    <function name="EstaNoJogo" type="Boolean" variable="estaNoJogo">
+        <parameters>
+            <parameter name="Jogador" type="String" array="False"/>
+            <parameter name="JogadoresNoJogo" type="String" array="True"/>
+        </parameters>
+        <body>
+            <declare name="estaNoJogo" type="Boolean" array="False" size=""/>
+            <assign variable="estaNoJogo" expression="false"/>
+            <for variable="i" start="0" end="size(JogadoresNoJogo)" direction="inc" step="1">
+                <if expression="Jogador == JogadoresNoJogo[i]">
+                    <then>
+                        <assign variable="estaNoJogo" expression="True"/>
+                    </then>
+                    <else/>
+                </if>
+            </for>
+        </body>
+    </function>
+    <function name="IJIniciarJogo" type="Boolean" variable="JogoEmProgresso">
+        <parameters>
+            <parameter name="Jogadores" type="String" array="True"/>
+            <parameter name="ActiveInGamePlayers" type="String" array="True"/>
+            <parameter name="JogoEmProgresso" type="Boolean" array="False"/>
+        </parameters>
+        <body>
+            <if expression="JogoEmProgresso == true">
+                <then>
+                    <output expression="&quot;Existe um jogo em curso.&quot;" newline="True"/>
+                </then>
+                <else>
+                    <declare name="NumJogadores" type="Integer" array="False" size=""/>
+                    <assign variable="NumJogadores" expression="0"/>
+                    <declare name="f" type="Integer" array="False" size=""/>
+                    <for variable="f" start="0" end="size(Jogadores)- 1" direction="inc" step="1">
+                        <if expression="Jogadores[f] == &quot;&quot;">
+                            <then/>
+                            <else>
+                                <assign variable="NumJogadores" expression="NumJogadores + 1"/>
+                            </else>
+                        </if>
+                    </for>
+                    <if expression="NumJogadores == 4">
+                        <then>
+                            <output expression="&quot;Jogo Iniciado com sucesso&quot;" newline="True"/>
+                            <assign variable="JogoEmProgresso" expression="True"/>
+                            <declare name="i" type="Integer" array="False" size=""/>
+                            <for variable="i" start="0" end="3" direction="inc" step="1">
+                                <assign variable="ActiveInGamePlayers[i]" expression="Jogadores[i]"/>
+                            </for>
+                        </then>
+                        <else>
+                            <output expression="&quot;Jogador inexistente.&quot;" newline="True"/>
+                        </else>
+                    </if>
+                </else>
+            </if>
+        </body>
+    </function>
+    <function name="InicializaVariaveis" type="None" variable="">
+        <parameters>
+            <parameter name="Jogadores" type="String" array="True"/>
+            <parameter name="Tabuleiro" type="String" array="True"/>
+            <parameter name="Peoes" type="Integer" array="True"/>
+        </parameters>
+        <body>
+            <declare name="i" type="Integer" array="False" size=""/>
+            <for variable="i" start="0" end="Size(Jogadores) - 1" direction="inc" step="1">
+                <assign variable="Jogadores[i]" expression="&quot;&quot;"/>
+            </for>
+            <for variable="i" start="0" end="Size(Tabuleiro) - 1" direction="inc" step="1">
+                <assign variable="Tabuleiro[i]" expression="&quot;???&quot;"/>
+            </for>
+            <comment text="Completar o resto do tabuleiro:"/>
+            <assign variable="Tabuleiro[0]" expression="&quot;Prison&quot;"/>
+            <assign variable="Tabuleiro[1]" expression="&quot;Green3&quot;"/>
+            <assign variable="Tabuleiro[2]" expression="&quot;Violet1&quot;"/>
+            <assign variable="Tabuleiro[3]" expression="&quot;Train2&quot;"/>
+            <assign variable="Tabuleiro[4]" expression="&quot;Red3&quot;"/>
+            <assign variable="Tabuleiro[5]" expression="&quot;White1&quot;"/>
+            <assign variable="Tabuleiro[6]" expression="&quot;BackToStart&quot;"/>
+            <assign variable="Tabuleiro[7]" expression="&quot;Blue3&quot;"/>
+            <assign variable="Tabuleiro[8]" expression="&quot;Community&quot;"/>
+            <assign variable="Tabuleiro[9]" expression="&quot;Red2&quot;"/>
+            <assign variable="Tabuleiro[10]" expression="&quot;Violet2&quot;"/>
+            <assign variable="Tabuleiro[11]" expression="&quot;WaterWorks&quot;"/>
+            <assign variable="Tabuleiro[12]" expression="&quot;Chance&quot;"/>
+            <assign variable="Tabuleiro[13]" expression="&quot;White2&quot;"/>
+            <for variable="i" start="0" end="Size(Peoes) - 1" direction="inc" step="1">
+                <assign variable="Peoes[i]" expression="Random(49)"/>
+            </for>
+        </body>
+    </function>
+    <function name="LDLan&#231;arDados" type="None" variable="">
+        <parameters>
+            <parameter name="Jogador" type="String" array="False"/>
+        </parameters>
+        <body>
+            <if expression="JogoEmProgresso != True">
+                <then>
+                    <output expression="&quot;N&#227;o existe um jogo em curso.&quot;" newline="True"/>
+                </then>
+                <else>
+                    <declare name="i" type="Integer" array="False" size=""/>
+                    <for variable="i" start="0" end="size(JogadoresNoJogo)" direction="inc" step="1">
+                        <if expression="Jogador == JogadoresNoJogo[i]">
+                            <then>
+                                <if expression="Jogador == JogadoresNoJogo[JogadorAtivo]">
+                                    <then>
+                                        <if expression="JaJogouEsteTurno[JogadorAtivo] != true">
+                                            <then/>
+                                            <else>
+                                                <output expression="&quot;N&#227;o &#233; a vez do Jogador.&quot;" newline="True"/>
+                                            </else>
+                                        </if>
+                                    </then>
+                                    <else>
+                                        <output expression="&quot;N&#227;o &#233; o turno deste jogador.&quot;" newline="True"/>
+                                    </else>
+                                </if>
+                            </then>
+                            <else>
+                                <output expression="&quot;Jogador n&#227;o participa no jogo em curso.&quot;" newline="True"/>
+                            </else>
+                        </if>
+                    </for>
+                </else>
+            </if>
+        </body>
+    </function>
+    <function name="LJListarJogadores" type="None" variable="">
+        <parameters>
+            <parameter name="Jogadores" type="String" array="True"/>
+        </parameters>
+        <body>
+            <declare name="i" type="Integer" array="False" size=""/>
+            <comment text="Falta implementar aqui a logica de quando n&#227;o existem jogadores registados."/>
+            <breakpoint expression="" always="True"/>
+            <for variable="i" start="0" end="Size(Jogadores) - 1" direction="inc" step="1">
+                <comment text="Neste caso &#233; v&#225;lido utilizar valores aleat&#243;rios para os outros campos, dado que n&#227;o s&#227;o utilizados em nenhum outro lugar.&#13;&#10;&#13;&#10;Perguntem ao professor antes de fazer esses tipos de simplifica&#231;&#245;es em outras partes."/>
+                <if expression="Jogadores[i] != &quot;&quot;">
+                    <then>
+                        <output expression="Jogadores[i] &amp; &quot; &quot; &amp; Random(8) &amp; &quot; &quot; &amp; Random(4) &amp; &quot; &quot; &amp; Random(6) &amp; &quot; &quot; &amp; Random(10)" newline="True"/>
+                    </then>
+                    <else/>
+                </if>
+            </for>
+        </body>
+    </function>
+    <function name="RJRegistarJogador" type="None" variable="">
+        <parameters>
+            <parameter name="Jogadores" type="String" array="True"/>
+            <parameter name="Indice" type="Integer" array="False"/>
+            <parameter name="Nome" type="String" array="False"/>
+        </parameters>
+        <body>
+            <declare name="i" type="Integer" array="False" size=""/>
+            <declare name="Existe" type="Boolean" array="False" size=""/>
+            <assign variable="Existe" expression="False"/>
+            <for variable="i" start="0" end="Size(Jogadores) - 1" direction="inc" step="1">
+                <if expression="Jogadores[i] = Nome">
+                    <then>
+                        <output expression="&quot;Jogador existente.&quot;" newline="True"/>
+                        <assign variable="Existe" expression="True"/>
+                    </then>
+                    <else/>
+                </if>
+            </for>
+            <if expression="Existe">
+                <then/>
+                <else>
+                    <assign variable="Jogadores[Indice]" expression="Nome"/>
+                    <output expression="&quot;Jogador registado com sucesso.&quot;" newline="True"/>
+                </else>
+            </if>
+        </body>
+    </function>
+</flowgorithm>
