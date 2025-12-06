@@ -571,6 +571,12 @@ namespace MonopolyProject.Logic
             string houseSpaceName = parts[2];
             Player activePlayer = GetActivePlayer(playerName);
 
+            if(activePlayer == null)
+            {
+                Console.WriteLine("Jogador não participa no jogo em curso.");
+                return;
+            }
+
             if(activePlayer != activePlayersInGame[currentPlayerIndex])
             {
                 Console.WriteLine("Não é o vez do jogador.");
