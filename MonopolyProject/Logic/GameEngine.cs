@@ -485,7 +485,7 @@ namespace MonopolyProject.Logic
 
             if (!activePlayer.HasRolledThisTurn || activePlayer.NeedsToPayRent || activePlayer.HasCommunityOrChanceCard || (activePlayer.DoublesCount > 0 && activePlayer.DoublesCount < 2))
             {
-                Console.WriteLine("jogador ainda tem ações a fazer.");
+                Console.WriteLine("O jogador ainda tem ações a fazer.");
                 return;
             }
 

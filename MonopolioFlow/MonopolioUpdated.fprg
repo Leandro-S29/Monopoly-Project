@@ -4,13 +4,13 @@
         <attribute name="name" value="ProjetoExemplo"/>
         <attribute name="authors" value="nathanpc"/>
         <attribute name="about" value=""/>
-        <attribute name="saved" value="2025-12-07 12:10:23 AM"/>
+        <attribute name="saved" value="2025-12-07 01:33:35 AM"/>
         <attribute name="created" value="bmF0aGFucGM7UE9LRUJFUlJZLVdJTjc7MjAyNS0xMS0yNjswOTozNjo0NyBBTTszMTUx"/>
         <attribute name="edited" value="Z3VpY2E7R1VJTEhFUk1FLVBDOzIwMjUtMTItMDQ7MTE6MTM6MTggUE07MTtuYXRoYW5wYztQT0tFQkVSUlktV0lONzsyMDI1LTExLTI2OzA5OjM2OjQ3IEFNO01vbm9wb2xpb19ESjEuZnByZzs3NzU4"/>
         <attribute name="edited" value="Z3VpY2E7R1VJTEhFUk1FLVBDOzIwMjUtMTItMDQ7MTE6MTQ6MTAgUE07MTtuYXRoYW5wYztQT0tFQkVSUlktV0lONzsyMDI1LTExLTI2OzA5OjM2OjQ3IEFNO01vbm9wb2xpb0NFLmZwcmc7NzYwMQ=="/>
         <attribute name="edited" value="Z3VpY2E7R1VJTEhFUk1FLVBDOzIwMjUtMTItMDY7MTE6NTU6MDEgUE07MTI7MjgyMA=="/>
         <attribute name="edited" value="TGVhbmRybztERVNLVE9QLTVWTkE3UzI7MjAyNS0xMi0wNzsxMjowOTowMiBBTTs1O25hdGhhbnBjO1BPS0VCRVJSWS1XSU43OzIwMjUtMTEtMjY7MDk6MzY6NDcgQU07TW9ub3BvbGlvX0NDYW5kVFQuZnByZzs4NTQy"/>
-        <attribute name="edited" value="TGVhbmRybztERVNLVE9QLTVWTkE3UzI7MjAyNS0xMi0wNzsxMjoxMDoyMyBBTTsxOzMxMjc="/>
+        <attribute name="edited" value="TGVhbmRybztERVNLVE9QLTVWTkE3UzI7MjAyNS0xMi0wNzswMTozMzozNSBBTTszOzMxMzU="/>
     </attributes>
     <function name="Main" type="None" variable="">
         <parameters/>
@@ -48,6 +48,7 @@
             <call expression="LJListarJogadores(Jogadores)"/>
             <assign variable="JogoEmProgresso" expression="IJIniciarJogo(Jogadores, JogadoresNoJogo, JogoEmProgresso)"/>
             <call expression="CCComprarCasa(JogoEmProgresso,JogadoresNoJogo,&quot;Nathan&quot;,JogadorAtivo)"/>
+            <call expression="TTTerminarTurno(JogoEmProgresso, JogadoresNoJogo,&quot;Nathan&quot;, JogadorAtivo, JaJogouEsteTurno, PrecisaPagarRenda, TemCartaCommunityOuChance, Duplicados)"/>
             <call expression="DJDetalhesDoJogo(Tabuleiro, Jogadores, Peoes)"/>
             <assign variable="JogoEmProgresso" expression="IJIniciarJogo(Jogadores, JogadoresNoJogo, JogoEmProgresso)"/>
             <call expression="LDLancarDados(&quot;Nathan&quot;, 6 , 6, JogoEmProgresso, JogadoresNoJogo, JaJogouEsteTurno, Duplicados, PrecisaPagarRenda, TemCartaCommunityOuChance, EstaNaPrisao, TurnosNaPrisao, JogadorAtivo, Posicao)"/>
@@ -65,7 +66,6 @@
             <parameter name="JogadorAtivo" type="Integer" array="False"/>
         </parameters>
         <body>
-            <declare name="JogadorEncontrado" type="Boolean" array="False" size=""/>
             <if expression="JogoEmProgresso">
                 <then>
                     <if expression="EstaNoJogo(Jogador, JogadoresNoJogo)">
@@ -463,8 +463,48 @@
         </body>
     </function>
     <function name="TTTerminarTurno" type="None" variable="">
-        <parameters/>
-        <body/>
+        <parameters>
+            <parameter name="JogoEmProgresso" type="Boolean" array="False"/>
+            <parameter name="JogadoresNoJogo" type="String" array="True"/>
+            <parameter name="Jogador" type="String" array="False"/>
+            <parameter name="JogadorAtivo" type="Integer" array="False"/>
+            <parameter name="JaJogouEsteTurno" type="Boolean" array="True"/>
+            <parameter name="PrecisaPagarRenda" type="Boolean" array="True"/>
+            <parameter name="TemCartaCommunityOuChance" type="Boolean" array="True"/>
+            <parameter name="Duplicados" type="Integer" array="True"/>
+        </parameters>
+        <body>
+            <if expression="JogoEmProgresso">
+                <then>
+                    <if expression="ValidarTurnoDoJogador(Jogador, JogadoresNoJogo, JogadorAtivo)">
+                        <then>
+                            <if expression="JaJogouEsteTurno[JogadorAtivo] == False || PrecisaPagarRenda[JogadorAtivo] == True || TemCartaCommunityOuChance[JogadorAtivo] == True || (Duplicados[JogadorAtivo] &gt; 0 &amp;&amp; Duplicados[JogadorAtivo] &lt; 2)">
+                                <then>
+                                    <output expression="&quot;O jogador ainda tem a&#231;&#245;es a fazer.&quot;" newline="True"/>
+                                    <output expression="&quot;JaJogou: &quot; &amp; JaJogouEsteTurno[JogadorAtivo] &amp; &quot; | Renda: &quot; &amp; PrecisaPagarRenda[JogadorAtivo] &amp; &quot; | Carta: &quot; &amp; TemCartaCommunityOuChance[JogadorAtivo] &amp; &quot; | Duplicados: &quot; &amp; Duplicados[JogadorAtivo]" newline="True"/>
+                                </then>
+                                <else>
+                                    <assign variable="JaJogouEsteTurno[JogadorAtivo]" expression="False"/>
+                                    <assign variable="PrecisaPagarRenda[JogadorAtivo]" expression="False"/>
+                                    <assign variable="TemCartaCommunityOuChance[JogadorAtivo]" expression="False"/>
+                                    <assign variable="Duplicados[JogadorAtivo]" expression="0"/>
+                                    <assign variable="JogadorAtivo" expression="(JogadorAtivo + 1) % size(JogadoresNoJogo)"/>
+                                    <declare name="NomeProximoJogador" type="String" array="False" size=""/>
+                                    <assign variable="NomeProximoJogador" expression="JogadoresNoJogo[JogadorAtivo]"/>
+                                    <output expression="&quot;Turno terminado. Novo turno do jogador &quot; &amp; NomeProximoJogador &amp; &quot;.&quot;" newline="True"/>
+                                </else>
+                            </if>
+                        </then>
+                        <else>
+                            <output expression="&quot;N&#227;o &#233; o turno do jogador indicado&quot;" newline="True"/>
+                        </else>
+                    </if>
+                </then>
+                <else>
+                    <output expression="&quot;N&#227;o existe jogo em curso.&quot;" newline="True"/>
+                </else>
+            </if>
+        </body>
     </function>
     <function name="ValidarTurnoDoJogador" type="Boolean" variable="eJogadorAtivo">
         <parameters>
