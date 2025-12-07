@@ -4,11 +4,12 @@
         <attribute name="name" value="ProjetoExemplo"/>
         <attribute name="authors" value="nathanpc"/>
         <attribute name="about" value=""/>
-        <attribute name="saved" value="2025-12-04 06:15:16 PM"/>
+        <attribute name="saved" value="2025-12-07 07:50:11 PM"/>
         <attribute name="created" value="bmF0aGFucGM7UE9LRUJFUlJZLVdJTjc7MjAyNS0xMS0yNjswOTozNjo0NyBBTTszMTUx"/>
         <attribute name="edited" value="bmF0aGFucGM7UE9LRUJFUlJZLVdJTjc7MjAyNS0xMS0yNjsxMjo1NToxNiBQTTsyNDszMzE4"/>
         <attribute name="edited" value="Z3VpY2E7R1VJTEhFUk1FLVBDOzIwMjUtMTItMDM7MDY6MjY6NTYgUE07MzsyNzgx"/>
-        <attribute name="edited" value="SGVucmlxdWU7TUVYOzIwMjUtMTItMDQ7MDY6MTU6MTYgUE07MjsyNDU1"/>
+        <attribute name="edited" value="SGVucmlxdWU7TUVYOzIwMjUtMTItMDc7MTI6MzU6MzggQU07MTtuYXRoYW5wYztQT0tFQkVSUlktV0lONzsyMDI1LTExLTI2OzA5OjM2OjQ3IEFNO01vbm9wb2xpb1VwZGF0ZWQuZnByZzs3ODU4"/>
+        <attribute name="edited" value="SGVucmlxdWU7TUVYOzIwMjUtMTItMDc7MDc6NTA6MTEgUE07NDsyNDU1"/>
     </attributes>
     <function name="Main" type="None" variable="">
         <parameters/>
@@ -20,6 +21,11 @@
             <assign variable="JogoEmProgresso" expression="False"/>
             <declare name="JogadoresNoJogo" type="String" array="True" size="4"/>
             <declare name="Tabuleiro" type="String" array="True" size="49"/>
+            <declare name="Tipo" type="String" array="True" size="49"/>
+            <declare name="Preco" type="Integer" array="True" size="49"/>
+            <declare name="TipoCor" type="String" array="True" size="49"/>
+            <declare name="Dono" type="String" array="True" size="49"/>
+            <declare name="NumeroDeCasas" type="Integer" array="True" size="49"/>
             <call expression="InicializaVariaveis(Jogadores, Tabuleiro, Peoes)"/>
             <comment text="Como est&#225; explicado no briefing, n&#227;o dever&#225; ser implementada a linha de comando. Apenas criar uma sequencia que executa cada comando (ao menos um sucesso e uma falha).&#13;&#10;&#13;&#10;N&#227;o deve haver intera&#231;&#245;es com o utilizador. O objetivo deste trabalho &#233; apenas analizar a l&#243;gica do projeto e a capacidade de resolu&#231;&#227;o de problemas utilizando a l&#243;gica."/>
             <call expression="LJListarJogadores(Jogadores)"/>
@@ -38,17 +44,19 @@
     <function name="CEComprarEspa&#231;o" type="None" variable="">
         <parameters>
             <parameter name="Jogador" type="String" array="False"/>
+            <parameter name="JogoEmProgresso" type="Boolean" array="False"/>
+            <parameter name="EstaNoJogo" type="Boolean" array="False"/>
+            <parameter name="JogadoresNoJogo" type="String" array="True"/>
+            <parameter name="JogadorAtivo" type="Integer" array="False"/>
         </parameters>
         <body>
-            <declare name="EstaNoJogo" type="Boolean" array="False" size=""/>
-            <if expression="!jogoEmProgresso">
+            <if expression="JogoEmProgresso">
                 <then>
-                    <assign variable="EstaNoJogo" expression="EstaNoJogo(Jogador, JogadoresNoJogo)"/>
-                    <if expression="EstaNoJogo == True">
+                    <if expression="EstaNoJogo(Jogador,JogadoresNoJogo)">
                         <then>
-                            <if expression="Jogador = JogadoresNoJogo[JogadorAtivo]">
+                            <if expression="ValidarTurnoDoJogador(Jogador, JogadoresNoJogo, JogadorAtivo)">
                                 <then>
-                                    <if expression="">
+                                    <if expression="Espa&#231;o = street">
                                         <then/>
                                         <else/>
                                     </if>
@@ -190,6 +198,77 @@
             </for>
         </body>
     </function>
+    <function name="InicializaVariaveisEspaco" type="None" variable="">
+        <parameters>
+            <parameter name="Tipo" type="String" array="True"/>
+            <parameter name="Preco" type="Integer" array="True"/>
+            <parameter name="TipoCor" type="String" array="True"/>
+            <parameter name="Dono" type="String" array="True"/>
+            <parameter name="NumeroDeCasas" type="Integer" array="True"/>
+        </parameters>
+        <body>
+            <declare name="i" type="Integer" array="False" size=""/>
+            <for variable="i" start="0" end="size(Tipo) - 1" direction="inc" step="1">
+                <if expression="Tabuleiro[i] == &quot;Community&quot;">
+                    <then>
+                        <assign variable="Tipo" expression="&quot;Community&quot;"/>
+                    </then>
+                    <else>
+                        <if expression="Tabuleiro[i] == &quot;Prison&quot;">
+                            <then>
+                                <assign variable="Tipo" expression="&quot;Prison&quot;"/>
+                            </then>
+                            <else>
+                                <if expression="Tabuleiro[i] == &quot;Train&quot;">
+                                    <then>
+                                        <assign variable="Tipo" expression="&quot;Train&quot;"/>
+                                    </then>
+                                    <else>
+                                        <if expression="Tabuleiro[i] == &quot;GoToStart&quot;">
+                                            <then>
+                                                <assign variable="Tipo" expression="&quot;Back to Start&quot;"/>
+                                            </then>
+                                            <else>
+                                                <if expression="Tabuleiro[i] == &quot;Chance&quot;">
+                                                    <then>
+                                                        <assign variable="Tipo" expression="&quot;Chance&quot;"/>
+                                                    </then>
+                                                    <else>
+                                                        <if expression="Tabuleiro[i] == &quot;Lux Tax&quot;">
+                                                            <then>
+                                                                <assign variable="Tipo" expression="&quot;Lux Tax&quot;"/>
+                                                            </then>
+                                                            <else>
+                                                                <if expression="Tabuleiro[i] == &quot;Start&quot;">
+                                                                    <then>
+                                                                        <assign variable="Tipo" expression="&quot;Start&quot;"/>
+                                                                    </then>
+                                                                    <else>
+                                                                        <if expression="Tabuleiro[i] == &quot;FreePark&quot;">
+                                                                            <then>
+                                                                                <assign variable="Tipo" expression="&quot;FreePark&quot;"/>
+                                                                            </then>
+                                                                            <else>
+                                                                                <assign variable="Tipo" expression="&quot;Street&quot;"/>
+                                                                            </else>
+                                                                        </if>
+                                                                    </else>
+                                                                </if>
+                                                            </else>
+                                                        </if>
+                                                    </else>
+                                                </if>
+                                            </else>
+                                        </if>
+                                    </else>
+                                </if>
+                            </else>
+                        </if>
+                    </else>
+                </if>
+            </for>
+        </body>
+    </function>
     <function name="LDLan&#231;arDados" type="None" variable="">
         <parameters>
             <parameter name="Jogador" type="String" array="False"/>
@@ -271,6 +350,23 @@
                     <assign variable="Jogadores[Indice]" expression="Nome"/>
                     <output expression="&quot;Jogador registado com sucesso.&quot;" newline="True"/>
                 </else>
+            </if>
+        </body>
+    </function>
+    <function name="ValidarTurnoDoJogador" type="Boolean" variable="eJogadorAtivo">
+        <parameters>
+            <parameter name="Jogador" type="String" array="False"/>
+            <parameter name="JogadoresNoJogo" type="String" array="True"/>
+            <parameter name="JogadorAtivo" type="Integer" array="False"/>
+        </parameters>
+        <body>
+            <declare name="eJogadorAtivo" type="Boolean" array="False" size=""/>
+            <assign variable="eJogadorAtivo" expression="False"/>
+            <if expression="Jogador == JogadoresNoJogo[JogadorAtivo]">
+                <then>
+                    <assign variable="eJogadorAtivo" expression="True"/>
+                </then>
+                <else/>
             </if>
         </body>
     </function>
