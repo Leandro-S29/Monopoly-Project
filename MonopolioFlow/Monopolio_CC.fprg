@@ -4,12 +4,12 @@
         <attribute name="name" value="ProjetoExemplo"/>
         <attribute name="authors" value="nathanpc"/>
         <attribute name="about" value=""/>
-        <attribute name="saved" value="2025-12-06 11:56:54 PM"/>
+        <attribute name="saved" value="2025-12-06 11:59:53 PM"/>
         <attribute name="created" value="bmF0aGFucGM7UE9LRUJFUlJZLVdJTjc7MjAyNS0xMS0yNjswOTozNjo0NyBBTTszMTUx"/>
         <attribute name="edited" value="bmF0aGFucGM7UE9LRUJFUlJZLVdJTjc7MjAyNS0xMS0yNjsxMjo1NToxNiBQTTsyNDszMzE4"/>
         <attribute name="edited" value="Z3VpY2E7R1VJTEhFUk1FLVBDOzIwMjUtMTItMDM7MDY6MjY6NTYgUE07MzsyNzgx"/>
         <attribute name="edited" value="TGVhbmRybztERVNLVE9QLTVWTkE3UzI7MjAyNS0xMi0wNjswNzoxMjoxMCBQTTsxO25hdGhhbnBjO1BPS0VCRVJSWS1XSU43OzIwMjUtMTEtMjY7MDk6MzY6NDcgQU07TW9ub3BvbGlvQ0UuZnByZzs3OTgx"/>
-        <attribute name="edited" value="TGVhbmRybztERVNLVE9QLTVWTkE3UzI7MjAyNS0xMi0wNjsxMTo1Njo1NCBQTTs1OzMxNTg="/>
+        <attribute name="edited" value="TGVhbmRybztERVNLVE9QLTVWTkE3UzI7MjAyNS0xMi0wNjsxMTo1OTo1MyBQTTs2OzMxNjE="/>
     </attributes>
     <function name="Main" type="None" variable="">
         <parameters/>
@@ -242,6 +242,10 @@
                 </else>
             </if>
         </body>
+    </function>
+    <function name="TTTerminarTurno" type="None" variable="">
+        <parameters/>
+        <body/>
     </function>
     <function name="ValidarTurnoDoJogador" type="Boolean" variable="eJogadorAtivo">
         <parameters>
