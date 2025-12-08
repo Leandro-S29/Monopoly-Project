@@ -4,12 +4,12 @@
         <attribute name="name" value="ProjetoExemplo"/>
         <attribute name="authors" value="nathanpc"/>
         <attribute name="about" value=""/>
-        <attribute name="saved" value="2025-12-07 07:50:11 PM"/>
+        <attribute name="saved" value="2025-12-08 12:36:47 AM"/>
         <attribute name="created" value="bmF0aGFucGM7UE9LRUJFUlJZLVdJTjc7MjAyNS0xMS0yNjswOTozNjo0NyBBTTszMTUx"/>
         <attribute name="edited" value="bmF0aGFucGM7UE9LRUJFUlJZLVdJTjc7MjAyNS0xMS0yNjsxMjo1NToxNiBQTTsyNDszMzE4"/>
         <attribute name="edited" value="Z3VpY2E7R1VJTEhFUk1FLVBDOzIwMjUtMTItMDM7MDY6MjY6NTYgUE07MzsyNzgx"/>
         <attribute name="edited" value="SGVucmlxdWU7TUVYOzIwMjUtMTItMDc7MTI6MzU6MzggQU07MTtuYXRoYW5wYztQT0tFQkVSUlktV0lONzsyMDI1LTExLTI2OzA5OjM2OjQ3IEFNO01vbm9wb2xpb1VwZGF0ZWQuZnByZzs3ODU4"/>
-        <attribute name="edited" value="SGVucmlxdWU7TUVYOzIwMjUtMTItMDc7MDc6NTA6MTEgUE07NDsyNDU1"/>
+        <attribute name="edited" value="SGVucmlxdWU7TUVYOzIwMjUtMTItMDg7MTI6MzY6NDcgQU07NjsyNDUy"/>
     </attributes>
     <function name="Main" type="None" variable="">
         <parameters/>
@@ -219,14 +219,14 @@
                                 <assign variable="Tipo" expression="&quot;Prison&quot;"/>
                             </then>
                             <else>
-                                <if expression="Tabuleiro[i] == &quot;Train&quot;">
+                                <if expression="Tabuleiro[i] == &quot;Train1&quot; || Tabuleiro[i] == &quot;Train2&quot; || Tabuleiro[i] == &quot;Train3&quot; || Tabuleiro[i] == &quot;Train4&quot;">
                                     <then>
                                         <assign variable="Tipo" expression="&quot;Train&quot;"/>
                                     </then>
                                     <else>
-                                        <if expression="Tabuleiro[i] == &quot;GoToStart&quot;">
+                                        <if expression="Tabuleiro[i] == &quot;BackToStart&quot;">
                                             <then>
-                                                <assign variable="Tipo" expression="&quot;Back to Start&quot;"/>
+                                                <assign variable="Tipo" expression="&quot;GoToStart&quot;"/>
                                             </then>
                                             <else>
                                                 <if expression="Tabuleiro[i] == &quot;Chance&quot;">
@@ -239,17 +239,32 @@
                                                                 <assign variable="Tipo" expression="&quot;Lux Tax&quot;"/>
                                                             </then>
                                                             <else>
-                                                                <if expression="Tabuleiro[i] == &quot;Start&quot;">
+                                                                <if expression="Tabuleiro[i] == &quot;Water Works&quot;">
                                                                     <then>
-                                                                        <assign variable="Tipo" expression="&quot;Start&quot;"/>
+                                                                        <assign variable="Tipo" expression="&quot;Utility&quot;"/>
                                                                     </then>
                                                                     <else>
-                                                                        <if expression="Tabuleiro[i] == &quot;FreePark&quot;">
+                                                                        <if expression="Tabuleiro[i] == &quot;Electric Company&quot;">
                                                                             <then>
-                                                                                <assign variable="Tipo" expression="&quot;FreePark&quot;"/>
+                                                                                <assign variable="Tipo" expression="&quot;Utility&quot;"/>
                                                                             </then>
                                                                             <else>
-                                                                                <assign variable="Tipo" expression="&quot;Street&quot;"/>
+                                                                                <if expression="Tabuleiro[i] == &quot;Start&quot;">
+                                                                                    <then>
+                                                                                        <assign variable="Tipo" expression="&quot;Start&quot;"/>
+                                                                                    </then>
+                                                                                    <else>
+                                                                                        <if expression="Tabuleiro[i] == &quot;FreePark&quot;">
+                                                                                            <then>
+                                                                                                <assign variable="Tipo" expression="&quot;FreePark&quot;"/>
+                                                                                                <assign variable="" expression=""/>
+                                                                                            </then>
+                                                                                            <else>
+                                                                                                <assign variable="Tipo" expression="&quot;Street&quot;"/>
+                                                                                            </else>
+                                                                                        </if>
+                                                                                    </else>
+                                                                                </if>
                                                                             </else>
                                                                         </if>
                                                                     </else>
@@ -266,6 +281,167 @@
                         </if>
                     </else>
                 </if>
+                <if expression="Tabuleiro[i] == &quot;Prison&quot; || Tabuleiro[i] == &quot;BackTostart&quot; || Tabuleiro[i] == &quot;Community&quot; ||Tabuleiro[i] == &quot;Water Works&quot; || Tabuleiro[i] == &quot;Chance&quot; || Tabuleiro[i] == &quot;Lux Tax&quot; || Tabuleiro[i] == &quot;Start&quot; || Tabuleiro[i] == &quot;FreePark&quot; || Tabuleiro[i] == &quot;Police&quot;">
+                    <then>
+                        <assign variable="TipoCor" expression="&quot;Blank&quot;"/>
+                    </then>
+                    <else>
+                        <if expression="Tabuleiro[i] == &quot;Train1&quot; || Tabuleiro[i] == &quot;Train2&quot; || Tabuleiro[i] == &quot;Train3&quot; || Tabuleiro[i] == &quot;Train4&quot; || Tabuleiro[i] == &quot;Electric Company&quot;">
+                            <then>
+                                <assign variable="TipoCor" expression="&quot;Utility&quot;"/>
+                            </then>
+                            <else>
+                                <if expression="Tabuleiro[i] == &quot;Green1&quot; || Tabuleiro[i] == &quot;Green2&quot; || Tabuleiro[i] == &quot;Green3&quot;">
+                                    <then>
+                                        <assign variable="TipoCor" expression="&quot;Green&quot;"/>
+                                    </then>
+                                    <else>
+                                        <if expression="Tabuleiro[i] == &quot;Violet1&quot; || Tabuleiro[i] == &quot;Violet&quot;">
+                                            <then>
+                                                <assign variable="TipoCor" expression="&quot;Violet&quot;"/>
+                                            </then>
+                                            <else>
+                                                <if expression="Tabuleiro[i] == &quot;Red1&quot; || Tabuleiro[i] == &quot;Red2&quot; || Tabuleiro[i] == &quot;Red3&quot;">
+                                                    <then>
+                                                        <assign variable="TipoCor" expression="&quot;Red&quot;"/>
+                                                    </then>
+                                                    <else>
+                                                        <if expression="Tabuleiro[i] == &quot;White1&quot; || Tabuleiro[i] == &quot;White2&quot; || Tabuleiro[i] == &quot;White3&quot;">
+                                                            <then>
+                                                                <assign variable="TipoCor" expression="&quot;White&quot;"/>
+                                                            </then>
+                                                            <else>
+                                                                <if expression="Tabuleiro[i] == &quot;Blue1&quot; || Tabuleiro[i] == &quot;Blue2&quot; || Tabuleiro[i] == &quot;Blue3&quot;">
+                                                                    <then>
+                                                                        <assign variable="TipoCor" expression="&quot;Blue&quot;"/>
+                                                                    </then>
+                                                                    <else>
+                                                                        <if expression="Tabuleiro[i] == &quot;Brown1&quot; || Tabuleiro[i] == &quot;Brown2&quot;">
+                                                                            <then>
+                                                                                <assign variable="TipoCor" expression="&quot;Brown&quot;"/>
+                                                                            </then>
+                                                                            <else>
+                                                                                <if expression="Tabuleiro[i] == &quot;Black1&quot; || Tabuleiro[i] == &quot;Black2&quot; || Tabuleiro[i] == &quot;Black3&quot;">
+                                                                                    <then>
+                                                                                        <assign variable="TipoCor" expression="&quot;Black&quot;"/>
+                                                                                    </then>
+                                                                                    <else>
+                                                                                        <if expression="Tabuleiro[i] == &quot;Orange1&quot; || Tabuleiro[i] == &quot;Orange2&quot; || Tabuleiro[i] == &quot;Orange3&quot;">
+                                                                                            <then>
+                                                                                                <assign variable="TipoCor" expression="&quot;Orange&quot;"/>
+                                                                                            </then>
+                                                                                            <else>
+                                                                                                <if expression="Tabuleiro[i] == &quot;Pink1&quot; || Tabuleiro[i] == &quot;Pink2&quot;">
+                                                                                                    <then>
+                                                                                                        <assign variable="TipoCor" expression="&quot;Pink&quot;"/>
+                                                                                                    </then>
+                                                                                                    <else>
+                                                                                                        <if expression="Tabuleiro[i] == &quot;Yellow1&quot; || Tabuleiro[i] == &quot;Yellow2&quot; || Tabuleiro[i] == &quot;Yellow3&quot;">
+                                                                                                            <then>
+                                                                                                                <assign variable="TipoCor" expression="&quot;Yellow&quot;"/>
+                                                                                                            </then>
+                                                                                                            <else/>
+                                                                                                        </if>
+                                                                                                    </else>
+                                                                                                </if>
+                                                                                            </else>
+                                                                                        </if>
+                                                                                    </else>
+                                                                                </if>
+                                                                            </else>
+                                                                        </if>
+                                                                    </else>
+                                                                </if>
+                                                            </else>
+                                                        </if>
+                                                    </else>
+                                                </if>
+                                            </else>
+                                        </if>
+                                    </else>
+                                </if>
+                            </else>
+                        </if>
+                    </else>
+                </if>
+                <if expression="Tabuleiro[i] == &quot;Prison&quot; || Tabuleiro[i] == &quot;BackToStart&quot; || Tabuleiro[i] == &quot;Community&quot; || Tabuleiro[i] == &quot;Chance&quot; || Tabuleiro[i] == &quot;Start&quot; || Tabuleiro[i] == &quot;FreePark&quot; || Tabuleiro[i] == &quot;Police&quot;">
+                    <then>
+                        <assign variable="Preco" expression="0"/>
+                    </then>
+                    <else>
+                        <if expression="Tabuleiro[i] == &quot;Green3&quot; || Tabuleiro[i] == &quot;Red3&quot; || Tabuleiro[i] == &quot;White1&quot; || Tabuleiro[i] == &quot;Pink1&quot;">
+                            <then>
+                                <assign variable="Preco" expression="160"/>
+                            </then>
+                            <else>
+                                <if expression="Tabuleiro[i] == &quot;Violet1&quot; || Tabuleiro[i] == &quot;Train2&quot; || Tabuleiro[i] == &quot;Train1&quot; || Tabuleiro[i] == &quot;Train 3&quot; || Tabuleiro[i] == &quot;Train4&quot;">
+                                    <then>
+                                        <assign variable="Preco" expression="150"/>
+                                    </then>
+                                    <else>
+                                        <if expression="Tabuleiro[i] == &quot;Blue3&quot; || Tabuleiro[i] == &quot;Yellow3&quot;">
+                                            <then>
+                                                <assign variable="Preco" expression="170"/>
+                                            </then>
+                                            <else>
+                                                <if expression="Tabuleiro[i] == &quot;Red2&quot; || Tabuleiro[i] == &quot;Violet2&quot; || Tabuleiro[i] == &quot;Red1&quot; || Tabuleiro[i] == &quot;Teal2&quot; || Tabuleiro[i] == &quot;Black3&quot;">
+                                                    <then>
+                                                        <assign variable="Preco" expression="130"/>
+                                                    </then>
+                                                    <else>
+                                                        <if expression="Tabuleiro[i] == &quot;Water Works&quot; || Tabuleiro[i] == &quot;Brown2&quot; || Tabuleiro[i] == &quot;Black2&quot; || Tabuleiro[i] == &quot;Green1&quot; || Tabuleiro[i] == &quot;Orange1&quot; || Tabuleiro[i] == &quot;Orange2&quot; || Tabuleiro[i] == &quot;Electric Company&quot;">
+                                                            <then>
+                                                                <assign variable="Preco" expression="120"/>
+                                                            </then>
+                                                            <else>
+                                                                <if expression="Tabuleiro[i] == &quot;White2&quot; || Tabuleiro[i] == &quot;Pink2&quot;">
+                                                                    <then>
+                                                                        <assign variable="Preco" expression="180"/>
+                                                                    </then>
+                                                                    <else>
+                                                                        <if expression="Tabuleiro[i] == &quot;White3&quot;">
+                                                                            <then>
+                                                                                <assign variable="Preco" expression="190"/>
+                                                                            </then>
+                                                                            <else>
+                                                                                <if expression="Tabuleiro[i] == &quot;Green2&quot; || Tabuleiro[i] == &quot;Blue1&quot; || Tabuleiro[i] == &quot;Orange3&quot; || Tabuleiro[i] == &quot;Yellow1&quot; || Tabuleiro[i] == &quot;Yellow2&quot; || Tabuleiro[i] == &quot;Blue2&quot;">
+                                                                                    <then>
+                                                                                        <assign variable="Preco" expression="140"/>
+                                                                                    </then>
+                                                                                    <else>
+                                                                                        <if expression="Tabuleiro[i] == &quot;Black1&quot;">
+                                                                                            <then>
+                                                                                                <assign variable="Preco" expression="110"/>
+                                                                                            </then>
+                                                                                            <else>
+                                                                                                <if expression="Tabuleiro[i] == &quot;Teal1&quot;">
+                                                                                                    <then>
+                                                                                                        <assign variable="Preco" expression="90"/>
+                                                                                                    </then>
+                                                                                                    <else/>
+                                                                                                </if>
+                                                                                            </else>
+                                                                                        </if>
+                                                                                    </else>
+                                                                                </if>
+                                                                            </else>
+                                                                        </if>
+                                                                    </else>
+                                                                </if>
+                                                            </else>
+                                                        </if>
+                                                    </else>
+                                                </if>
+                                            </else>
+                                        </if>
+                                    </else>
+                                </if>
+                            </else>
+                        </if>
+                    </else>
+                </if>
+                <assign variable="Dono[i]" expression="&quot;&quot;"/>
+                <assign variable="NumeroDeCasas[i]" expression="0"/>
             </for>
         </body>
     </function>
