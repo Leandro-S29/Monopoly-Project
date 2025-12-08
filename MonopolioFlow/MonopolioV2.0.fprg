@@ -4,13 +4,13 @@
         <attribute name="name" value="ProjetoExemplo"/>
         <attribute name="authors" value="nathanpc"/>
         <attribute name="about" value=""/>
-        <attribute name="saved" value="2025-12-08 06:30:27 PM"/>
+        <attribute name="saved" value="2025-12-08 07:49:08 PM"/>
         <attribute name="created" value="bmF0aGFucGM7UE9LRUJFUlJZLVdJTjc7MjAyNS0xMS0yNjswOTozNjo0NyBBTTszMTUx"/>
-        <attribute name="edited" value="Z3VpY2E7R1VJTEhFUk1FLVBDOzIwMjUtMTItMDg7MDY6MDc6NTggUE07MTtuYXRoYW5wYztQT0tFQkVSUlktV0lONzsyMDI1LTExLTI2OzA5OjM2OjQ3IEFNO01vbm9wb2xpb0NFKDMpLmZwcmc7Nzc1NQ=="/>
-        <attribute name="edited" value="Z3VpY2E7R1VJTEhFUk1FLVBDOzIwMjUtMTItMDg7MDY6MTI6MTAgUE07MztuYXRoYW5wYztQT0tFQkVSUlktV0lONzsyMDI1LTExLTI2OzA5OjM2OjQ3IEFNO01vbm9wb2xpb0RKX2ZpbmFsaXphZG8uZnByZzs4NzY3"/>
         <attribute name="edited" value="Z3VpY2E7R1VJTEhFUk1FLVBDOzIwMjUtMTItMDg7MDY6MjE6NDAgUE07MTtuYXRoYW5wYztQT0tFQkVSUlktV0lONzsyMDI1LTExLTI2OzA5OjM2OjQ3IEFNO01vbm9wb2xpb0xKLmZwcmc7NzYyNA=="/>
         <attribute name="edited" value="Z3VpY2E7R1VJTEhFUk1FLVBDOzIwMjUtMTItMDg7MDY6Mjc6MzIgUE07NztuYXRoYW5wYztQT0tFQkVSUlktV0lONzsyMDI1LTExLTI2OzA5OjM2OjQ3IEFNO01vbm9wb2xpb1VwZGF0ZWQuZnByZzs4MTk4"/>
         <attribute name="edited" value="Z3VpY2E7R1VJTEhFUk1FLVBDOzIwMjUtMTItMDg7MDY6MzA6MjcgUE07MTc7MjgzMg=="/>
+        <attribute name="edited" value="TGVhbmRybztERVNLVE9QLTVWTkE3UzI7MjAyNS0xMi0wODswNzozMzozMyBQTTsyO25hdGhhbnBjO1BPS0VCRVJSWS1XSU43OzIwMjUtMTEtMjY7MDk6MzY6NDcgQU07TW9ub3BvbGlvVXBkYXRlZC5mcHJnOzg1Njc="/>
+        <attribute name="edited" value="TGVhbmRybztERVNLVE9QLTVWTkE3UzI7MjAyNS0xMi0wODswNzo0OTowOCBQTTsxOzMxNjI="/>
     </attributes>
     <function name="Main" type="None" variable="">
         <parameters/>
@@ -53,7 +53,9 @@
             <call expression="RJRegistarJogador(Jogadores, 2, &quot;Real&quot;)"/>
             <call expression="LJListarJogadores(Jogadores)"/>
             <assign variable="JogoEmProgresso" expression="IJIniciarJogo(Jogadores, JogadoresNoJogo, JogoEmProgresso)"/>
+            <call expression="CCComprarCasa(JogoEmProgresso, JogadoresNoJogo, &quot;Nathan&quot;,JogadorAtivo,Posicao,Tabuleiro,TipoCor,Tipo,&quot;Pink&quot;,Dono,Dinheiro,NumeroDeCasas,Preco,&quot;Pink2&quot;)"/>
             <call expression="TTTerminarTurno(JogoEmProgresso, JogadoresNoJogo,&quot;Nathan&quot;, JogadorAtivo, JaJogouEsteTurno, PrecisaPagarRenda, TemCartaCommunityOuChance, Duplicados)"/>
+            <breakpoint expression="" always="True"/>
             <call expression="DJDetalhesDoJogo(Tabuleiro, Jogadores, Posicao, Dono,Dinheiro,JogadorAtivo, NumeroDeCasas, JogoEmProgresso)"/>
             <assign variable="JogoEmProgresso" expression="IJIniciarJogo(Jogadores, JogadoresNoJogo, JogoEmProgresso)"/>
             <call expression="LDLancarDados(&quot;Nathan&quot;, -3 , 6, JogoEmProgresso, JogadoresNoJogo, JaJogouEsteTurno, Duplicados, PrecisaPagarRenda, TemCartaCommunityOuChance, EstaNaPrisao, TurnosNaPrisao, JogadorAtivo, Posicao, Tabuleiro, Tipo, Dono)"/>
@@ -85,8 +87,14 @@
             <parameter name="JogadorAtivo" type="Integer" array="False"/>
             <parameter name="Posicao" type="Integer" array="True"/>
             <parameter name="Tabuleiro" type="String" array="True"/>
-            <parameter name="PosicaoComprarCasa" type="String" array="False"/>
+            <parameter name="TipoCor" type="String" array="True"/>
             <parameter name="Tipo" type="String" array="True"/>
+            <parameter name="Cor" type="String" array="False"/>
+            <parameter name="Dono" type="String" array="True"/>
+            <parameter name="Dinheiro" type="Integer" array="True"/>
+            <parameter name="NumeroDeCasas" type="Integer" array="True"/>
+            <parameter name="Preco" type="Integer" array="True"/>
+            <parameter name="PosicaoComprarCasa" type="String" array="False"/>
         </parameters>
         <body>
             <if expression="JogoEmProgresso">
@@ -97,8 +105,38 @@
                                 <then>
                                     <if expression="Tabuleiro[Posicao[JogadorAtivo]] == PosicaoComprarCasa">
                                         <then>
+                                            <declare name="CorDaPosicao" type="String" array="False" size=""/>
+                                            <assign variable="CorDaPosicao" expression="TipoCor[Posicao[JogadorAtivo]]"/>
                                             <if expression="Tipo[Posicao[JogadorAtivo]] == &quot;Street&quot;">
-                                                <then/>
+                                                <then>
+                                                    <if expression="TemTodosOsEspacosCores(JogadoresNoJogo[JogadorAtivo],Cor,TipoCor,Dono)">
+                                                        <then>
+                                                            <if expression="NumeroDeCasas[Posicao[JogadorAtivo]] &gt;= 4">
+                                                                <then>
+                                                                    <output expression="&quot;N&#250;mero m&#225;ximo de casas atingido.&quot;" newline="True"/>
+                                                                </then>
+                                                                <else>
+                                                                    <declare name="ValorDaCasa" type="Integer" array="False" size=""/>
+                                                                    <assign variable="ValorDaCasa" expression="CustoDaCasa(Preco,Posicao,JogadorAtivo)"/>
+                                                                    <if expression="Dinheiro[JogadorAtivo] &lt; ValorDaCasa">
+                                                                        <then>
+                                                                            <output expression="&quot;O Jogador n&#227;o possui dinheiro suficiente.&quot;" newline="True"/>
+                                                                        </then>
+                                                                        <else>
+                                                                            <assign variable="Dinheiro[JogadorAtivo]" expression="Dinheiro[JogadorAtivo] - ValorDaCasa"/>
+                                                                            <assign variable="NumeroDeCasas[Posicao[JogadorAtivo]]" expression="NumeroDeCasas[Posicao[JogadorAtivo]] + 1"/>
+                                                                            <assign variable="Dono[Posicao[JogadorAtivo]]" expression="Jogador"/>
+                                                                            <output expression="&quot;Casa adquirida.&quot;" newline="True"/>
+                                                                        </else>
+                                                                    </if>
+                                                                </else>
+                                                            </if>
+                                                        </then>
+                                                        <else>
+                                                            <output expression="&quot;0 jogador n&#227;o possui todos os espa&#231;os da cor.&quot;" newline="True"/>
+                                                        </else>
+                                                    </if>
+                                                </then>
                                                 <else>
                                                     <output expression="&quot;N&#227;o &#233; poss&#237;vel comprar casa no espa&#231;o indicado.&quot;" newline="True"/>
                                                 </else>
@@ -125,10 +163,10 @@
             </if>
         </body>
     </function>
-    <function name="CustoDaCasa" type="Integer" variable="Preco[Espaco[JogadorAtivo]] * 0.6">
+    <function name="CustoDaCasa" type="Integer" variable="Preco[Posicao[JogadorAtivo]] * 0.6">
         <parameters>
             <parameter name="Preco" type="Integer" array="True"/>
-            <parameter name="Espaco" type="Integer" array="True"/>
+            <parameter name="Posicao" type="Integer" array="True"/>
             <parameter name="JogadorAtivo" type="Integer" array="False"/>
         </parameters>
         <body/>
