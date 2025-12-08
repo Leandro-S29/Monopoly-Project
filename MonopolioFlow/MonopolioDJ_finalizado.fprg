@@ -4,13 +4,13 @@
         <attribute name="name" value="ProjetoExemplo"/>
         <attribute name="authors" value="nathanpc"/>
         <attribute name="about" value=""/>
-        <attribute name="saved" value="2025-12-08 12:48:49 "/>
+        <attribute name="saved" value="2025-12-08 01:15:53 "/>
         <attribute name="created" value="bmF0aGFucGM7UE9LRUJFUlJZLVdJTjc7MjAyNS0xMS0yNjswOTozNjo0NyBBTTszMTUx"/>
         <attribute name="edited" value="Z3VpY2E7R1VJTEhFUk1FLVBDOzIwMjUtMTItMDQ7MTE6MTM6MTggUE07MTtuYXRoYW5wYztQT0tFQkVSUlktV0lONzsyMDI1LTExLTI2OzA5OjM2OjQ3IEFNO01vbm9wb2xpb19ESjEuZnByZzs3NzU4"/>
         <attribute name="edited" value="Z3VpY2E7R1VJTEhFUk1FLVBDOzIwMjUtMTItMDQ7MTE6MTQ6MTAgUE07MTtuYXRoYW5wYztQT0tFQkVSUlktV0lONzsyMDI1LTExLTI2OzA5OjM2OjQ3IEFNO01vbm9wb2xpb0NFLmZwcmc7NzYwMQ=="/>
         <attribute name="edited" value="Z3VpY2E7R1VJTEhFUk1FLVBDOzIwMjUtMTItMDY7MTE6NTU6MDEgUE07MTI7MjgyMA=="/>
         <attribute name="edited" value="aGVucmk7TEFQVE9QLUhFTlJJUVVFOzIwMjUtMTItMDc7IjA4OjUzOjMyICI7MTtuYXRoYW5wYztQT0tFQkVSUlktV0lONzsyMDI1LTExLTI2OzA5OjM2OjQ3IEFNO01vbm9wb2xpb0NFLmZwcmc7Nzc5Mw=="/>
-        <attribute name="edited" value="aGVucmk7TEFQVE9QLUhFTlJJUVVFOzIwMjUtMTItMDg7IjEyOjQ4OjQ5ICI7NzsyOTY5"/>
+        <attribute name="edited" value="aGVucmk7TEFQVE9QLUhFTlJJUVVFOzIwMjUtMTItMDg7IjAxOjE1OjUzICI7ODsyOTU3"/>
     </attributes>
     <function name="Main" type="None" variable="">
         <parameters/>
@@ -88,7 +88,6 @@
                 <then>
                     <declare name="i" type="Integer" array="False" size=""/>
                     <for variable="i" start="0" end="Size(Tabuleiro) - 1" direction="inc" step="1">
-                        <declare name="j" type="Integer" array="False" size=""/>
                         <output expression="&quot;| &quot; &amp; Tabuleiro[i] &amp; &quot; &quot;" newline="False"/>
                         <if expression="Dono[i] != &quot;&quot;">
                             <then>
@@ -105,6 +104,7 @@
                                 <output expression="&quot; &quot;" newline="False"/>
                             </else>
                         </if>
+                        <declare name="j" type="Integer" array="False" size=""/>
                         <for variable="j" start="0" end="Size(Peoes) - 1" direction="inc" step="1">
                             <if expression="Peoes[j] = i">
                                 <then>
