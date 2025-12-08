@@ -4,13 +4,13 @@
         <attribute name="name" value="ProjetoExemplo"/>
         <attribute name="authors" value="nathanpc"/>
         <attribute name="about" value=""/>
-        <attribute name="saved" value="2025-12-07 01:33:35 AM"/>
+        <attribute name="saved" value="2025-12-08 05:37:20 PM"/>
         <attribute name="created" value="bmF0aGFucGM7UE9LRUJFUlJZLVdJTjc7MjAyNS0xMS0yNjswOTozNjo0NyBBTTszMTUx"/>
         <attribute name="edited" value="Z3VpY2E7R1VJTEhFUk1FLVBDOzIwMjUtMTItMDQ7MTE6MTM6MTggUE07MTtuYXRoYW5wYztQT0tFQkVSUlktV0lONzsyMDI1LTExLTI2OzA5OjM2OjQ3IEFNO01vbm9wb2xpb19ESjEuZnByZzs3NzU4"/>
         <attribute name="edited" value="Z3VpY2E7R1VJTEhFUk1FLVBDOzIwMjUtMTItMDQ7MTE6MTQ6MTAgUE07MTtuYXRoYW5wYztQT0tFQkVSUlktV0lONzsyMDI1LTExLTI2OzA5OjM2OjQ3IEFNO01vbm9wb2xpb0NFLmZwcmc7NzYwMQ=="/>
         <attribute name="edited" value="Z3VpY2E7R1VJTEhFUk1FLVBDOzIwMjUtMTItMDY7MTE6NTU6MDEgUE07MTI7MjgyMA=="/>
         <attribute name="edited" value="TGVhbmRybztERVNLVE9QLTVWTkE3UzI7MjAyNS0xMi0wNzsxMjowOTowMiBBTTs1O25hdGhhbnBjO1BPS0VCRVJSWS1XSU43OzIwMjUtMTEtMjY7MDk6MzY6NDcgQU07TW9ub3BvbGlvX0NDYW5kVFQuZnByZzs4NTQy"/>
-        <attribute name="edited" value="TGVhbmRybztERVNLVE9QLTVWTkE3UzI7MjAyNS0xMi0wNzswMTozMzozNSBBTTszOzMxMzU="/>
+        <attribute name="edited" value="TGVhbmRybztERVNLVE9QLTVWTkE3UzI7MjAyNS0xMi0wODswNTozNzoyMCBQTTs0OzMxNTQ="/>
     </attributes>
     <function name="Main" type="None" variable="">
         <parameters/>
@@ -58,12 +58,29 @@
             </for>
         </body>
     </function>
+    <function name="CalcularRenda" type="Integer" variable="RendaBase+RendaDaCasa">
+        <parameters>
+            <parameter name="Preco" type="Integer" array="True"/>
+            <parameter name="NumeroDeCasa" type="Integer" array="True"/>
+            <parameter name="JogadorAtivo" type="Integer" array="False"/>
+            <parameter name="Posicao" type="Integer" array="True"/>
+        </parameters>
+        <body>
+            <declare name="RendaBase" type="Real" array="False" size=""/>
+            <assign variable="RendaBase" expression="Preco[Posicao[JogadorAtivo]]*0.25"/>
+            <declare name="RendaDaCasa" type="Real" array="False" size=""/>
+            <assign variable="RendaDaCasa" expression="Preco[Posicao[JogadorAtivo]]*0.75*NumeroDeCasas"/>
+        </body>
+    </function>
     <function name="CCComprarCasa" type="None" variable="">
         <parameters>
             <parameter name="JogoEmProgresso" type="Boolean" array="False"/>
             <parameter name="JogadoresNoJogo" type="String" array="True"/>
             <parameter name="Jogador" type="String" array="False"/>
             <parameter name="JogadorAtivo" type="Integer" array="False"/>
+            <parameter name="Posicao" type="Integer" array="True"/>
+            <parameter name="Tabuleiro" type="String" array="True"/>
+            <parameter name="PosicaoComprarCasa" type="String" array="False"/>
         </parameters>
         <body>
             <if expression="JogoEmProgresso">
@@ -71,7 +88,21 @@
                     <if expression="EstaNoJogo(Jogador, JogadoresNoJogo)">
                         <then>
                             <if expression="ValidarTurnoDoJogador(Jogador, JogadoresNoJogo, JogadorAtivo)">
-                                <then/>
+                                <then>
+                                    <if expression="Tabuleiro[Posicao[JogadorAtivo]] == PosicaoComprarCasa">
+                                        <then>
+                                            <if expression="Tipo[Posicao[JogadorAtivo]] == Street">
+                                                <then/>
+                                                <else>
+                                                    <output expression="&quot;N&#227;o &#233; poss&#237;vel comprar casa no espa&#231;o indicado.&quot;" newline="True"/>
+                                                </else>
+                                            </if>
+                                        </then>
+                                        <else>
+                                            <output expression="&quot;N&#227;o &#233; poss&#237;vel comprar casa no espa&#231;o indicado.&quot;" newline="True"/>
+                                        </else>
+                                    </if>
+                                </then>
                                 <else>
                                     <output expression="&quot;N&#227;o &#233; a vez do jogador.&quot;" newline="True"/>
                                 </else>
@@ -87,6 +118,14 @@
                 </else>
             </if>
         </body>
+    </function>
+    <function name="CustoDaCasa" type="Integer" variable="Preco[Espaco[JogadorAtivo]] * 0.6">
+        <parameters>
+            <parameter name="Preco" type="Integer" array="True"/>
+            <parameter name="Espaco" type="Integer" array="True"/>
+            <parameter name="JogadorAtivo" type="Integer" array="False"/>
+        </parameters>
+        <body/>
     </function>
     <function name="DJDetalhesDoJogo" type="None" variable="">
         <parameters>
@@ -461,6 +500,12 @@
                 </else>
             </if>
         </body>
+    </function>
+    <function name="TemTodosOsEspacosCores" type="Boolean" variable="">
+        <parameters>
+            <parameter name="Jogador" type="String" array="False"/>
+        </parameters>
+        <body/>
     </function>
     <function name="TTTerminarTurno" type="None" variable="">
         <parameters>
