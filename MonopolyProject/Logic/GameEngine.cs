@@ -485,7 +485,7 @@ namespace MonopolyProject.Logic
 
             if (!activePlayer.HasRolledThisTurn || activePlayer.NeedsToPayRent || activePlayer.HasCommunityOrChanceCard || (activePlayer.DoublesCount > 0 && activePlayer.DoublesCount < 2))
             {
-                Console.WriteLine("jogador ainda tem ações a fazer.");
+                Console.WriteLine("O jogador ainda tem ações a fazer.");
                 return;
             }
 
@@ -570,6 +570,12 @@ namespace MonopolyProject.Logic
             string playerName = parts[1];
             string houseSpaceName = parts[2];
             Player activePlayer = GetActivePlayer(playerName);
+
+            if(activePlayer == null)
+            {
+                Console.WriteLine("Jogador não participa no jogo em curso.");
+                return;
+            }
 
             if(activePlayer != activePlayersInGame[currentPlayerIndex])
             {

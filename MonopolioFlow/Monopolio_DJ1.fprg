@@ -4,11 +4,11 @@
         <attribute name="name" value="ProjetoExemplo"/>
         <attribute name="authors" value="nathanpc"/>
         <attribute name="about" value=""/>
-        <attribute name="saved" value="2025-12-03 07:08:16 "/>
+        <attribute name="saved" value="2025-12-03 10:51:18 "/>
         <attribute name="created" value="bmF0aGFucGM7UE9LRUJFUlJZLVdJTjc7MjAyNS0xMS0yNjswOTozNjo0NyBBTTszMTUx"/>
         <attribute name="edited" value="bmF0aGFucGM7UE9LRUJFUlJZLVdJTjc7MjAyNS0xMS0yNjsxMjo1NToxNiBQTTsyNDszMzE4"/>
         <attribute name="edited" value="Z3VpY2E7R1VJTEhFUk1FLVBDOzIwMjUtMTItMDM7MDY6MjY6NTYgUE07MzsyNzgx"/>
-        <attribute name="edited" value="aGVucmk7TEFQVE9QLUhFTlJJUVVFOzIwMjUtMTItMDM7IjA3OjA4OjE2ICI7MjsyOTUz"/>
+        <attribute name="edited" value="aGVucmk7TEFQVE9QLUhFTlJJUVVFOzIwMjUtMTItMDM7IjEwOjUxOjE4ICI7MzsyOTQ4"/>
     </attributes>
     <function name="Main" type="None" variable="">
         <parameters/>
@@ -115,10 +115,6 @@
             <for variable="i" start="0" end="Size(Jogadores) - 1" direction="inc" step="1">
                 <assign variable="Jogadores[i]" expression="&quot;&quot;"/>
             </for>
-            <for variable="i" start="0" end="Size(Tabuleiro) - 1" direction="inc" step="1">
-                <assign variable="Tabuleiro[i]" expression="&quot;???&quot;"/>
-            </for>
-            <comment text="Completar o resto do tabuleiro:"/>
             <assign variable="Tabuleiro[0]" expression="&quot;Prison&quot;"/>
             <assign variable="Tabuleiro[1]" expression="&quot;Green3&quot;"/>
             <assign variable="Tabuleiro[2]" expression="&quot;Violet1&quot;"/>
@@ -177,38 +173,7 @@
         <parameters>
             <parameter name="Jogador" type="String" array="False"/>
         </parameters>
-        <body>
-            <if expression="JogoEmProgresso != True">
-                <then>
-                    <output expression="&quot;N&#227;o existe um jogo em curso.&quot;" newline="True"/>
-                </then>
-                <else>
-                    <declare name="i" type="Integer" array="False" size=""/>
-                    <for variable="i" start="0" end="size(JogadoresNoJogo)" direction="inc" step="1">
-                        <if expression="Jogador == JogadoresNoJogo[i]">
-                            <then>
-                                <if expression="Jogador == JogadoresNoJogo[JogadorAtivo]">
-                                    <then>
-                                        <if expression="JaJogouEsteTurno[JogadorAtivo] != true">
-                                            <then/>
-                                            <else>
-                                                <output expression="&quot;N&#227;o &#233; a vez do Jogador.&quot;" newline="True"/>
-                                            </else>
-                                        </if>
-                                    </then>
-                                    <else>
-                                        <output expression="&quot;N&#227;o &#233; o turno deste jogador.&quot;" newline="True"/>
-                                    </else>
-                                </if>
-                            </then>
-                            <else>
-                                <output expression="&quot;Jogador n&#227;o participa no jogo em curso.&quot;" newline="True"/>
-                            </else>
-                        </if>
-                    </for>
-                </else>
-            </if>
-        </body>
+        <body/>
     </function>
     <function name="LJListarJogadores" type="None" variable="">
         <parameters>
