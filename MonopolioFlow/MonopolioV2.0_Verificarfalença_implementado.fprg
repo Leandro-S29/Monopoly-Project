@@ -4,13 +4,13 @@
         <attribute name="name" value="ProjetoExemplo"/>
         <attribute name="authors" value="nathanpc"/>
         <attribute name="about" value=""/>
-        <attribute name="saved" value="2025-12-09 01:38:19 "/>
+        <attribute name="saved" value="2025-12-09 01:53:35 "/>
         <attribute name="created" value="bmF0aGFucGM7UE9LRUJFUlJZLVdJTjc7MjAyNS0xMS0yNjswOTozNjo0NyBBTTszMTUx"/>
         <attribute name="edited" value="Z3VpY2E7R1VJTEhFUk1FLVBDOzIwMjUtMTItMDg7MDY6MjE6NDAgUE07MTtuYXRoYW5wYztQT0tFQkVSUlktV0lONzsyMDI1LTExLTI2OzA5OjM2OjQ3IEFNO01vbm9wb2xpb0xKLmZwcmc7NzYyNA=="/>
         <attribute name="edited" value="Z3VpY2E7R1VJTEhFUk1FLVBDOzIwMjUtMTItMDg7MDY6Mjc6MzIgUE07NztuYXRoYW5wYztQT0tFQkVSUlktV0lONzsyMDI1LTExLTI2OzA5OjM2OjQ3IEFNO01vbm9wb2xpb1VwZGF0ZWQuZnByZzs4MTk4"/>
         <attribute name="edited" value="Z3VpY2E7R1VJTEhFUk1FLVBDOzIwMjUtMTItMDg7MDY6MzA6MjcgUE07MTc7MjgzMg=="/>
         <attribute name="edited" value="aGVucmk7TEFQVE9QLUhFTlJJUVVFOzIwMjUtMTItMDg7IjA2OjMyOjM0ICI7MTtuYXRoYW5wYztQT0tFQkVSUlktV0lONzsyMDI1LTExLTI2OzA5OjM2OjQ3IEFNO01vbm9wb2xpb1BBLmZwcmc7NzgwMA=="/>
-        <attribute name="edited" value="aGVucmk7TEFQVE9QLUhFTlJJUVVFOzIwMjUtMTItMDk7IjAxOjM4OjE5ICI7MTI7MzAwOA=="/>
+        <attribute name="edited" value="aGVucmk7TEFQVE9QLUhFTlJJUVVFOzIwMjUtMTItMDk7IjAxOjUzOjM1ICI7MTM7MzAwNA=="/>
     </attributes>
     <function name="Main" type="None" variable="">
         <parameters/>
@@ -988,7 +988,7 @@
                                     <assign variable="TemCartaCommunityOuChance[JogadorAtivo]" expression="False"/>
                                     <assign variable="Duplicados[JogadorAtivo]" expression="0"/>
                                     <assign variable="JogadorAtivo" expression="(JogadorAtivo + 1) % size(JogadoresNoJogo)"/>
-                                    <while expression="JogadoresNoJogo[JogadorAtivo] == &quot;ELIMINADO&quot;">
+                                    <while expression="JogadoresNoJogo[JogadorAtivo] == &quot;&quot;">
                                         <assign variable="JogadorAtivo" expression="(JogadorAtivo + 1) % size(JogadoresNoJogo)"/>
                                     </while>
                                     <declare name="NomeProximoJogador" type="String" array="False" size=""/>
