@@ -4,13 +4,13 @@
         <attribute name="name" value="ProjetoExemplo"/>
         <attribute name="authors" value="nathanpc"/>
         <attribute name="about" value=""/>
-        <attribute name="saved" value="2025-12-09 01:53:35 "/>
+        <attribute name="saved" value="2025-12-09 04:49:22 "/>
         <attribute name="created" value="bmF0aGFucGM7UE9LRUJFUlJZLVdJTjc7MjAyNS0xMS0yNjswOTozNjo0NyBBTTszMTUx"/>
         <attribute name="edited" value="Z3VpY2E7R1VJTEhFUk1FLVBDOzIwMjUtMTItMDg7MDY6MjE6NDAgUE07MTtuYXRoYW5wYztQT0tFQkVSUlktV0lONzsyMDI1LTExLTI2OzA5OjM2OjQ3IEFNO01vbm9wb2xpb0xKLmZwcmc7NzYyNA=="/>
         <attribute name="edited" value="Z3VpY2E7R1VJTEhFUk1FLVBDOzIwMjUtMTItMDg7MDY6Mjc6MzIgUE07NztuYXRoYW5wYztQT0tFQkVSUlktV0lONzsyMDI1LTExLTI2OzA5OjM2OjQ3IEFNO01vbm9wb2xpb1VwZGF0ZWQuZnByZzs4MTk4"/>
         <attribute name="edited" value="Z3VpY2E7R1VJTEhFUk1FLVBDOzIwMjUtMTItMDg7MDY6MzA6MjcgUE07MTc7MjgzMg=="/>
         <attribute name="edited" value="aGVucmk7TEFQVE9QLUhFTlJJUVVFOzIwMjUtMTItMDg7IjA2OjMyOjM0ICI7MTtuYXRoYW5wYztQT0tFQkVSUlktV0lONzsyMDI1LTExLTI2OzA5OjM2OjQ3IEFNO01vbm9wb2xpb1BBLmZwcmc7NzgwMA=="/>
-        <attribute name="edited" value="aGVucmk7TEFQVE9QLUhFTlJJUVVFOzIwMjUtMTItMDk7IjAxOjUzOjM1ICI7MTM7MzAwNA=="/>
+        <attribute name="edited" value="aGVucmk7TEFQVE9QLUhFTlJJUVVFOzIwMjUtMTItMDk7IjA0OjQ5OjIyICI7MTQ7MzAwOQ=="/>
     </attributes>
     <function name="Main" type="None" variable="">
         <parameters/>
@@ -156,7 +156,7 @@
                             <then>
                                 <if expression="NumeroDeCasas[i] &gt; 0">
                                     <then>
-                                        <output expression="&quot;(&quot; &amp; Dono[i] &amp; &quot; - &quot; &amp; NumeroDeCasas[i] &amp; &quot; casas) &quot;" newline="False"/>
+                                        <output expression="&quot;(&quot; &amp; Dono[i] &amp; &quot; - &quot; &amp; NumeroDeCasas[i] &amp; &quot;) &quot;" newline="False"/>
                                     </then>
                                     <else>
                                         <output expression="&quot;(&quot; &amp; Dono[i] &amp; &quot;) &quot;" newline="False"/>
