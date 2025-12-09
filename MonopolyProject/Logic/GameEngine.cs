@@ -439,7 +439,7 @@ namespace MonopolyProject.Logic
 
             if (activePlayer.Money < space.Price)
             {
-                Console.WriteLine("jogador não tem dinheiro suficiente para adquirir o espaço.");
+                Console.WriteLine("O jogador não tem dinheiro suficiente para adquirir o espaço.");
                 return;
             }
             
