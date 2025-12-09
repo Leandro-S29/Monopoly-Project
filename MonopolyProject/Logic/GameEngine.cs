@@ -656,8 +656,8 @@ namespace MonopolyProject.Logic
 
             if(!activePlayer.HasCommunityOrChanceCard)
             {
-                Console.WriteLine("Não é possível tirar carta neste espaço.");
-                return;
+                    Console.WriteLine("A carta já foi tirada.");
+                    return;
             }
 
             if(space.Type != SpaceType.Chance && space.Type != SpaceType.Community)
