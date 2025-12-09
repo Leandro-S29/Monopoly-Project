@@ -4,13 +4,13 @@
         <attribute name="name" value="ProjetoExemplo"/>
         <attribute name="authors" value="nathanpc"/>
         <attribute name="about" value=""/>
-        <attribute name="saved" value="2025-12-09 04:49:22 "/>
+        <attribute name="saved" value="2025-12-09 03:11:48 PM"/>
         <attribute name="created" value="bmF0aGFucGM7UE9LRUJFUlJZLVdJTjc7MjAyNS0xMS0yNjswOTozNjo0NyBBTTszMTUx"/>
-        <attribute name="edited" value="Z3VpY2E7R1VJTEhFUk1FLVBDOzIwMjUtMTItMDg7MDY6MjE6NDAgUE07MTtuYXRoYW5wYztQT0tFQkVSUlktV0lONzsyMDI1LTExLTI2OzA5OjM2OjQ3IEFNO01vbm9wb2xpb0xKLmZwcmc7NzYyNA=="/>
-        <attribute name="edited" value="Z3VpY2E7R1VJTEhFUk1FLVBDOzIwMjUtMTItMDg7MDY6Mjc6MzIgUE07NztuYXRoYW5wYztQT0tFQkVSUlktV0lONzsyMDI1LTExLTI2OzA5OjM2OjQ3IEFNO01vbm9wb2xpb1VwZGF0ZWQuZnByZzs4MTk4"/>
-        <attribute name="edited" value="Z3VpY2E7R1VJTEhFUk1FLVBDOzIwMjUtMTItMDg7MDY6MzA6MjcgUE07MTc7MjgzMg=="/>
         <attribute name="edited" value="aGVucmk7TEFQVE9QLUhFTlJJUVVFOzIwMjUtMTItMDg7IjA2OjMyOjM0ICI7MTtuYXRoYW5wYztQT0tFQkVSUlktV0lONzsyMDI1LTExLTI2OzA5OjM2OjQ3IEFNO01vbm9wb2xpb1BBLmZwcmc7NzgwMA=="/>
-        <attribute name="edited" value="aGVucmk7TEFQVE9QLUhFTlJJUVVFOzIwMjUtMTItMDk7IjA0OjQ5OjIyICI7MTQ7MzAwOQ=="/>
+        <attribute name="edited" value="aGVucmk7TEFQVE9QLUhFTlJJUVVFOzIwMjUtMTItMDk7IjAxOjM4OjE5ICI7MTI7MzAwOA=="/>
+        <attribute name="edited" value="SGVucmlxdWU7TUVYOzIwMjUtMTItMDk7MDI6NTA6NDMgUE07MTtuYXRoYW5wYztQT0tFQkVSUlktV0lONzsyMDI1LTExLTI2OzA5OjM2OjQ3IEFNO01vbm9wb2xpb1Y0LjAuZnByZzs3Mzg4"/>
+        <attribute name="edited" value="SGVucmlxdWU7TUVYOzIwMjUtMTItMDk7MDM6MDU6NTkgUE07MTE7bmF0aGFucGM7UE9LRUJFUlJZLVdJTjc7MjAyNS0xMS0yNjswOTozNjo0NyBBTTtNb25vcG9saW9UQ19MREZJTkFMLmZwcmc7Nzk2NQ=="/>
+        <attribute name="edited" value="SGVucmlxdWU7TUVYOzIwMjUtMTItMDk7MDM6MTE6NDggUE07MjsyNDU4"/>
     </attributes>
     <function name="Main" type="None" variable="">
         <parameters/>
@@ -42,6 +42,8 @@
             <declare name="TipoCor" type="String" array="True" size="49"/>
             <declare name="Dono" type="String" array="True" size="49"/>
             <declare name="NumeroDeCasas" type="Integer" array="True" size="49"/>
+            <declare name="DinheiroFreePark" type="Integer" array="False" size=""/>
+            <assign variable="DinheiroFreePark" expression="0"/>
             <call expression="InicializaVariaveisEspaco(Tipo, Preco, TipoCor, Dono, NumeroDeCasas, Tabuleiro)"/>
             <comment text="Como est&#225; explicado no briefing, n&#227;o dever&#225; ser implementada a linha de comando. Apenas criar uma sequencia que executa cada comando (ao menos um sucesso e uma falha).&#13;&#10;&#13;&#10;N&#227;o deve haver intera&#231;&#245;es com o utilizador. O objetivo deste trabalho &#233; apenas analizar a l&#243;gica do projeto e a capacidade de resolu&#231;&#227;o de problemas utilizando a l&#243;gica."/>
             <call expression="LJListarJogadores(Jogadores, vitorias)"/>
@@ -56,7 +58,10 @@
             <call expression="TTTerminarTurno(JogoEmProgresso, JogadoresNoJogo,&quot;Nathan&quot;, JogadorAtivo, JaJogouEsteTurno, PrecisaPagarRenda, TemCartaCommunityOuChance, Duplicados)"/>
             <call expression="DJDetalhesDoJogo(Tabuleiro, Jogadores, Posicao, Dono,Dinheiro,JogadorAtivo, NumeroDeCasas, JogoEmProgresso)"/>
             <assign variable="JogoEmProgresso" expression="IJIniciarJogo(Jogadores, JogadoresNoJogo, JogoEmProgresso)"/>
-            <call expression="LDLancarDados(&quot;Nathan&quot;, -3 , 6, JogoEmProgresso, JogadoresNoJogo, JaJogouEsteTurno, Duplicados, PrecisaPagarRenda, TemCartaCommunityOuChance, EstaNaPrisao, TurnosNaPrisao, JogadorAtivo, Posicao, Tabuleiro, Tipo, Dono)"/>
+            <call expression="LDLancarDados(&quot;Guivo&quot;, 1 , -1, JogoEmProgresso, JogadoresNoJogo, JaJogouEsteTurno, Duplicados, PrecisaPagarRenda, TemCartaCommunityOuChance, EstaNaPrisao, TurnosNaPrisao, JogadorAtivo, Posicao, Tabuleiro, Tipo, Dono, DinheiroFreePark, Dinheiro, TemCartaCommunityOuChance)"/>
+            <call expression="LDLancarDados(&quot;Guivo&quot;, 1 , -1, JogoEmProgresso, JogadoresNoJogo, JaJogouEsteTurno, Duplicados, PrecisaPagarRenda, TemCartaCommunityOuChance, EstaNaPrisao, TurnosNaPrisao, JogadorAtivo, Posicao, Tabuleiro, Tipo, Dono, DinheiroFreePark, Dinheiro, TemCartaCommunityOuChance)"/>
+            <call expression="TCTirarCarta(&quot;Guivo&quot;, JogadoresNoJogo, JogoEmProgresso, TemCartaCommunityOuChance, Tipo, Posicao, JogadorAtivo, Dono, NumeroDeCasas, Dinheiro, TurnosNaPrisao, EstaNaPrisao)"/>
+            <call expression="TCTirarCarta(&quot;Guivo&quot;, JogadoresNoJogo, JogoEmProgresso, TemCartaCommunityOuChance, Tipo, Posicao, JogadorAtivo, Dono, NumeroDeCasas, Dinheiro, TurnosNaPrisao, EstaNaPrisao)"/>
             <declare name="i" type="Integer" array="False" size=""/>
             <for variable="i" start="0" end="size(JogadoresNoJogo)-1" direction="inc" step="1">
                 <output expression="JogadoresNoJogo[i]" newline="True"/>
@@ -127,6 +132,67 @@
             </if>
         </body>
     </function>
+    <function name="CEComprarEspa&#231;o" type="None" variable="">
+        <parameters>
+            <parameter name="Jogador" type="String" array="False"/>
+            <parameter name="JogoEmProgresso" type="Boolean" array="False"/>
+            <parameter name="EstaNoJogo" type="Boolean" array="False"/>
+            <parameter name="JogadoresNoJogo" type="String" array="True"/>
+            <parameter name="JogadorAtivo" type="Integer" array="False"/>
+            <parameter name="Dinheiro" type="Integer" array="True"/>
+            <parameter name="Tipo" type="String" array="True"/>
+            <parameter name="Dono" type="String" array="True"/>
+            <parameter name="Preco" type="Integer" array="True"/>
+            <parameter name="Posicao" type="Integer" array="True"/>
+        </parameters>
+        <body>
+            <if expression="JogoEmProgresso">
+                <then>
+                    <if expression="EstaNoJogo(Jogador,JogadoresNoJogo)">
+                        <then>
+                            <if expression="ValidarTurnoDoJogador(Jogador, JogadoresNoJogo, JogadorAtivo)">
+                                <then>
+                                    <if expression="Tipo[Posicao[JogadorAtivo]] != &quot;Street&quot; || Tipo[Posicao[JogadorAtivo]] != &quot;Train&quot; || Tipo[Posicao[JogadorAtivo]] != &quot;Utility&quot;">
+                                        <then>
+                                            <output expression="&quot;Este espa&#231;o n&#227;o est&#225; para venda.&quot;" newline="True"/>
+                                        </then>
+                                        <else>
+                                            <if expression="Dono[Posicao[JogadorAtivo]] != &quot;&quot;">
+                                                <then>
+                                                    <output expression="&quot;O espa&#231;o j&#225; se encontra comprado.&quot;" newline="True"/>
+                                                </then>
+                                                <else>
+                                                    <if expression="Dinheiro[JogadorAtivo] &lt; Preco[Posicao[JogadorAtivo]]">
+                                                        <then>
+                                                            <output expression="&quot;O jogador n&#227;o tem dinheiro suficiente para adquirir o espa&#231;o.&quot;" newline="True"/>
+                                                        </then>
+                                                        <else>
+                                                            <assign variable="Dinheiro[JogadorAtivo]" expression="Dinheiro[JogadorAtivo] - Preco[Posicao[JogadorAtivo]]"/>
+                                                            <assign variable="Dono[Posicao[JogadorAtivo]]" expression="JogadoresNoJogo[JogadorAtivo]"/>
+                                                            <output expression="&quot;Espa&#231;o comprado.&quot;" newline="True"/>
+                                                        </else>
+                                                    </if>
+                                                </else>
+                                            </if>
+                                        </else>
+                                    </if>
+                                </then>
+                                <else>
+                                    <output expression="&quot;N&#227;o &#233; a vez do jogador.&quot;" newline="True"/>
+                                </else>
+                            </if>
+                        </then>
+                        <else>
+                            <output expression="&quot;O jogador n&#227;o est&#225; no jogo.&quot;" newline="True"/>
+                        </else>
+                    </if>
+                </then>
+                <else>
+                    <output expression="&quot;N&#227;o existe um jogo em curso.&quot;" newline="True"/>
+                </else>
+            </if>
+        </body>
+    </function>
     <function name="CustoDaCasa" type="Integer" variable="Preco[Espaco[JogadorAtivo]] * 0.6">
         <parameters>
             <parameter name="Preco" type="Integer" array="True"/>
@@ -156,7 +222,7 @@
                             <then>
                                 <if expression="NumeroDeCasas[i] &gt; 0">
                                     <then>
-                                        <output expression="&quot;(&quot; &amp; Dono[i] &amp; &quot; - &quot; &amp; NumeroDeCasas[i] &amp; &quot;) &quot;" newline="False"/>
+                                        <output expression="&quot;(&quot; &amp; Dono[i] &amp; &quot; - &quot; &amp; NumeroDeCasas[i] &amp; &quot; casas) &quot;" newline="False"/>
                                     </then>
                                     <else>
                                         <output expression="&quot;(&quot; &amp; Dono[i] &amp; &quot;) &quot;" newline="False"/>
@@ -610,6 +676,9 @@
             <parameter name="Tabuleiro" type="String" array="True"/>
             <parameter name="Tipo" type="String" array="True"/>
             <parameter name="Dono" type="String" array="True"/>
+            <parameter name="DinheiroFreePark" type="Integer" array="False"/>
+            <parameter name="Dinheiro" type="Integer" array="True"/>
+            <parameter name="TemCartaCommunityOuChance" type="Boolean" array="True"/>
         </parameters>
         <body>
             <if expression="JogoEmProgresso != True">
@@ -623,25 +692,52 @@
                         <then>
                             <if expression="Jogador == JogadoresNoJogo[JogadorAtivo]">
                                 <then>
-                                    <if expression="JaJogouEsteTurno[JogadorAtivo] != true &amp;&amp; Duplicados[JogadorAtivo] == 0">
+                                    <if expression="JaJogouEsteTurno[JogadorAtivo] == False">
                                         <then>
                                             <if expression="PrecisaPagarRenda[JogadorAtivo] != True || TemCartaComunityOuChance[JogadorAtivo] != True">
                                                 <then>
                                                     <if expression="EstaNaPrisao[JogadorAtivo] != True">
                                                         <then>
-                                                            <call expression="Movimentacao(d1, d2, posicao, JogadorAtivo)"/>
-                                                            <call expression="LDOutputs(Posicao, d1, d2, Tabuleiro, Tipo, JogadorAtivo, Dono, JogadoresNoJogo, TurnosNaPrisao, EstaNaPrisao)"/>
+                                                            <if expression="d1 == d2">
+                                                                <then>
+                                                                    <call expression="Movimentacao(d1, d2, posicao, JogadorAtivo)"/>
+                                                                    <call expression="LDOutputs(Posicao, d1, d2, Tabuleiro, Tipo, JogadorAtivo, Dono, JogadoresNoJogo, TurnosNaPrisao, EstaNaPrisao, DinheiroFreePark, Dinheiro, TemCartaCommunityOuChance)"/>
+                                                                    <declare name="dado1" type="Integer" array="False" size=""/>
+                                                                    <declare name="dado2" type="Integer" array="False" size=""/>
+                                                                    <assign variable="dado1" expression="random(3) - 3"/>
+                                                                    <assign variable="dado2" expression="random(3) - 3"/>
+                                                                    <if expression="dado1 == dado2">
+                                                                        <then>
+                                                                            <assign variable="Posicao[JogadorAtivo]" expression="0"/>
+                                                                            <assign variable="TurnosNaPrisao[JogadorAtivo]" expression="0"/>
+                                                                            <assign variable="EstaNaPrisao[JogadorAtivo]" expression="True"/>
+                                                                        </then>
+                                                                        <else>
+                                                                            <call expression="Movimentacao(d1, d2, posicao, JogadorAtivo)"/>
+                                                                            <call expression="LDOutputs(Posicao, d1, d2, Tabuleiro, Tipo, JogadorAtivo, Dono, JogadoresNoJogo, TurnosNaPrisao, EstaNaPrisao, DinheiroFreePark, Dinheiro, TemCartaCommunityOuChance)"/>
+                                                                            <assign variable="JaJogouEsteturno[JogadorAtivo]" expression="True"/>
+                                                                        </else>
+                                                                    </if>
+                                                                </then>
+                                                                <else>
+                                                                    <call expression="Movimentacao(d1, d2, posicao, JogadorAtivo)"/>
+                                                                    <call expression="LDOutputs(Posicao, d1, d2, Tabuleiro, Tipo, JogadorAtivo, Dono, JogadoresNoJogo, TurnosNaPrisao, EstaNaPrisao, DinheiroFreePark, Dinheiro, TemCartaCommunityOuChance)"/>
+                                                                    <assign variable="JaJogouEsteturno[JogadorAtivo]" expression="True"/>
+                                                                </else>
+                                                            </if>
                                                         </then>
                                                         <else>
                                                             <if expression="d1 == d2">
                                                                 <then>
-                                                                    <assign variable="EstaNaPrisao" expression="false"/>
-                                                                    <assign variable="TurnosNaPrisao" expression="0"/>
+                                                                    <assign variable="EstaNaPrisao[JogadorAtivo]" expression="false"/>
+                                                                    <assign variable="TurnosNaPrisao[JogadorAtivo]" expression="0"/>
+                                                                    <assign variable="JaJogouEsteturno[JogadorAtivo]" expression="True"/>
                                                                     <call expression="Movimentacao(d1, d2, posicao, JogadorAtivo)"/>
+                                                                    <call expression="LDOutputs(Posicao, d1, d2, Tabuleiro, Tipo, JogadorAtivo, Dono, JogadoresNoJogo, TurnosNaPrisao, EstaNaPrisao, DinheiroFreePark, Dinheiro, TemCartaCommunityOuChance)"/>
                                                                 </then>
                                                                 <else>
-                                                                    <assign variable="TurnosNaPrisao" expression="TurnosNaPrisao + 1"/>
-                                                                    <assign variable="JaJogouEsteturno" expression="True"/>
+                                                                    <assign variable="TurnosNaPrisao[JogadorAtivo]" expression="TurnosNaPrisao[JogadorAtivo] + 1"/>
+                                                                    <assign variable="JaJogouEsteturno[JogadorAtivo]" expression="True"/>
                                                                     <if expression="TurnosNaPrisao[JogadorAtivo] == 3">
                                                                         <then>
                                                                             <assign variable="EstaNaPrisao[JogadorAtivo]" expression="False"/>
@@ -686,12 +782,16 @@
             <parameter name="JogadoresNoJogo" type="String" array="True"/>
             <parameter name="TurnosNaPrisao" type="Integer" array="True"/>
             <parameter name="EstaNaPrisao" type="Boolean" array="True"/>
+            <parameter name="DinheiroFreePark" type="Integer" array="False"/>
+            <parameter name="Dinheiro" type="Integer" array="True"/>
+            <parameter name="TemCartaCommunityOuChance" type="Boolean" array="True"/>
         </parameters>
         <body>
             <output expression="&quot;Saiu &quot; &amp; D1 &amp; &quot;/&quot; &amp; D2 &amp; &quot; - Espa&#231;o &quot; &amp; Tabuleiro[Posicao[JogadorAtivo]] &amp;&quot;  &quot;" newline="False"/>
             <if expression="Tipo[Posicao[JogadorAtivo]] == &quot;Chance&quot; || Tipo[Posicao[JogadorAtivo]] == &quot;Community&quot;">
                 <then>
                     <output expression="&quot;Espa&#231;o especial. Tirar carta.&quot;" newline="True"/>
+                    <assign variable="TemCartaCommunityOuChance[JogadorAtivo]" expression="True"/>
                 </then>
                 <else>
                     <if expression="Tipo[Posicao[JogadorAtivo]] == &quot;BackToStart&quot;">
@@ -716,19 +816,40 @@
                                             <if expression="Tipo[Posicao[JogadorAtivo]] == &quot;FreePark&quot;">
                                                 <then>
                                                     <output expression="&quot;Jogador recebe ValorGuardadoNoFreePark.&quot;" newline="True"/>
+                                                    <assign variable="Dinheiro[JogadorAtivo]" expression="Dinheiro[JogadorAtivo] + DinheiroFreePark"/>
                                                 </then>
                                                 <else>
-                                                    <if expression="Dono[Posicao[JogadorAtivo]] == &quot;&quot;">
+                                                    <if expression="Tipo[Posicao[JogadorAtivo]] == &quot;Lux Tax&quot;">
                                                         <then>
-                                                            <output expression="&quot;Espa&#231;o sem dono&quot;" newline="True"/>
+                                                            <if expression="Dinheiro[JogadorAtivo] &gt; 80">
+                                                                <then>
+                                                                    <assign variable="Dinheiro[JogadorAtivo]" expression="Dinheiro[JogadorAtivo] - 80"/>
+                                                                    <assign variable="DinheiroFreePark" expression="DinheiroFreePark + 80"/>
+                                                                </then>
+                                                                <else/>
+                                                            </if>
                                                         </then>
                                                         <else>
-                                                            <if expression="Dono[Posicao[JogadorAtivo]] == JogadoresNoJogo[JogadorAtivo]">
+                                                            <if expression="Tipo[Posicao[JogadorAtivo]] == &quot;Start&quot;">
                                                                 <then>
-                                                                    <output expression="&quot;Espa&#231;o J&#225; Comprado&quot;" newline="True"/>
+                                                                    <assign variable="Dinheiro[JogadorAtivo]" expression="Dinheiro[JogadorAtivo] + 200"/>
                                                                 </then>
                                                                 <else>
-                                                                    <output expression="&quot;Espa&#231;o ja comprado por outro jogador. Necess&#225;rio pagar renda.&quot;" newline="True"/>
+                                                                    <if expression="Dono[Posicao[JogadorAtivo]] == &quot;&quot;">
+                                                                        <then>
+                                                                            <output expression="&quot;Espa&#231;o sem dono&quot;" newline="True"/>
+                                                                        </then>
+                                                                        <else>
+                                                                            <if expression="Dono[Posicao[JogadorAtivo]] == JogadoresNoJogo[JogadorAtivo]">
+                                                                                <then>
+                                                                                    <output expression="&quot;Espa&#231;o J&#225; Comprado&quot;" newline="True"/>
+                                                                                </then>
+                                                                                <else>
+                                                                                    <output expression="&quot;Espa&#231;o ja comprado por outro jogador. Necess&#225;rio pagar renda.&quot;" newline="True"/>
+                                                                                </else>
+                                                                            </if>
+                                                                        </else>
+                                                                    </if>
                                                                 </else>
                                                             </if>
                                                         </else>
@@ -802,33 +923,26 @@
             </for>
             <assign variable="BordaDireita[0]" expression="6"/>
             <for variable="i" start="1" end="size(BordaEsquerda)-1" direction="inc" step="1">
-                <assign variable="BordaEsquerda[i]" expression="BordaEsquerda[i] + 7"/>
-                <assign variable="BordaDireita[i]" expression="BordaDireita[i] + 7"/>
+                <assign variable="BordaEsquerda[i]" expression="BordaEsquerda[i-1] + 7"/>
+                <assign variable="BordaDireita[i]" expression="BordaDireita[i-1] + 7"/>
             </for>
             <declare name="MovimentoLinhas" type="Integer" array="False" size=""/>
             <declare name="MovimentoColunas" type="Integer" array="False" size=""/>
             <assign variable="MovimentoLinhas" expression="d1"/>
             <assign variable="MovimentoColunas" expression="7 * d2"/>
-            <output expression="MovimentoColunas &amp; &quot;gfire&quot;" newline="True"/>
             <declare name="NovaPosicao" type="Integer" array="False" size=""/>
             <assign variable="NovaPosicao" expression="Posicao[JogadorAtivo]"/>
-            <output expression="&quot;Posicao:&quot; &amp; NovaPosicao" newline="True"/>
             <declare name="LinhaAtual" type="Integer" array="False" size=""/>
-            <assign variable="LinhaAtual" expression="posicao[JogadorAtivo]/7"/>
-            <output expression="LinhaAtual" newline="True"/>
-            <output expression="Posicao[JogadorAtivo]" newline="True"/>
+            <assign variable="LinhaAtual" expression="Posicao[JogadorAtivo]/7"/>
             <assign variable="NovaPosicao" expression="Posicao[JogadorAtivo]+MovimentoLinhas"/>
-            <output expression="NovaPosicao" newline="True"/>
-            <if expression="NovaPosicao &lt; BordaEsquerda[LinhaAtual + 1]">
+            <if expression="NovaPosicao &lt; BordaEsquerda[LinhaAtual]">
                 <then>
                     <assign variable="NovaPosicao" expression="NovaPosicao + 7"/>
-                    <output expression="&quot;supertrue&quot;" newline="True"/>
                 </then>
                 <else>
-                    <if expression="NovaPosicao &gt; BordaDireita[LinhaAtual + 1]">
+                    <if expression="NovaPosicao &gt; BordaDireita[LinhaAtual]">
                         <then>
                             <assign variable="NovaPosicao" expression="NovaPosicao - 7"/>
-                            <output expression="&quot;supertrue2&quot;" newline="True"/>
                         </then>
                         <else/>
                     </if>
@@ -838,20 +952,17 @@
             <if expression="NovaPosicao &lt; 0">
                 <then>
                     <assign variable="NovaPosicao" expression="NovaPosicao + 49"/>
-                    <output expression="True" newline="True"/>
                 </then>
                 <else>
                     <if expression="NovaPosicao &gt; 48">
                         <then>
                             <assign variable="NovaPosicao" expression="NovaPosicao -  49"/>
-                            <output expression="&quot;true2&quot;" newline="True"/>
                         </then>
                         <else/>
                     </if>
                 </else>
             </if>
             <assign variable="Posicao[JogadorAtivo]" expression="NovaPosicao"/>
-            <output expression="Posicao[JogadorAtivo]" newline="True"/>
         </body>
     </function>
     <function name="PAPagaroAluguer" type="None" variable="">
@@ -955,6 +1066,222 @@
             </if>
         </body>
     </function>
+    <function name="TCTirarCarta" type="None" variable="">
+        <parameters>
+            <parameter name="Jogador" type="String" array="False"/>
+            <parameter name="JogadoresNoJogo" type="String" array="True"/>
+            <parameter name="JogoEmProgresso" type="Boolean" array="False"/>
+            <parameter name="TemCartaCommunityOuChance" type="Boolean" array="True"/>
+            <parameter name="Tipo" type="String" array="True"/>
+            <parameter name="Posicao" type="Integer" array="True"/>
+            <parameter name="JogadorAtivo" type="Integer" array="False"/>
+            <parameter name="Dono" type="String" array="True"/>
+            <parameter name="NumeroDeCasa" type="Integer" array="True"/>
+            <parameter name="Dinheiro" type="Integer" array="True"/>
+            <parameter name="TurnosNaPrisao" type="Integer" array="True"/>
+            <parameter name="EstaNaPrisao" type="Boolean" array="True"/>
+        </parameters>
+        <body>
+            <declare name="EstaNoJogo" type="Boolean" array="False" size=""/>
+            <assign variable="EstaNoJogo" expression="EstaNoJogo(Jogador, JogadoresNoJogo)"/>
+            <if expression="JogoEmProgresso == True">
+                <then>
+                    <if expression="EstaNoJogo == True">
+                        <then>
+                            <if expression="Jogador == JogadoresNoJogo[JogadorAtivo]">
+                                <then>
+                                    <if expression="Tipo[Posicao[JogadorAtivo]] == &quot;Community&quot; || Tipo[Posicao[JogadorAtivo]] == &quot;Chance&quot;">
+                                        <then>
+                                            <if expression="TemCartaCommunityOuChance[JogadorAtivo] == True">
+                                                <then>
+                                                    <if expression="Tipo[Posicao[JogadorAtivo]] == &quot;Community&quot;">
+                                                        <then>
+                                                            <call expression="TCTirarCartaCommunity(Dono, Posicao, JogadorAtivo, Dinheiro, NumeroDeCasa, JogadoresNoJogo)"/>
+                                                        </then>
+                                                        <else>
+                                                            <call expression="TCTirarCartaChance(JogadorAtivo, Dinheiro, Posicao, TurnosNaPrisao, EstaNaPrisao)"/>
+                                                        </else>
+                                                    </if>
+                                                    <assign variable="TemCartaCommunityOuChance[JogadorAtivo]" expression="False"/>
+                                                </then>
+                                                <else>
+                                                    <output expression="&quot;A Carta j&#225; foi tirada.&quot;" newline="True"/>
+                                                </else>
+                                            </if>
+                                        </then>
+                                        <else>
+                                            <output expression="&quot;N&#227;o &#233; poss&#237;vel tirar carta neste espa&#231;o.&quot;" newline="True"/>
+                                        </else>
+                                    </if>
+                                </then>
+                                <else>
+                                    <output expression="&quot;Nao &#233; a vez do Jogador.&quot;" newline="True"/>
+                                </else>
+                            </if>
+                        </then>
+                        <else>
+                            <output expression="&quot;Jogador n&#227;o participa no jogo em curso.&quot;" newline="True"/>
+                        </else>
+                    </if>
+                </then>
+                <else>
+                    <output expression="&quot;N&#227;o existe um jogo em curso.&quot;" newline="True"/>
+                </else>
+            </if>
+        </body>
+    </function>
+    <function name="TCTirarCartaChance" type="None" variable="">
+        <parameters>
+            <parameter name="JogadorAtivo" type="Integer" array="False"/>
+            <parameter name="Dinheiro" type="Integer" array="True"/>
+            <parameter name="Posicao" type="Integer" array="True"/>
+            <parameter name="TurnosNaPrisao" type="Integer" array="True"/>
+            <parameter name="EstaNaPrisao" type="Boolean" array="True"/>
+        </parameters>
+        <body>
+            <declare name="Chance" type="Integer" array="False" size=""/>
+            <assign variable="Chance" expression="Random(10)"/>
+            <declare name="Mensagem" type="String" array="False" size=""/>
+            <if expression="Chance == 1">
+                <then>
+                    <assign variable="Mensagem" expression="&quot;O jogador recebe 200.&quot;"/>
+                    <assign variable="Dinheiro[JogadorAtivo]" expression="Dinheiro[JogadorAtivo] + 200"/>
+                </then>
+                <else>
+                    <if expression="Chance == 2">
+                        <then>
+                            <assign variable="Mensagem" expression="&quot;O jogador tem de pagar 70.&quot;"/>
+                            <assign variable="Dinheiro[JogadorAtivo]" expression="Dinheiro[JogadorAtivo] - 70"/>
+                        </then>
+                        <else>
+                            <if expression="Chance == 3 || Chance == 4">
+                                <then>
+                                    <assign variable="Mensagem" expression="&quot;O jogador recebe 150.&quot;"/>
+                                    <assign variable="Dinheiro[JogadorAtivo]" expression="Dinheiro[JogadorAtivo] + 150"/>
+                                </then>
+                                <else>
+                                    <if expression="Chance == 5 || Chance == 6">
+                                        <then>
+                                            <assign variable="Mensagem" expression="&quot;O jogador move se para a casa start.&quot;"/>
+                                            <assign variable="Posicao[JogadorAtivo]" expression="24"/>
+                                        </then>
+                                        <else>
+                                            <if expression="Chance == 7 || Chance == 8">
+                                                <then>
+                                                    <assign variable="Mensagem" expression="&quot;O jogador move-se para a casa Police.&quot;"/>
+                                                    <assign variable="Posicao[JogadorAtivo]" expression="0"/>
+                                                    <assign variable="TurnosNaPrisao[JogadorAtivo]" expression="0"/>
+                                                    <assign variable="EstaNaPrisao[JogadorAtivo]" expression="True"/>
+                                                </then>
+                                                <else>
+                                                    <assign variable="Mensagem" expression="&quot;O jogador move-se para a casa FreePark.&quot;"/>
+                                                    <assign variable="Posicao[JogadorAtivo]" expression="42"/>
+                                                </else>
+                                            </if>
+                                        </else>
+                                    </if>
+                                </else>
+                            </if>
+                        </else>
+                    </if>
+                </else>
+            </if>
+            <output expression="Mensagem" newline="True"/>
+        </body>
+    </function>
+    <function name="TCTirarCartaCommunity" type="None" variable="">
+        <parameters>
+            <parameter name="Dono" type="String" array="True"/>
+            <parameter name="Posicao" type="Integer" array="True"/>
+            <parameter name="JogadorAtivo" type="Integer" array="False"/>
+            <parameter name="Dinheiro" type="Integer" array="True"/>
+            <parameter name="NumeroDeCasa" type="Integer" array="True"/>
+            <parameter name="JogadoresNoJogo" type="String" array="True"/>
+        </parameters>
+        <body>
+            <declare name="Chance" type="Integer" array="False" size=""/>
+            <assign variable="Chance" expression="Random(10)"/>
+            <declare name="Mensagem" type="String" array="False" size=""/>
+            <declare name="i" type="Integer" array="False" size=""/>
+            <if expression="Chance == 1">
+                <then>
+                    <assign variable="Mensagem" expression="&quot;O jogador paga 20 por cada casa nos seus espa&#231;os.&quot;"/>
+                    <declare name="NumCasa" type="Integer" array="False" size=""/>
+                    <assign variable="NumCasa" expression="0"/>
+                    <for variable="i" start="0" end="Size(Dono) - 1" direction="inc" step="1">
+                        <if expression="Dono[i] == JogadoresNoJogo[JogadorAtivo]">
+                            <then>
+                                <assign variable="NumCasa" expression="NumCasa + NumeroDeCasa"/>
+                            </then>
+                            <else/>
+                        </if>
+                    </for>
+                    <assign variable="Dinheiro[JogadorAtivo]" expression="Dinheiro[JogadorAtivo] - (20 * NumCasa)"/>
+                </then>
+                <else>
+                    <if expression="Chance == 2">
+                        <then>
+                            <assign variable="Mensagem" expression="&quot;O jogador recebe 10 de cada outro jogador.&quot;"/>
+                            <for variable="i" start="0" end="Size(JogadoresNoJogo) - 1" direction="inc" step="1">
+                                <if expression="JogadoresNoJogo[i] != JogadoresNoJogo[JogadorAtivo]">
+                                    <then>
+                                        <assign variable="Dinheiro[i]" expression="Dinheiro[i] - 10"/>
+                                        <assign variable="Dinheiro[JogadorAtivo]" expression="Dinheiro[JogadorAtivo] - 10"/>
+                                    </then>
+                                    <else/>
+                                </if>
+                            </for>
+                        </then>
+                        <else>
+                            <if expression="Chance == 3">
+                                <then>
+                                    <assign variable="Mensagem" expression="&quot;O jogador tem de pagar 40.&quot;"/>
+                                    <assign variable="Dinheiro[JogadorAtivo]" expression="Dinheiro[JogadorAtivo] - 40"/>
+                                </then>
+                                <else>
+                                    <if expression="Chance == 4">
+                                        <then>
+                                            <assign variable="Mensagem" expression="&quot;O jogador move-se para Pink1.&quot;"/>
+                                            <assign variable="Posicao[JogadorAtivo]" expression="35"/>
+                                        </then>
+                                        <else>
+                                            <if expression="Chance == 5">
+                                                <then>
+                                                    <assign variable="Mensagem" expression="&quot;O jogador move-se para Teal2&quot;"/>
+                                                    <assign variable="Posicao[JogadorAtivo]" expression="25"/>
+                                                </then>
+                                                <else>
+                                                    <if expression="Chance == 6">
+                                                        <then>
+                                                            <assign variable="Mensagem" expression="&quot;O jogador move-se para White2&quot;"/>
+                                                            <assign variable="Posicao[JogadorAtivo]" expression="13"/>
+                                                        </then>
+                                                        <else>
+                                                            <if expression="Chance == 7 || Chance == 8">
+                                                                <then>
+                                                                    <assign variable="Mensagem" expression="&quot;O jogador recebe 170.&quot;"/>
+                                                                    <assign variable="Dinheiro[JogadorAtivo]" expression="Dinheiro[JogadorAtivo] + 170"/>
+                                                                </then>
+                                                                <else>
+                                                                    <assign variable="Mensagem" expression="&quot;O jogador recebe 100.&quot;"/>
+                                                                    <assign variable="Dinheiro[JogadorAtivo]" expression="Dinheiro[JogadorAtivo] + 100"/>
+                                                                </else>
+                                                            </if>
+                                                        </else>
+                                                    </if>
+                                                </else>
+                                            </if>
+                                        </else>
+                                    </if>
+                                </else>
+                            </if>
+                        </else>
+                    </if>
+                </else>
+            </if>
+            <output expression="Mensagem" newline="True"/>
+        </body>
+    </function>
     <function name="TemTodosOsEspacosCores" type="Boolean" variable="">
         <parameters>
             <parameter name="Jogador" type="String" array="False"/>
@@ -988,7 +1315,7 @@
                                     <assign variable="TemCartaCommunityOuChance[JogadorAtivo]" expression="False"/>
                                     <assign variable="Duplicados[JogadorAtivo]" expression="0"/>
                                     <assign variable="JogadorAtivo" expression="(JogadorAtivo + 1) % size(JogadoresNoJogo)"/>
-                                    <while expression="JogadoresNoJogo[JogadorAtivo] == &quot;&quot;">
+                                    <while expression="JogadoresNoJogo[JogadorAtivo] == &quot;ELIMINADO&quot;">
                                         <assign variable="JogadorAtivo" expression="(JogadorAtivo + 1) % size(JogadoresNoJogo)"/>
                                     </while>
                                     <declare name="NomeProximoJogador" type="String" array="False" size=""/>
