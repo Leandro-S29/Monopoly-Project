@@ -538,7 +538,7 @@ namespace MonopolyProject.Logic
                 return;
             }
 
-            int rentAmount = currentSpace.CalculateRent();
+            double rentAmount = currentSpace.CalculateRent();
 
             if (activePlayer.Money < rentAmount)
             {
@@ -610,7 +610,7 @@ namespace MonopolyProject.Logic
                 return;
             }
 
-            int houseCost = CurrentSpace.HouseCost();
+            double houseCost = CurrentSpace.HouseCost();
             
             if(activePlayer.Money < houseCost)
             {
@@ -788,6 +788,7 @@ namespace MonopolyProject.Logic
         }
 
         // Helpers Methods
+        //FIXME: Error related to player sending more than two LD even when not double
         public void GoToJail(Player player)
         {
             // Moves player to prison

@@ -12,9 +12,9 @@ namespace MonopolyProject.Models
         public int Losses { get; set; }
 
         // In-Game Data
-        public int Money { get; set; }
-        public int Row { get; set; } // Y position
-        public int Col { get; set; } // X position
+        public double Money { get; set; }
+        public int Row { get; set; } 
+        public int Col { get; set; } 
         public bool IsInJail { get; set; }
         public int TurnsInJail { get; set; } // Counts number of turns in jail
         public bool HasRolledThisTurn { get; set; }
