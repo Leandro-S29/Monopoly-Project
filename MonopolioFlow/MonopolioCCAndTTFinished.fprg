@@ -4,13 +4,13 @@
         <attribute name="name" value="ProjetoExemplo"/>
         <attribute name="authors" value="nathanpc"/>
         <attribute name="about" value=""/>
-        <attribute name="saved" value="2025-12-15 01:52:02 PM"/>
+        <attribute name="saved" value="2025-12-15 01:53:06 PM"/>
         <attribute name="created" value="bmF0aGFucGM7UE9LRUJFUlJZLVdJTjc7MjAyNS0xMS0yNjswOTozNjo0NyBBTTszMTUx"/>
         <attribute name="edited" value="Z3VpY2E7R1VJTEhFUk1FLVBDOzIwMjUtMTItMDg7MDY6Mjc6MzIgUE07NztuYXRoYW5wYztQT0tFQkVSUlktV0lONzsyMDI1LTExLTI2OzA5OjM2OjQ3IEFNO01vbm9wb2xpb1VwZGF0ZWQuZnByZzs4MTk4"/>
         <attribute name="edited" value="Z3VpY2E7R1VJTEhFUk1FLVBDOzIwMjUtMTItMDg7MDY6MzA6MjcgUE07MTc7MjgzMg=="/>
         <attribute name="edited" value="TGVhbmRybztERVNLVE9QLTVWTkE3UzI7MjAyNS0xMi0wODswNzozMzozMyBQTTsyO25hdGhhbnBjO1BPS0VCRVJSWS1XSU43OzIwMjUtMTEtMjY7MDk6MzY6NDcgQU07TW9ub3BvbGlvVXBkYXRlZC5mcHJnOzg1Njc="/>
         <attribute name="edited" value="TGVhbmRybztERVNLVE9QLTVWTkE3UzI7MjAyNS0xMi0wOTswMzo0OTo1NCBQTTs1O25hdGhhbnBjO1BPS0VCRVJSWS1XSU43OzIwMjUtMTEtMjY7MDk6MzY6NDcgQU07TW9ub3BvbGlvVENfTERGSU5BTC5mcHJnOzg2MTg="/>
-        <attribute name="edited" value="TGVhbmRybztERVNLVE9QLTVWTkE3UzI7MjAyNS0xMi0xNTswMTo1MjowMiBQTTs5OzMxNTA="/>
+        <attribute name="edited" value="TGVhbmRybztERVNLVE9QLTVWTkE3UzI7MjAyNS0xMi0xNTswMTo1MzowNiBQTTsxMDszMTk1"/>
     </attributes>
     <function name="Main" type="None" variable="">
         <parameters/>
@@ -58,10 +58,7 @@
             <call expression="ForcarComprarCasa(&quot;Guivo&quot;, &quot;Pink&quot;, TipoCor, Dono, Tabuleiro)"/>
             <call expression="LDLancarDados(&quot;Guivo&quot;, -3 , -2, JogoEmProgresso, JogadoresNoJogo, JaJogouEsteTurno, Duplicados, PrecisaPagarRenda, TemCartaCommunityOuChance, EstaNaPrisao, TurnosNaPrisao, JogadorAtivo, Posicao, Tabuleiro, Tipo, Dono, DinheiroFreePark, Dinheiro, TemCartaCommunityOuChance)"/>
             <call expression="CCComprarCasa(JogoEmProgresso, JogadoresNoJogo, &quot;Guivo&quot;,JogadorAtivo,Posicao,Tabuleiro,TipoCor,Tipo,&quot;Pink&quot;,Dono,Dinheiro,NumeroDeCasas,Preco,&quot;Pink1&quot;)"/>
-            <output expression="JogadoresNoJogo[JogadorAtivo] &amp; &quot;Mi Bombo&quot;" newline="True"/>
             <assign variable="JogadorAtivo" expression="TTTerminarTurno(JogoEmProgresso, JogadoresNoJogo,&quot;Guivo&quot;, JogadorAtivo, JaJogouEsteTurno, PrecisaPagarRenda, TemCartaCommunityOuChance, Duplicados)"/>
-            <output expression="JogadoresNoJogo[JogadorAtivo] &amp; &quot;Mi Bombo&quot;" newline="True"/>
-            <breakpoint expression="" always="True"/>
             <call expression="DJDetalhesDoJogo(Tabuleiro, Jogadores, Posicao, Dono,Dinheiro,JogadorAtivo, NumeroDeCasas, JogoEmProgresso)"/>
             <assign variable="JogoEmProgresso" expression="IJIniciarJogo(Jogadores, JogadoresNoJogo, JogoEmProgresso)"/>
             <call expression="LDLancarDados(&quot;Nathan&quot;, -3 , 6, JogoEmProgresso, JogadoresNoJogo, JaJogouEsteTurno, Duplicados, PrecisaPagarRenda, TemCartaCommunityOuChance, EstaNaPrisao, TurnosNaPrisao, JogadorAtivo, Posicao, Tabuleiro, Tipo, Dono, DinheiroFreePark, Dinheiro, TemCartaCommunityOuChance)"/>
