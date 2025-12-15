@@ -4,13 +4,13 @@
         <attribute name="name" value="ProjetoExemplo"/>
         <attribute name="authors" value="nathanpc"/>
         <attribute name="about" value=""/>
-        <attribute name="saved" value="2025-12-09 04:53:58 PM"/>
+        <attribute name="saved" value="2025-12-15 01:52:02 PM"/>
         <attribute name="created" value="bmF0aGFucGM7UE9LRUJFUlJZLVdJTjc7MjAyNS0xMS0yNjswOTozNjo0NyBBTTszMTUx"/>
         <attribute name="edited" value="Z3VpY2E7R1VJTEhFUk1FLVBDOzIwMjUtMTItMDg7MDY6Mjc6MzIgUE07NztuYXRoYW5wYztQT0tFQkVSUlktV0lONzsyMDI1LTExLTI2OzA5OjM2OjQ3IEFNO01vbm9wb2xpb1VwZGF0ZWQuZnByZzs4MTk4"/>
         <attribute name="edited" value="Z3VpY2E7R1VJTEhFUk1FLVBDOzIwMjUtMTItMDg7MDY6MzA6MjcgUE07MTc7MjgzMg=="/>
         <attribute name="edited" value="TGVhbmRybztERVNLVE9QLTVWTkE3UzI7MjAyNS0xMi0wODswNzozMzozMyBQTTsyO25hdGhhbnBjO1BPS0VCRVJSWS1XSU43OzIwMjUtMTEtMjY7MDk6MzY6NDcgQU07TW9ub3BvbGlvVXBkYXRlZC5mcHJnOzg1Njc="/>
         <attribute name="edited" value="TGVhbmRybztERVNLVE9QLTVWTkE3UzI7MjAyNS0xMi0wOTswMzo0OTo1NCBQTTs1O25hdGhhbnBjO1BPS0VCRVJSWS1XSU43OzIwMjUtMTEtMjY7MDk6MzY6NDcgQU07TW9ub3BvbGlvVENfTERGSU5BTC5mcHJnOzg2MTg="/>
-        <attribute name="edited" value="TGVhbmRybztERVNLVE9QLTVWTkE3UzI7MjAyNS0xMi0wOTswNDo1Mzo1OCBQTTs4OzMxNjc="/>
+        <attribute name="edited" value="TGVhbmRybztERVNLVE9QLTVWTkE3UzI7MjAyNS0xMi0xNTswMTo1MjowMiBQTTs5OzMxNTA="/>
     </attributes>
     <function name="Main" type="None" variable="">
         <parameters/>
@@ -58,7 +58,10 @@
             <call expression="ForcarComprarCasa(&quot;Guivo&quot;, &quot;Pink&quot;, TipoCor, Dono, Tabuleiro)"/>
             <call expression="LDLancarDados(&quot;Guivo&quot;, -3 , -2, JogoEmProgresso, JogadoresNoJogo, JaJogouEsteTurno, Duplicados, PrecisaPagarRenda, TemCartaCommunityOuChance, EstaNaPrisao, TurnosNaPrisao, JogadorAtivo, Posicao, Tabuleiro, Tipo, Dono, DinheiroFreePark, Dinheiro, TemCartaCommunityOuChance)"/>
             <call expression="CCComprarCasa(JogoEmProgresso, JogadoresNoJogo, &quot;Guivo&quot;,JogadorAtivo,Posicao,Tabuleiro,TipoCor,Tipo,&quot;Pink&quot;,Dono,Dinheiro,NumeroDeCasas,Preco,&quot;Pink1&quot;)"/>
-            <call expression="TTTerminarTurno(JogoEmProgresso, JogadoresNoJogo,&quot;Guivo&quot;, JogadorAtivo, JaJogouEsteTurno, PrecisaPagarRenda, TemCartaCommunityOuChance, Duplicados)"/>
+            <output expression="JogadoresNoJogo[JogadorAtivo] &amp; &quot;Mi Bombo&quot;" newline="True"/>
+            <assign variable="JogadorAtivo" expression="TTTerminarTurno(JogoEmProgresso, JogadoresNoJogo,&quot;Guivo&quot;, JogadorAtivo, JaJogouEsteTurno, PrecisaPagarRenda, TemCartaCommunityOuChance, Duplicados)"/>
+            <output expression="JogadoresNoJogo[JogadorAtivo] &amp; &quot;Mi Bombo&quot;" newline="True"/>
+            <breakpoint expression="" always="True"/>
             <call expression="DJDetalhesDoJogo(Tabuleiro, Jogadores, Posicao, Dono,Dinheiro,JogadorAtivo, NumeroDeCasas, JogoEmProgresso)"/>
             <assign variable="JogoEmProgresso" expression="IJIniciarJogo(Jogadores, JogadoresNoJogo, JogoEmProgresso)"/>
             <call expression="LDLancarDados(&quot;Nathan&quot;, -3 , 6, JogoEmProgresso, JogadoresNoJogo, JaJogouEsteTurno, Duplicados, PrecisaPagarRenda, TemCartaCommunityOuChance, EstaNaPrisao, TurnosNaPrisao, JogadorAtivo, Posicao, Tabuleiro, Tipo, Dono, DinheiroFreePark, Dinheiro, TemCartaCommunityOuChance)"/>
@@ -246,6 +249,28 @@
                 <if expression="Jogador == JogadoresNoJogo[i]">
                     <then>
                         <assign variable="estaNoJogo" expression="True"/>
+                    </then>
+                    <else/>
+                </if>
+            </for>
+        </body>
+    </function>
+    <function name="ForcarComprarCasa" type="None" variable="">
+        <parameters>
+            <parameter name="Jogador" type="String" array="False"/>
+            <parameter name="Cor" type="String" array="False"/>
+            <parameter name="TipoCor" type="String" array="True"/>
+            <parameter name="Dono" type="String" array="True"/>
+            <parameter name="Tabuleiro" type="String" array="True"/>
+        </parameters>
+        <body>
+            <declare name="i" type="Integer" array="False" size=""/>
+            <assign variable="i" expression="0"/>
+            <for variable="i" start="0" end="size(TipoCor)- 1" direction="inc" step="1">
+                <if expression="TipoCor[i] == Cor">
+                    <then>
+                        <assign variable="Dono[i]" expression="Jogador"/>
+                        <output expression="&quot;Dono&quot; &amp; Dono[i] &amp; &quot;Cor&quot; &amp; TipoCor[i]" newline="True"/>
                     </then>
                     <else/>
                 </if>
@@ -968,28 +993,6 @@
             </if>
         </body>
     </function>
-    <function name="ForcarComprarCasa" type="None" variable="">
-        <parameters>
-            <parameter name="Jogador" type="String" array="False"/>
-            <parameter name="Cor" type="String" array="False"/>
-            <parameter name="TipoCor" type="String" array="True"/>
-            <parameter name="Dono" type="String" array="True"/>
-            <parameter name="Tabuleiro" type="String" array="True"/>
-        </parameters>
-        <body>
-            <declare name="i" type="Integer" array="False" size=""/>
-            <assign variable="i" expression="0"/>
-            <for variable="i" start="0" end="size(TipoCor)- 1" direction="inc" step="1">
-                <if expression="TipoCor[i] == Cor">
-                    <then>
-                        <assign variable="Dono[i]" expression="Jogador"/>
-                        <output expression="&quot;Dono&quot; &amp; Dono[i] &amp; &quot;Cor&quot; &amp; TipoCor[i]" newline="True"/>
-                    </then>
-                    <else/>
-                </if>
-            </for>
-        </body>
-    </function>
     <function name="TemTodosOsEspacosCores" type="Boolean" variable="TemTodasAsCores">
         <parameters>
             <parameter name="Jogador" type="String" array="False"/>
@@ -1028,7 +1031,7 @@
             </if>
         </body>
     </function>
-    <function name="TTTerminarTurno" type="None" variable="">
+    <function name="TTTerminarTurno" type="Integer" variable="NovoJogadorAtivo">
         <parameters>
             <parameter name="JogoEmProgresso" type="Boolean" array="False"/>
             <parameter name="JogadoresNoJogo" type="String" array="True"/>
@@ -1040,6 +1043,8 @@
             <parameter name="Duplicados" type="Integer" array="True"/>
         </parameters>
         <body>
+            <declare name="NovoJogadorAtivo" type="Integer" array="False" size=""/>
+            <assign variable="NovoJogadorAtivo" expression="JogadorAtivo"/>
             <if expression="JogoEmProgresso">
                 <then>
                     <if expression="ValidarTurnoDoJogador(Jogador, JogadoresNoJogo, JogadorAtivo)">
@@ -1055,6 +1060,7 @@
                                     <assign variable="TemCartaCommunityOuChance[JogadorAtivo]" expression="False"/>
                                     <assign variable="Duplicados[JogadorAtivo]" expression="0"/>
                                     <assign variable="JogadorAtivo" expression="(JogadorAtivo + 1) % size(JogadoresNoJogo)"/>
+                                    <assign variable="NovoJogadorAtivo" expression="JogadorAtivo"/>
                                     <declare name="NomeProximoJogador" type="String" array="False" size=""/>
                                     <assign variable="NomeProximoJogador" expression="JogadoresNoJogo[JogadorAtivo]"/>
                                     <output expression="&quot;Turno terminado. Novo turno do jogador &quot; &amp; NomeProximoJogador &amp; &quot;.&quot;" newline="True"/>
