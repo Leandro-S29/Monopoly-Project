@@ -196,6 +196,7 @@ namespace MonopolyProject.Logic
             Console.WriteLine("Jogo iniciado com sucesso.");
         }
 
+       
         public void RollDice(string[] commandParts)
         {
             if (commandParts.Length != 2 && commandParts.Length != 4)
@@ -296,7 +297,7 @@ namespace MonopolyProject.Logic
             while (newCol > 6) newCol -= 7;
 
             activePlayer.SetPosition(newRow, newCol);
-            activePlayer.HasRolledThisTurn = true;
+            
 
             Space spacing = board.Grid[activePlayer.Row, activePlayer.Col];
 
@@ -309,16 +310,18 @@ namespace MonopolyProject.Logic
                     //Players goes to jail
                     GoToJail(activePlayer);
                     Console.WriteLine($"Saiu {d1}/{d2} - espaço Police. Jogador preso.");
+                    activePlayer.HasRolledThisTurn = true;
+                    activePlayer.DoublesCount = 0;
                     return;
                 }
             }
             else
             {
                 activePlayer.DoublesCount = 0;
+                activePlayer.HasRolledThisTurn = true;
             }
 
             Console.WriteLine($"Saiu {d1}/{d2} -");
-
             HandleSpaceInteraction(activePlayer, spacing);
             Console.Write($"espaço {spacing.Name}...");
         }
