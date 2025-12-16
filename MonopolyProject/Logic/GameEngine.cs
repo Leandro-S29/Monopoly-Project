@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using MonopolyProject.Models;
 
+//TODO: Validate all console outputs match exactly the briefing once more
 namespace MonopolyProject.Logic
 {
     public class GameEngine
