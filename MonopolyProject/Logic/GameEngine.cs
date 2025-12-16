@@ -54,7 +54,7 @@ namespace MonopolyProject.Logic
                     RegisterPlayer(commandParts);
                     break;
                 case "LJ":
-                    ListPlayers();
+                    ListPlayers(commandParts);
                     break;
                 case "IJ":
                     StartGame(commandParts);
@@ -66,7 +66,7 @@ namespace MonopolyProject.Logic
                     BuySpace(commandParts);
                     break;
                 case "DJ":
-                    GameDetails();
+                    GameDetails(commandParts);
                     break;
                 case "TT":
                     EndTurn(commandParts);
@@ -107,8 +107,13 @@ namespace MonopolyProject.Logic
         }
 
         // Method to list all registered players
-        public void ListPlayers()
+        public void ListPlayers(string[] commandParts)
         {
+            if (commandParts.Length != 1) 
+            {
+                Console.WriteLine("Instrução inválida.");
+                return;
+            }
             if (registeredPlayers.Count == 0)
             {
                 Console.WriteLine("Sem jogadores registados.");
@@ -318,6 +323,7 @@ namespace MonopolyProject.Logic
             Console.WriteLine($"Saiu {d1}/{d2} -");
 
             HandleSpaceInteraction(activePlayer, spacing);
+            Console.Write($"espaço {spacing.Name}...");
         }
 
         // Helper methods for RollDice
@@ -357,7 +363,7 @@ namespace MonopolyProject.Logic
                     Console.Write($"espaço Prison. Jogador só de passagem.");
                     break;
                 case SpaceType.FreePark:
-                    Console.Write($"espaço FreePark. Jogador recebe {freeParkingFunds} ValorGuardado No Free Park.");
+                    Console.Write($"espaço FreePark. Jogador recebe {freeParkingFunds} ValorGuardadoNoFreePark.");
                     player.Money += freeParkingFunds;
                     freeParkingFunds = 0;
                     break;
@@ -420,7 +426,7 @@ namespace MonopolyProject.Logic
 
             if(activePlayer != activePlayersInGame[currentPlayerIndex])
             {
-                Console.WriteLine("Não é o vez do jogador.");
+                Console.WriteLine("Não é a vez do jogador.");
                 return;
             }
 
@@ -428,7 +434,7 @@ namespace MonopolyProject.Logic
 
             if(space.Type != SpaceType.Street && space.Type != SpaceType.Train && space.Type != SpaceType.Utility)
             {
-                Console.WriteLine("Este espaço não está para venda");
+                Console.WriteLine("Este espaço não está para venda.");
                 return;
             }
 
@@ -449,8 +455,14 @@ namespace MonopolyProject.Logic
             Console.WriteLine("Espaço comprado.");
         }
 
-        public void GameDetails()
+        public void GameDetails(string[] commandParts)
         {
+            if (commandParts.Length != 1) 
+            {
+                Console.WriteLine("Instrução inválida.");
+                return;
+            }
+
             if(gameInProgress)
             {
                 Player player = GetActivePlayer(activePlayersInGame[currentPlayerIndex].Name);
@@ -543,7 +555,7 @@ namespace MonopolyProject.Logic
 
             if (activePlayer.Money < rentAmount)
             {
-                Console.WriteLine("jogador não tem dinheiro suficiente.");
+                Console.WriteLine("O jogador não tem dinheiro suficiente.");
                 PlayerBankrupt(activePlayer);
             }
 
@@ -564,7 +576,7 @@ namespace MonopolyProject.Logic
 
             if (!gameInProgress)
             {
-                Console.WriteLine("Não existe jogo em curso.");
+                Console.WriteLine("Não existe um jogo em curso.");
                 return;
             }
 
@@ -601,7 +613,7 @@ namespace MonopolyProject.Logic
              //Checks if Player owns all properties in the color group
             if(!OwnsAllColor(activePlayer, CurrentSpace.ColorGroup))
             {
-                Console.WriteLine("0 jogador não possui todos os espaços da cor.");
+                Console.WriteLine("O jogador não possui todos os espaços da cor.");
                 return;
             }
             
@@ -615,7 +627,7 @@ namespace MonopolyProject.Logic
             
             if(activePlayer.Money < houseCost)
             {
-                Console.WriteLine("jogador não possui dinheiro suficiente.");
+                Console.WriteLine("O jogador não possui dinheiro suficiente.");
                 return;
             }
 
