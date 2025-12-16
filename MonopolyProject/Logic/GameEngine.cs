@@ -1,9 +1,7 @@
 using System;
 using System.Collections.Generic;
-using System.Diagnostics;
 using MonopolyProject.Models;
 
-//TODO: Validate all console outputs match exactly the briefing once more
 namespace MonopolyProject.Logic
 {
     public class GameEngine
@@ -130,8 +128,7 @@ namespace MonopolyProject.Logic
                     var left = players[i];
                     var right = players[j];
         
-                    bool shouldSwap = right.Wins > left.Wins ||
-                                      (right.Wins == left.Wins && string.Compare(right.Name, left.Name, StringComparison.Ordinal) < 0);
+                    bool shouldSwap = right.Wins > left.Wins || (right.Wins == left.Wins && right.Name.CompareTo(left.Name) < 0);
         
                     if (shouldSwap)
                     {
@@ -167,7 +164,7 @@ namespace MonopolyProject.Logic
                 playerNames.Add(commandParts[i]);
             }
 
-            // Clear previous game state
+            // Clear previous active players
             activePlayersInGame.Clear();
 
             foreach (string playerName in playerNames)
@@ -398,21 +395,8 @@ namespace MonopolyProject.Logic
             }
         }
 
-        // Tax handling
-        private void HandleTax(Player player, Space space)
-        {
-            if (player.Money >= 80)
-            {
-                player.Money -= 80;
-                freeParkingFunds += 80;
-            }
-            else
-            {
-                PlayerBankrupt(player);
-            }
-        }
+        // End of RollDice helper methods
 
-        // Other commands
         public void BuySpace(string[] parts)
         {
             if(parts.Length != 2)
@@ -684,7 +668,6 @@ namespace MonopolyProject.Logic
 
             if(space.Type != SpaceType.Chance)
             {
-                // Chance Cards
                 if(roll <= 20)
                 {
                     Console.WriteLine("O jogador recebe 150.");
@@ -724,7 +707,7 @@ namespace MonopolyProject.Logic
                     freeParkingFunds = 0;
                 }
             }
-            else // SpaceType.Community
+            else
             {
                 if(roll <= 10)
                 {
@@ -748,7 +731,7 @@ namespace MonopolyProject.Logic
                     }
                 }else if(roll <= 20)
                 {
-                    Console.WriteLine("O jogador recebe 10 de cada outro jogador."); // Fixed string "por cada" -> "de cada"
+                    Console.WriteLine("O jogador recebe 10 de cada outro jogador.");
                     int CollectedAmount = 0;
                     foreach(var otherPlayer in activePlayersInGame)
                     {
@@ -801,12 +784,11 @@ namespace MonopolyProject.Logic
         }
 
         // Helpers Methods
-        //FIXME: Error related to player sending more than two LD even when not double
         public void GoToJail(Player player)
         {
             // Moves player to prison
-            player.Row = 0; // Makes player go to row = 0
-            player.Col = 0; // Makes player go to col = 0
+            player.Row = 0; 
+            player.Col = 0; 
 
             player.IsInJail = true;
             player.TurnsInJail = 0; // Resets turns in jail counter
@@ -815,7 +797,7 @@ namespace MonopolyProject.Logic
 
         public Player GetActivePlayer(String playerName)
         {
-            // Iterate list to find player (replacement for Dictionary lookup)
+            // Iterate list to find player
             foreach (var player in activePlayersInGame)
             {
                 if (player.Name == playerName)
@@ -858,26 +840,39 @@ namespace MonopolyProject.Logic
             {
                 activePlayersInGame.RemoveAt(playerIndex);
 
-                // If the player removed was before the current player, decrement index
-                // to keep the turn with the correct next person
+                // Adjust currentPlayerIndex if necessary
                 if (playerIndex < currentPlayerIndex)
                 {
                     currentPlayerIndex--;
                 }
             }
 
-            // Handle wrap around if index is now out of bounds
+            // Reset index if it goes more than it should
             if (currentPlayerIndex >= activePlayersInGame.Count)
             {
                 currentPlayerIndex = 0;
             }
 
-            // update the player's stats 
+            // Add a player loss + Validate if there is a winner
             player.Losses += 1;
             if (activePlayersInGame.Count == 1)
             {
                 gameInProgress = false;
                 activePlayersInGame[0].Wins += 1;
+            }
+        }
+
+        // Tax handling
+        private void HandleTax(Player player, Space space)
+        {
+            if (player.Money >= 80)
+            {
+                player.Money -= 80;
+                freeParkingFunds += 80;
+            }
+            else
+            {
+                PlayerBankrupt(player);
             }
         }
 

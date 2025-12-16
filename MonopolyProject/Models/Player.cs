@@ -33,7 +33,7 @@ namespace MonopolyProject.Models
 
         public void ResetForGame()
         {
-            Money = 1200; 
+            Money = 1200.0; 
             SetPosition(3,3);
             IsInJail = false;
             TurnsInJail = 0;

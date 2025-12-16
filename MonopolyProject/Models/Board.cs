@@ -81,7 +81,6 @@ namespace MonopolyProject.Models
             Grid[6, 6] = new Space("Police", SpaceType.Police, 0, ColorType.Blank);
         }
 
-        // TODO: Must Check with the file if its properly done
         public void DisplayBoard(List<Player> players)
         {
             for (int row = 0; row < 7; row++)
